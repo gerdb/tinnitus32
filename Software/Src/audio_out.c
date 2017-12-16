@@ -46,10 +46,10 @@ void AUDIO_OUT_Init(void)
 {
 	  uint8_t ret = AUDIO_OK;
 
-//	  for (int i = 0; i<(4*1024); i++)
-//	  {
-//		  wavetable[i] = 32767 * sin((i*2*M_PI)/1024);
-//	  }
+	  for (int i = 0; i<(4*1024); i++)
+	  {
+		  wavetable[i] = 32767 * sin((i*2*M_PI)/1024);
+	  }
 
 
 //	  for (int i = 0; i<1024; i++)
@@ -61,10 +61,10 @@ void AUDIO_OUT_Init(void)
 //		  wavetable[i] = -32767;
 //	  }
 
-	  for (int i = 0; i<(4*1024); i++)
-	  {
-		  wavetable[i] = 32767 * sin((((i*1)+100*sin((i*0.1*M_PI)/1024))*M_PI)/1024);
-	  }
+//	  for (int i = 0; i<(4*1024); i++)
+//	  {
+//		  wavetable[i] = 32767 * sin((((i*1)+100*sin((i*0.1*M_PI)/1024))*M_PI)/1024);
+//	  }
 
 	  if(ret == AUDIO_OK)
 	  {
