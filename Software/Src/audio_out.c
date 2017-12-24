@@ -13,13 +13,15 @@
 #include "audio_out.h"
 #include <math.h>
 
+volatile int a=0, b=0;
+
 uint16_t		wav = 0;
 __IO uint32_t I2S_DR;
 static AUDIO_DrvTypeDef           *pAudioDrv;
 //static I2C_HandleTypeDef    I2cHandle;
 
 /* Initial Volume level (from 0 (Mute) to 100 (Max)) */
-static uint8_t Volume = 70;
+static uint8_t Volume = 55;
 
 //uint32_t I2cxTimeout = I2Cx_TIMEOUT_MAX;    /*<! Value of Timeout when I2C communication fails */
 
@@ -30,6 +32,7 @@ uint16_t cc[8];
 uint16_t lastcc = 0;
 uint16_t nowcc = 0;
 int16_t wavetable[4*1024];
+uint16_t pitch_period;
 // Divider = 2exp(20)
 // Wavetable: 4096
 // DAC: 48kHz
@@ -41,6 +44,8 @@ uint32_t wavetableptr = 0;
 uint16_t wavetableindex = 0;
 volatile int cnt = 0;
 
+int32_t pitch_periodeFiltL = 0;
+int32_t pitch_periodeFilt = 0;
 
 void AUDIO_OUT_Init(void)
 {
@@ -128,6 +133,7 @@ void AUDIO_OUT_Init(void)
 void AUDIO_OUT_I2S_IRQHandler(void)
 {
 
+	int16_t spitch_period;
 	cnt ++;
 	if (cnt == 96000)
 		cnt = 0;
@@ -142,12 +148,56 @@ void AUDIO_OUT_I2S_IRQHandler(void)
 	BSP_LED_On(LED3);
 	hi2s3.Instance->DR = wavetable[wavetableptr >> 20 /* use only the 12MSB of the 32bit counter*/];
 	BSP_LED_Off(LED3);
+
+	nowcc = htim1.Instance->CCR2;
+
+
+
+
+
+
+	pitch_period = nowcc-lastcc;
+
+	if (pitch_period < 2000)
+		pitch_period *= 2;
+
+	spitch_period = pitch_period - 2376;
+
 	for (int i=0;i<7;i++)
 	{
 		cc[i] = cc[i+1];
 	}
-	nowcc = htim1.Instance->CCR1;
-	cc[7] = nowcc-lastcc;
+	cc[7] = pitch_period;
+
+	a++;
+
+	if (a>1000)
+	{
+		if (pitch_period == 0)
+		{
+
+		}
+		else if (spitch_period > 100 || spitch_period < -100)
+		{
+			b++;
+			if (b>10) {
+				b+=100;
+			}
+		}
+		else
+		{
+			//                          4          12      10      6
+			pitch_periodeFilt += (spitch_period *  1024 * 1024  - pitch_periodeFilt) / 1024;
+			//wavetablefrq = spitch_period * 5120000;
+		}
+	}
+
+	//pitch_periodeFiltL += spitch_period - pitch_periodeFilt;
+	//pitch_periodeFilt = pitch_periodeFiltL / 1;
+
+	//wavetablefrq = spitch_period * 512000;
+	wavetablefrq = pitch_periodeFilt * (4096 / 1024) ;
+
 	lastcc = nowcc;
 
 }

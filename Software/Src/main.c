@@ -89,7 +89,11 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-
+extern void initialise_monitor_handles(void);
+int flag1ms = 0;
+int taskcnt = 0;
+extern uint16_t pitch_period;
+extern uint32_t wavetablefrq;
 /* USER CODE END 0 */
 
 int main(void)
@@ -125,6 +129,7 @@ int main(void)
   MX_TIM1_Init();
 
   /* USER CODE BEGIN 2 */
+  initialise_monitor_handles();
   AUDIO_OUT_Init();
 
   HAL_TIM_Base_Start(&htim1);
@@ -144,6 +149,16 @@ int main(void)
     MX_USB_HOST_Process();
 
   /* USER CODE BEGIN 3 */
+    if (flag1ms)
+    {
+    	flag1ms = 0;
+    	taskcnt++;
+    	if (taskcnt>=1000)
+    	{
+    		taskcnt = 0;
+    		//printf("%d  %d\n", pitch_period, wavetablefrq);
+    	}
+    }
 
   }
   /* USER CODE END 3 */

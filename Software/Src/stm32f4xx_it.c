@@ -37,6 +37,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "audio_out.h"
+extern int flag1ms;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -53,7 +54,7 @@ extern I2S_HandleTypeDef hi2s3;
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-
+	flag1ms = 1;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   HAL_SYSTICK_IRQHandler();

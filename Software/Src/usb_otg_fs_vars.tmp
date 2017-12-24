@@ -1,2 +1,0 @@
-HCD_HandleTypeDef hhcd_USB_OTG_FS;
-void _Error_Handler(char * file, int line);
