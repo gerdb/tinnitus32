@@ -53,6 +53,7 @@
 
 /* USER CODE BEGIN Includes */
 #include "audio_out.h"
+#include "../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -94,6 +95,13 @@ int flag1ms = 0;
 int taskcnt = 0;
 extern uint16_t pitch_period;
 extern uint32_t wavetablefrq;
+extern int32_t pitch_periodeFilt;
+extern int32_t siPitchOffset;
+int32_t siMinPitchPeriode = 0;
+int32_t siStartPitchPeriode = 0;
+uint32_t uiLedCircleSpeed;
+uint32_t uiLedCirclePos;
+int siAutotune = 0;
 /* USER CODE END 0 */
 
 int main(void)
@@ -139,6 +147,7 @@ int main(void)
 
   HAL_TIM_Base_Start(&htim3);
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_3);
+  BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -152,6 +161,47 @@ int main(void)
     if (flag1ms)
     {
     	flag1ms = 0;
+
+
+    	if (siAutotune == 0)
+    	{
+    		if (BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_SET)
+    		{
+    			siAutotune = 1200;
+    			uiLedCircleSpeed = siAutotune;
+    			uiLedCirclePos = 0;
+    			siPitchOffset = 0;
+    			pitch_periodeFilt =  0x7FFFFFFF;
+    			siMinPitchPeriode = 0x7FFFFFFF;
+    		}
+    	}
+    	else
+    	{
+    		if (pitch_periodeFilt < siMinPitchPeriode)
+    		{
+    			siMinPitchPeriode = pitch_periodeFilt;
+    		}
+    		siAutotune--;
+
+//    		if (siAutotune == 4900)
+//    		{
+//    			siStartPitchPeriode = pitch_periodeFilt;
+//    		}
+//
+//    		if (siAutotune < 4500 && (pitch_periodeFilt > siMinPitchPeriode + 16*1024))
+//    		{
+//    			siAutotune = 0;
+//    		}
+    		uiLedCircleSpeed = siAutotune;
+    		uiLedCirclePos += uiLedCircleSpeed;
+    		BSP_LED_Off(((uiLedCirclePos / 32768)+2-1) & 0x03);
+    		BSP_LED_On (((uiLedCirclePos / 32768)+2  ) & 0x03);
+    		if (siAutotune == 0)
+    		{
+    			siPitchOffset = siMinPitchPeriode;
+    		}
+    	}
+
     	taskcnt++;
     	if (taskcnt>=1000)
     	{

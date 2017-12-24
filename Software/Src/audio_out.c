@@ -42,6 +42,7 @@ uint16_t pitch_period;
 uint32_t wavetablefrq = 1000 * 11184.810666667;
 uint32_t wavetableptr = 0;
 uint16_t wavetableindex = 0;
+int32_t siPitchOffset = 0;
 volatile int cnt = 0;
 
 int32_t pitch_periodeFiltL = 0;
@@ -137,17 +138,17 @@ void AUDIO_OUT_I2S_IRQHandler(void)
 	cnt ++;
 	if (cnt == 96000)
 		cnt = 0;
-	if (cnt < 48000)
-		BSP_LED_On(LED4);
-	else
-		BSP_LED_Off(LED4);
+//	if (cnt < 48000)
+//		BSP_LED_On(LED4);
+//	else
+//		BSP_LED_Off(LED4);
 
 	wavetableptr += wavetablefrq;
 //	wav += 128;
 //	hi2s3.Instance->DR = wav;
-	BSP_LED_On(LED3);
+	//BSP_LED_On(LED3);
 	hi2s3.Instance->DR = wavetable[wavetableptr >> 20 /* use only the 12MSB of the 32bit counter*/];
-	BSP_LED_Off(LED3);
+	//BSP_LED_Off(LED3);
 
 	nowcc = htim1.Instance->CCR2;
 
@@ -161,7 +162,7 @@ void AUDIO_OUT_I2S_IRQHandler(void)
 	if (pitch_period < 2000)
 		pitch_period *= 2;
 
-	spitch_period = pitch_period - 2376;
+	spitch_period = pitch_period - 2048 ; //2376;
 
 	for (int i=0;i<7;i++)
 	{
@@ -177,16 +178,16 @@ void AUDIO_OUT_I2S_IRQHandler(void)
 		{
 
 		}
-		else if (spitch_period > 100 || spitch_period < -100)
-		{
-			b++;
-			if (b>10) {
-				b+=100;
-			}
-		}
+//		else if (spitch_period > 100 || spitch_period < -100)
+//		{
+//			b++;
+//			if (b>10) {
+//				b+=100;
+//			}
+//		}
 		else
 		{
-			//                          4          12      10      6
+			//                          4           10      10
 			pitch_periodeFilt += (spitch_period *  1024 * 1024  - pitch_periodeFilt) / 1024;
 			//wavetablefrq = spitch_period * 5120000;
 		}
@@ -196,7 +197,7 @@ void AUDIO_OUT_I2S_IRQHandler(void)
 	//pitch_periodeFilt = pitch_periodeFiltL / 1;
 
 	//wavetablefrq = spitch_period * 512000;
-	wavetablefrq = pitch_periodeFilt * (4096 / 1024) ;
+	wavetablefrq = (pitch_periodeFilt - siPitchOffset) * (4096 / 1024) ;
 
 	lastcc = nowcc;
 
