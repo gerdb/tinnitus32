@@ -142,7 +142,9 @@ int main(void)
   MX_TIM1_Init();
 
   /* USER CODE BEGIN 2 */
+#ifdef DEBUG
   initialise_monitor_handles();
+#endif
   AUDIO_OUT_Init();
 
   HAL_TIM_Base_Start(&htim1);
@@ -211,7 +213,7 @@ int main(void)
     		if (siAutotune == 0)
     		{
     			siPitchOffset = siMinPitchPeriode;
-    			siVolOffset = siMinVolPeriode;
+    			siVolOffset = siMinVolPeriode + 16384 * 128;
     		}
     	}
 
@@ -219,9 +221,12 @@ int main(void)
     	if (taskcnt>=1000)
     	{
     		taskcnt = 0;
-    		if (siAutotune == 0) {
-//    			printf("%d  %d\n", usVolPeriod, siVol);
+#ifdef DEBUG
+    		if (siAutotune == 0)
+    		{
+    			//printf("%d  %d\n", usVolPeriod, siVol);
     		}
+#endif
     	}
     }
 
