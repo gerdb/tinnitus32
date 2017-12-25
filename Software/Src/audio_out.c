@@ -13,15 +13,14 @@
 #include "audio_out.h"
 #include <math.h>
 
-volatile int a=0, b=0;
 
-uint16_t		wav = 0;
+
 __IO uint32_t I2S_DR;
 static AUDIO_DrvTypeDef           *pAudioDrv;
 //static I2C_HandleTypeDef    I2cHandle;
 
 /* Initial Volume level (from 0 (Mute) to 100 (Max)) */
-static uint8_t Volume = 55;
+static uint8_t Volume = 60;
 
 //uint32_t I2cxTimeout = I2Cx_TIMEOUT_MAX;    /*<! Value of Timeout when I2C communication fails */
 
@@ -29,10 +28,21 @@ extern I2S_HandleTypeDef hi2s3;
 extern TIM_HandleTypeDef htim1;
 
 uint16_t cc[8];
-uint16_t lastcc = 0;
-uint16_t nowcc = 0;
 int16_t wavetable[4*1024];
-uint16_t pitch_period;
+
+uint16_t usPitchCC = 0;
+uint16_t usPitchLastCC = 0;
+uint16_t usPitchPeriod;
+int16_t spitch_period;
+
+int32_t siPitchOffset = 0;
+int32_t siPitchPeriodeFilt = 0;
+uint16_t usVolCC = 0;
+uint16_t usVolLastCC = 0;
+uint16_t usVolPeriod;
+int32_t siVolOffset = 0;
+int32_t siVolPeriodeFilt = 0;
+
 // Divider = 2exp(20)
 // Wavetable: 4096
 // DAC: 48kHz
@@ -42,11 +52,8 @@ uint16_t pitch_period;
 uint32_t wavetablefrq = 1000 * 11184.810666667;
 uint32_t wavetableptr = 0;
 uint16_t wavetableindex = 0;
-int32_t siPitchOffset = 0;
-volatile int cnt = 0;
 
-int32_t pitch_periodeFiltL = 0;
-int32_t pitch_periodeFilt = 0;
+int32_t siVol=0;
 
 void AUDIO_OUT_Init(void)
 {
@@ -134,72 +141,58 @@ void AUDIO_OUT_Init(void)
 void AUDIO_OUT_I2S_IRQHandler(void)
 {
 
-	int16_t spitch_period;
-	cnt ++;
-	if (cnt == 96000)
-		cnt = 0;
-//	if (cnt < 48000)
-//		BSP_LED_On(LED4);
-//	else
-//		BSP_LED_Off(LED4);
 
 	wavetableptr += wavetablefrq;
-//	wav += 128;
-//	hi2s3.Instance->DR = wav;
-	//BSP_LED_On(LED3);
-	hi2s3.Instance->DR = wavetable[wavetableptr >> 20 /* use only the 12MSB of the 32bit counter*/];
-	//BSP_LED_Off(LED3);
 
-	nowcc = htim1.Instance->CCR2;
+	// WAV output to audio DAC
+	hi2s3.Instance->DR = (wavetable[wavetableptr >> 20 /* use only the 12MSB of the 32bit counter*/]) * siVol / 256;
+
+	// Get the input capture timestamps
+	usPitchCC = htim1.Instance->CCR1;
+	usVolCC = htim1.Instance->CCR2;
+
+	// Calculate the periode
+	usPitchPeriod = usPitchCC-usPitchLastCC;
+	usVolPeriod = usVolCC-usVolLastCC;
+
+	if (usPitchPeriod < 2000)
+		usPitchPeriod *= 2;
+	if (usVolPeriod < 2000)
+		usVolPeriod *= 2;
 
 
+//	for (int i=0;i<7;i++)
+//	{
+//		cc[i] = cc[i+1];
+//	}
+//	cc[7] = usPitchPeriod;
 
-
-
-
-	pitch_period = nowcc-lastcc;
-
-	if (pitch_period < 2000)
-		pitch_period *= 2;
-
-	spitch_period = pitch_period - 2048 ; //2376;
-
-	for (int i=0;i<7;i++)
+	if (usPitchPeriod != 0)
 	{
-		cc[i] = cc[i+1];
-	}
-	cc[7] = pitch_period;
-
-	a++;
-
-	if (a>1000)
-	{
-		if (pitch_period == 0)
-		{
-
-		}
-//		else if (spitch_period > 100 || spitch_period < -100)
-//		{
-//			b++;
-//			if (b>10) {
-//				b+=100;
-//			}
-//		}
-		else
-		{
-			//                          4           10      10
-			pitch_periodeFilt += (spitch_period *  1024 * 1024  - pitch_periodeFilt) / 1024;
-			//wavetablefrq = spitch_period * 5120000;
-		}
+		//                                   11bit                10bit  10bit
+		siPitchPeriodeFilt += ((int16_t)(usPitchPeriod - 2048) *  1024 * 1024  - siPitchPeriodeFilt) / 1024;
 	}
 
-	//pitch_periodeFiltL += spitch_period - pitch_periodeFilt;
-	//pitch_periodeFilt = pitch_periodeFiltL / 1;
+	if (usVolPeriod != 0)
+	{
+		//                                   11bit                10bit  10bit
+		siVolPeriodeFilt += ((int16_t)(usVolPeriod - 2048) *  1024 * 1024  - siVolPeriodeFilt) / 1024;
+	}
 
-	//wavetablefrq = spitch_period * 512000;
-	wavetablefrq = (pitch_periodeFilt - siPitchOffset) * (4096 / 1024) ;
+	wavetablefrq = (siPitchPeriodeFilt - siPitchOffset) * (4096 / 1024) ;
+	siVol = 256 - ((siVolPeriodeFilt - siVolOffset) / 65536);
+	if (siVol<0)
+	{
+		siVol = 0;
+	}
+	if (siVol>256)
+	{
+		siVol = 256;
+	}
 
-	lastcc = nowcc;
+
+	usPitchLastCC = usPitchCC;
+	usVolLastCC = usVolCC;
 
 }
 

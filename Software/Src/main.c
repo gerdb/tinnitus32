@@ -93,12 +93,17 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 extern void initialise_monitor_handles(void);
 int flag1ms = 0;
 int taskcnt = 0;
-extern uint16_t pitch_period;
+extern uint16_t usPitchPeriod;
+extern uint16_t usVolPeriod;
 extern uint32_t wavetablefrq;
-extern int32_t pitch_periodeFilt;
+extern int32_t siPitchPeriodeFilt;
+extern int32_t siVolPeriodeFilt;
 extern int32_t siPitchOffset;
+extern int32_t siVolOffset;
+extern int32_t siVol;
+
 int32_t siMinPitchPeriode = 0;
-int32_t siStartPitchPeriode = 0;
+int32_t siMinVolPeriode = 0;
 uint32_t uiLedCircleSpeed;
 uint32_t uiLedCirclePos;
 int siAutotune = 0;
@@ -171,15 +176,22 @@ int main(void)
     			uiLedCircleSpeed = siAutotune;
     			uiLedCirclePos = 0;
     			siPitchOffset = 0;
-    			pitch_periodeFilt =  0x7FFFFFFF;
+    			siPitchPeriodeFilt =  0x7FFFFFFF;
     			siMinPitchPeriode = 0x7FFFFFFF;
+    			siVolOffset = 0;
+    			siVolPeriodeFilt =  0x7FFFFFFF;
+    			siMinVolPeriode = 0x7FFFFFFF;
     		}
     	}
     	else
     	{
-    		if (pitch_periodeFilt < siMinPitchPeriode)
+    		if (siPitchPeriodeFilt < siMinPitchPeriode)
     		{
-    			siMinPitchPeriode = pitch_periodeFilt;
+    			siMinPitchPeriode = siPitchPeriodeFilt;
+    		}
+    		if (siVolPeriodeFilt < siMinVolPeriode)
+    		{
+    			siMinVolPeriode = siVolPeriodeFilt;
     		}
     		siAutotune--;
 
@@ -199,6 +211,7 @@ int main(void)
     		if (siAutotune == 0)
     		{
     			siPitchOffset = siMinPitchPeriode;
+    			siVolOffset = siMinVolPeriode;
     		}
     	}
 
@@ -206,7 +219,9 @@ int main(void)
     	if (taskcnt>=1000)
     	{
     		taskcnt = 0;
-    		//printf("%d  %d\n", pitch_period, wavetablefrq);
+    		if (siAutotune == 0) {
+//    			printf("%d  %d\n", usVolPeriod, siVol);
+    		}
     	}
     }
 
