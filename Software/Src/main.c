@@ -53,6 +53,7 @@
 
 /* USER CODE BEGIN Includes */
 #include "audio_out.h"
+#include "theremin.h"
 #include "../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h"
 /* USER CODE END Includes */
 
@@ -91,22 +92,9 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* USER CODE BEGIN 0 */
 extern void initialise_monitor_handles(void);
-int flag1ms = 0;
-int taskcnt = 0;
-extern uint16_t usPitchPeriod;
-extern uint16_t usVolPeriod;
-extern int32_t siPitch;
-extern int32_t siPitchPeriodeFilt;
-extern int32_t siVolPeriodeFilt;
-extern int32_t siPitchOffset;
-extern int32_t siVolOffset;
-extern int32_t siVol;
+int siFlag1ms = 0;
+int siTaskCnt = 0;
 
-int32_t siMinPitchPeriode = 0;
-int32_t siMinVolPeriode = 0;
-uint32_t uiLedCircleSpeed;
-uint32_t uiLedCirclePos;
-int siAutotune = 0;
 /* USER CODE END 0 */
 
 int main(void)
@@ -145,6 +133,7 @@ int main(void)
 #ifdef DEBUG
   initialise_monitor_handles();
 #endif
+  THEREMIN_Init();
   AUDIO_OUT_Init();
 
   HAL_TIM_Base_Start(&htim1);
@@ -165,71 +154,18 @@ int main(void)
     MX_USB_HOST_Process();
 
   /* USER CODE BEGIN 3 */
-    if (flag1ms)
-    {
-    	flag1ms = 0;
+	if (siFlag1ms)
+	{
+		siFlag1ms = 0;
+	    THEREMIN_1msTask();
 
-
-    	if (siAutotune == 0)
-    	{
-    		if (BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_SET)
-    		{
-    			siAutotune = 1200;
-    			uiLedCircleSpeed = siAutotune;
-    			uiLedCirclePos = 0;
-    			siPitchOffset = 0;
-    			siPitchPeriodeFilt =  0x7FFFFFFF;
-    			siMinPitchPeriode = 0x7FFFFFFF;
-    			siVolOffset = 0;
-    			siVolPeriodeFilt =  0x7FFFFFFF;
-    			siMinVolPeriode = 0x7FFFFFFF;
-    		}
-    	}
-    	else
-    	{
-    		if (siPitchPeriodeFilt < siMinPitchPeriode)
-    		{
-    			siMinPitchPeriode = siPitchPeriodeFilt;
-    		}
-    		if (siVolPeriodeFilt < siMinVolPeriode)
-    		{
-    			siMinVolPeriode = siVolPeriodeFilt;
-    		}
-    		siAutotune--;
-
-//    		if (siAutotune == 4900)
-//    		{
-//    			siStartPitchPeriode = pitch_periodeFilt;
-//    		}
-//
-//    		if (siAutotune < 4500 && (pitch_periodeFilt > siMinPitchPeriode + 16*1024))
-//    		{
-//    			siAutotune = 0;
-//    		}
-    		uiLedCircleSpeed = siAutotune;
-    		uiLedCirclePos += uiLedCircleSpeed;
-    		BSP_LED_Off(((uiLedCirclePos / 32768)+2-1) & 0x03);
-    		BSP_LED_On (((uiLedCirclePos / 32768)+2  ) & 0x03);
-    		if (siAutotune == 0)
-    		{
-    			siPitchOffset = siMinPitchPeriode;
-    			siVolOffset = siMinVolPeriode + 16384 * 128;
-    		}
-    	}
-
-    	taskcnt++;
-    	if (taskcnt>=1000)
-    	{
-    		taskcnt = 0;
-#ifdef DEBUG
-    		if (siAutotune == 0)
-    		{
-    			//printf("%d  %d\n", siPitchPeriodeFilt / 10000, siVol);
-    		}
-#endif
-    	}
-    }
-
+		siTaskCnt++;
+		if (siTaskCnt >= 1000)
+		{
+			siTaskCnt = 0;
+		    THEREMIN_1sTask();
+		}
+	}
   }
   /* USER CODE END 3 */
 
