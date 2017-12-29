@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
-<ProjectName>/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/Software/\Theremin32</ProjectName>
+<ProjectName>/home/gerd/Documents/Elektronik/theremin/workspace/tinnitus32/Software/\tinnitus32</ProjectName>
 <CMSIS>../Drivers/CMSIS</CMSIS>
 <HAL_Driver>/home/gerd/STM32Cube/Repository//STM32Cube_FW_F4_V1.18.0/Drivers/CMSIS</HAL_Driver>
 
@@ -22,7 +22,7 @@
 
 <configs>
   <config>
-    <name>Theremin32</name>				
+    <name>tinnitus32</name>				
     <device>STM32F407VGTx</device>		 
     <heapSize>0x200</heapSize>
     <stackSize>0x400</stackSize>

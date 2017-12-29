@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/Software/Inc
+HeaderPath=/home/gerd/Documents/Elektronik/theremin/workspace/tinnitus32/Software/Inc
 HeaderFiles=usb_host.h;usbh_conf.h;usbh_platform.h;stm32f4xx_it.h;stm32f4xx_hal_conf.h;main.h;
-SourcePath=/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/Software/Src
+SourcePath=/home/gerd/Documents/Elektronik/theremin/workspace/tinnitus32/Software/Src
 SourceFiles=usb_host.c;usbh_conf.c;usbh_platform.c;stm32f4xx_it.c;stm32f4xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]
