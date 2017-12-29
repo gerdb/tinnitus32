@@ -95,7 +95,7 @@ int flag1ms = 0;
 int taskcnt = 0;
 extern uint16_t usPitchPeriod;
 extern uint16_t usVolPeriod;
-extern uint32_t wavetablefrq;
+extern int32_t siPitch;
 extern int32_t siPitchPeriodeFilt;
 extern int32_t siVolPeriodeFilt;
 extern int32_t siPitchOffset;
@@ -224,7 +224,7 @@ int main(void)
 #ifdef DEBUG
     		if (siAutotune == 0)
     		{
-    			//printf("%d  %d\n", usVolPeriod, siVol);
+    			//printf("%d  %d\n", siPitchPeriodeFilt / 10000, siVol);
     		}
 #endif
     	}

@@ -28,8 +28,9 @@ extern I2S_HandleTypeDef hi2s3;
 extern TIM_HandleTypeDef htim1;
 
 uint16_t cc[8];
-int16_t wavetable[4*1024];
+int16_t ssWaveTable[4*1024];
 uint32_t  uiVolLinTable[1024];
+uint32_t  uiPitchLinTable[1024];
 
 uint16_t usPitchCC = 0;
 uint16_t usPitchLastCC = 0;
@@ -50,9 +51,8 @@ int32_t siVolPeriodeFilt = 0;
 // Audiofreq = 48000Hz * wavetablefrq / (2exp(20)) / 1024 tableentries * 2(channel left & right);
 // wavetablefrq = Audiofreq / 48000Hz * 2exp(20) * 1024 /2
 // wavetablefrq = Audiofreq * 11184.81066 ...
-uint32_t wavetablefrq = 1000 * 11184.810666667;
-uint32_t wavetableptr = 0;
-uint16_t wavetableindex = 0;
+int32_t siPitch = 1000 * 11184.810666667;
+uint32_t uiWaveTableIndex = 0;
 
 int32_t siVol=0;
 
@@ -62,17 +62,27 @@ void AUDIO_OUT_Init(void)
 
 	  for (int i = 0; i<1024; i++)
 	  {
-		  uiVolLinTable[i] = 1023 - (pow ( ((double)i) / 1023.0 , 0.25)*1023.0);
+		  if (i<32)
+		  {
+			  uiVolLinTable[31-i] = 596 + i*4 ;
+
+		  } else
+		  {
+			  uiVolLinTable[i] = 1023 - (pow ( ((double)i) / 1023.0 , 0.25) * 1023.0);
+		  }
+
 	  }
-	  for (int i = 0; i<32; i++)
+	  for (int i = 0; i<1024; i++)
 	  {
-		  uiVolLinTable[31-i] = 596 + i*4 ;
+		  uiPitchLinTable[i] = pow ( ((double)i) / 1023.0 , 1.0) * 1023.0 ;
+		  //uiPitchLinTable[i] = i ;
 	  }
+
 
 
 	  for (int i = 0; i<(4*1024); i++)
 	  {
-		  wavetable[i] = 32767 * sin((i*2*M_PI)/1024);
+		  ssWaveTable[i] = 32767 * sin((i*2*M_PI)/1024);
 	  }
 
 
@@ -151,12 +161,25 @@ void AUDIO_OUT_Init(void)
  */
 void AUDIO_OUT_I2S_IRQHandler(void)
 {
+uint32_t p1,p2;
 
+//	if (siPitch < 16384*1024)
+//	{
+//		// 10.000.000 = 1024
+//		p1 = uiPitchLinTable[ (siPitch / 16384)  ] * 16384;
+//		p2 = uiPitchLinTable[ (siPitch / 16384)+1] * 16384;
+//
+//		// Interpolate between both points
+//		uiWaveTableIndex += p1 + ( (p2-p1) * (siPitch & 0x00003FFF) ) / 16384;
+//	}
+//	else
+//	{
+//		uiWaveTableIndex += siPitch;
+//	}
 
-	wavetableptr += wavetablefrq;
-
+	uiWaveTableIndex += siPitch * 2;
 	// WAV output to audio DAC
-	hi2s3.Instance->DR = (wavetable[wavetableptr >> 20 /* use only the 12MSB of the 32bit counter*/]) * uiVolLinTable[siVol] / 1024;
+	hi2s3.Instance->DR = (ssWaveTable[uiWaveTableIndex >> 20 /* use only the 12MSB of the 32bit counter*/]) * uiVolLinTable[siVol] / 1024;
 
 	// Get the input capture timestamps
 	usPitchCC = htim1.Instance->CCR1;
@@ -190,7 +213,7 @@ void AUDIO_OUT_I2S_IRQHandler(void)
 		siVolPeriodeFilt += ((int16_t)(usVolPeriod - 2048) *  1024 * 1024  - siVolPeriodeFilt) / 1024;
 	}
 
-	wavetablefrq = (siPitchPeriodeFilt - siPitchOffset) * (4096 / 1024) ;
+	siPitch = (siPitchPeriodeFilt - siPitchOffset) * (1024 / 1024) ;
 	siVol = ((siVolPeriodeFilt - siVolOffset) / 16384);
 	if (siVol<0)
 	{
@@ -199,6 +222,10 @@ void AUDIO_OUT_I2S_IRQHandler(void)
 	if (siVol > 1023)
 	{
 		siVol = 1023;
+	}
+	if (siPitch<0)
+	{
+		siPitch = 0;
 	}
 
 
