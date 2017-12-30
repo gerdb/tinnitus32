@@ -279,7 +279,7 @@ void THEREMIN_1sTask(void)
 #ifdef DEBUG
 	if (siAutotune == 0)
 	{
-		//printf("%d  %d\n", siPitchPeriodeFilt / 10000, siVol);
+		//printf("%d  %d\n", slPitchPeriodeFilt / 10000, slVol);
 	}
 #endif
 }

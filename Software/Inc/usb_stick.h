@@ -1,8 +1,8 @@
 /**
  *  Project     tinnitus32
- *  @file		audio_out.h
+ *  @file		usb_stick.h
  *  @author		Gerd Bartelt - www.sebulli.com
- *  @brief		Header file for audio_out.c
+ *  @brief		Header file for usb_stick.c
  *
  *  @copyright	GPL3
  *
@@ -21,18 +21,11 @@
  *
  */
 
-#ifndef AUDIO_OUT_H_
-#define AUDIO_OUT_H_
-
-
-/* Audio status definition ------------------------------------------------- */
-#define AUDIO_OK                        0
-#define AUDIO_ERROR                     1
-#define AUDIO_TIMEOUT                   2
+#ifndef USB_STICK_H_
+#define USB_STICK_H_
 
 /* Function prototypes ----------------------------------------------------- */
-void AUDIO_OUT_Init();
-void AUDIO_OUT_I2S_IRQHandler(void);
+void USB_STICK_Connected(void);
+void USB_STICK_Disconnected(void);
 
-
-#endif /* AUDIO_OUT_H_ */
+#endif /* USB_STICK_H_ */

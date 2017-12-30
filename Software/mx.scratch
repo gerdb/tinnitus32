@@ -32,7 +32,7 @@
     <usedDebug>true</usedDebug>
     	<debugprobe>swd</debugprobe>
     <optimization>6</optimization>
-    <icfloc>1</icfloc>
+    <icfloc>0</icfloc>
     <Adefines>
         <define></define>
     </Adefines>   
@@ -64,8 +64,9 @@
 	   <include>../Drivers/STM32F4xx_HAL_Driver/Inc</include>
 	   <include>../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy</include>
 	   <include>../Middlewares/ST/STM32_USB_Host_Library/Core/Inc</include>
-	   <include>../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc</include>
+	   <include>../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc</include>
 	   <include>../Drivers/CMSIS/Device/ST/STM32F4xx/Include</include>
+	   <include>../Middlewares/Third_Party/FatFs/src</include>
 	   <include>../Drivers/CMSIS/Include</include>
 
     </Cincludes>
