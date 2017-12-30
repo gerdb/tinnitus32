@@ -28,4 +28,5 @@
 void USB_STICK_Connected(void);
 void USB_STICK_Disconnected(void);
 
+
 #endif /* USB_STICK_H_ */

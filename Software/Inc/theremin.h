@@ -27,7 +27,7 @@
 
 /* Global variables  ------------------------------------------------------- */
 extern uint16_t usDACValue;
-
+extern int16_t ssWaveTable[4 * 1024];
 
 /* Function prototypes ----------------------------------------------------- */
 void THEREMIN_Init(void);
