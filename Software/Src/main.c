@@ -53,9 +53,10 @@
 #include "usb_host.h"
 
 /* USER CODE BEGIN Includes */
+#include "../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h"
 #include "audio_out.h"
 #include "theremin.h"
-#include "../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h"
+#include "pots.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -142,6 +143,7 @@ int main(void)
 #endif
   THEREMIN_Init();
   AUDIO_OUT_Init();
+  POTS_Init();
 
   HAL_TIM_Base_Start(&htim1);
   HAL_TIM_IC_Start(&htim1,TIM_CHANNEL_1);

@@ -180,8 +180,8 @@ void USB_STICK_Connected(void)
 	if (f_mount(&USBHFatFS, (TCHAR const*) USBHPath, 0) == FR_OK)
 	{
 		bMounted = 1;
-		//USB_STICK_ReadCFile("WAV1.C");
 		USB_STICK_ReadWAVFile("WAV1.WAV");
+		USB_STICK_ReadCFile("WAV1.C");
 	}
 }
 
