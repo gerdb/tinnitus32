@@ -168,6 +168,7 @@ static void USB_STICK_ReadWAVFile(char* filename)
 		{
 			ssWaveTable[i] = ssWaveTable[i - 1024];
 		}
+
 	}
 }
 
