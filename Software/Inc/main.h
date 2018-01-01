@@ -99,8 +99,14 @@
 #define LD5_GPIO_Port GPIOD
 #define LD6_Pin GPIO_PIN_15
 #define LD6_GPIO_Port GPIOD
+#define POT_MUX_A_Pin GPIO_PIN_6
+#define POT_MUX_A_GPIO_Port GPIOC
 #define I2S3_MCK_Pin GPIO_PIN_7
 #define I2S3_MCK_GPIO_Port GPIOC
+#define POT_MUX_B_Pin GPIO_PIN_8
+#define POT_MUX_B_GPIO_Port GPIOC
+#define POT_MUX_C_Pin GPIO_PIN_9
+#define POT_MUX_C_GPIO_Port GPIOC
 #define VBUS_FS_Pin GPIO_PIN_9
 #define VBUS_FS_GPIO_Port GPIOA
 #define OTG_FS_ID_Pin GPIO_PIN_10

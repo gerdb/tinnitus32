@@ -25,6 +25,17 @@
 #define POTS_H_
 
 #define ADC_CHANNELS 9
+#define POT_STAB_THERESHOLD 40
+#define POT_STAB_TIME 10
+
+/* Types ---------------------------------------------------------------- */
+typedef struct
+{
+  uint16_t	usRawVal;
+  uint16_t	usStabilized;
+  int   	iStabilizeCnt;
+  int		bChanged;
+}POTS_PotTypeDef;
 
 /* Function prototypes ----------------------------------------------------- */
 void POTS_Init(void);

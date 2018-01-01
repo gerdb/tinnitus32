@@ -23,11 +23,20 @@
 
 #include "stm32f4xx_hal.h"
 #include "pots.h"
+#include <stdlib.h>
 
 extern ADC_HandleTypeDef hadc1;
 
 uint16_t usADCResult[ADC_CHANNELS];
+uint32_t ulPORT_MUX_MASK[8];
+int	iPotMux = 0;
+int iPotTask = 0;
 
+// Index 0..7  : AD Channel 0 - MUX 0..7
+// Index 8..15 : AD Channel 1 - MUX 0..7
+//  ...
+// Index 64..71: AD Channel 8 - MUX 0..7
+POTS_PotTypeDef strPots[ADC_CHANNELS * 8];
 
 /**
  * @brief initialize the module
@@ -56,10 +65,55 @@ void POTS_Init(void)
 
 	/* Start the DMA channel */
 	HAL_DMA_Start(hadc1.DMA_Handle, (uint32_t) &hadc1.Instance->DR,
-			(uint32_t)((uint32_t*)&usADCResult[0]), ADC_CHANNELS);
+			(uint32_t)((uint32_t*)usADCResult), ADC_CHANNELS);
 
     __HAL_UNLOCK(hadc1.DMA_Handle);
 	hadc1.DMA_Handle->State = HAL_DMA_STATE_READY;
+
+	//Fill the multiplexer mask for faster access
+	for (int i=0; i<8; i++)
+	{
+		ulPORT_MUX_MASK[i] = 0;
+		if (i & 0x01)
+		{
+			ulPORT_MUX_MASK[i] |= POT_MUX_A_Pin;
+		}
+		else
+		{
+			ulPORT_MUX_MASK[i] |= (uint32_t)POT_MUX_A_Pin << 16U;;
+		}
+
+		if (i & 0x02)
+		{
+			ulPORT_MUX_MASK[i] |= POT_MUX_B_Pin;
+		}
+		else
+		{
+			ulPORT_MUX_MASK[i] |= (uint32_t)POT_MUX_B_Pin << 16U;;
+		}
+		if (i & 0x04)
+		{
+			ulPORT_MUX_MASK[i] |= POT_MUX_C_Pin;
+		}
+		else
+		{
+			ulPORT_MUX_MASK[i] |= (uint32_t)POT_MUX_C_Pin << 16U;;
+		}
+
+	}
+
+	// Initialize the pots structure
+	for (int i=0; i< (ADC_CHANNELS * 8); i++)
+	{
+		strPots[i].usRawVal = 0;
+		strPots[i].usStabilized = 0;
+		strPots[i].iStabilizeCnt = 0;
+		strPots[i].bChanged = 0;
+	}
+
+	// Start with -1, so in the next task, the first value will be 0
+	iPotTask = -1;
+	iPotMux = -1;
 }
 
 
@@ -68,5 +122,64 @@ void POTS_Init(void)
  */
 void POTS_1msTask(void)
 {
-	hadc1.Instance->CR2 |= (uint32_t) ADC_CR2_SWSTART;
+	int iPot;
+
+	// Generate a task counter
+	iPotTask ++;
+
+
+	switch (iPotTask)
+	{
+	case 0:
+		// Select next mux channel
+		iPotMux++;
+		if (iPotMux >=8)
+		{
+			iPotMux = 0;
+		}
+		// Set 3 output ports
+		GPIOC->BSRR = ulPORT_MUX_MASK[iPotMux];
+		break;
+
+	case 2:
+		// Start ADC conversion for 9 AD channels
+		hadc1.Instance->CR2 |= (uint32_t) ADC_CR2_SWSTART;
+		break;
+
+	case 3:
+
+		for (int i=0;i<ADC_CHANNELS ; i++)
+		{
+			// Index 0..7  : AD Channel 0 - MUX 0..7
+			// Index 8..15 : AD Channel 1 - MUX 0..7
+			//  ...
+			// Index 64..71: AD Channel 8 - MUX 0..7
+			iPot = i*8 + iPotMux;
+
+			// Use the ADC value
+			strPots[iPot].usRawVal = usADCResult[i];
+
+			// Change in pot value detected?
+			if (abs((int)(strPots[iPot].usRawVal) - (int)(strPots[iPot].usStabilized)) > POT_STAB_THERESHOLD )
+			{
+				strPots[iPot].iStabilizeCnt = POT_STAB_TIME;
+			}
+
+			// Update the stabilzed value a certain time after change detection
+			if (strPots[iPot].iStabilizeCnt != 0)
+			{
+				strPots[iPot].usStabilized = strPots[iPot].usRawVal;
+				strPots[iPot].iStabilizeCnt --;
+			}
+		}
+		// Next iPotTask will be 0
+		iPotTask = -1;
+		break;
+	}
+
+
+
+
+
+
 }
