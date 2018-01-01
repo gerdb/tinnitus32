@@ -24,7 +24,10 @@
 #ifndef POTS_H_
 #define POTS_H_
 
+#define ADC_CHANNELS 9
+
 /* Function prototypes ----------------------------------------------------- */
 void POTS_Init(void);
+void POTS_1msTask(void);
 
 #endif /* POTS_H_ */
