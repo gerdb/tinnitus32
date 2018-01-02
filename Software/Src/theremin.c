@@ -215,8 +215,8 @@ void THEREMIN_1msTask(void)
 		// Start autotune by pressing BUTTON_KEY
 		if (BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_SET)
 		{
-			// 1.2sec auto-tune
-			siAutotune = 1200;
+			// 1.0sec auto-tune
+			siAutotune = 1000;
 
 			// Reset LED indicator and pitch and volume values
 			ulLedCircleSpeed = siAutotune;
@@ -256,8 +256,8 @@ void THEREMIN_1msTask(void)
 		// LED indicator
 		ulLedCircleSpeed = siAutotune;
 		ulLedCirclePos += ulLedCircleSpeed;
-		BSP_LED_Off(((ulLedCirclePos / 32768) + 2 - 1) & 0x03);
-		BSP_LED_On(((ulLedCirclePos / 32768) + 2) & 0x03);
+		BSP_LED_Off(((ulLedCirclePos / 32768) + 4 - 1) & 0x03);
+		BSP_LED_On(((ulLedCirclePos / 32768) + 4) & 0x03);
 
 		// Auto-tune is finished
 		if (siAutotune == 0)
