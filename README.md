@@ -2,12 +2,12 @@
 
 A digital Theremin based on the STM32 microcontroller.
 
-* Very simple setup: Only an evaluation board and 2 oscillators for a basic
+* Easy to build: Only a STM32 evaluation board and 2 oscillators for a basic
 and cheap Theremin
-* 16/24bit audio DAC with headphone amplifier
-* Powerful ARM Cortex-M4 microcontroller with DSP, FPU and 168MHz clock
+* Excellent audio quality: 16/24bit audio DAC with headphone amplifier
 * Loads waveforms with Theremin sound directly from an USB stick
 * Very fast autotune: 1sec
+* Powerful ARM Cortex-M4 microcontroller with DSP, FPU and 168MHz clock
 
 # Hardware
 The STM32F407G-DISC1 evaluation board can be used.
