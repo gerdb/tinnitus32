@@ -15,10 +15,28 @@ So you need only 2 additional oscillators for basic operation.
 ![tinnitus32](pics/stm32F407_disco.png "STM32F407G-DISC1")
 
 # Example of an LC colpitts oscillator 
-Value for the pitch oscillator: C1=82pF  
-Value for the volume oscillator: C1=100pF  
-## Schematic
+### Schematic
 ![tinnitus32](pics/tinnitus32_osc_sch.png "tinnitus32 oscillator schematic")
+
+### Bill of material
+| Component     | Pitch        | Volume       | Price | Supplier   |
+| ------------- | ------------ | ------------ | ----- | ---------- |
+| C1            | 82pF         | 100pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| C2            | 330pF        | 390pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| C3            | 330pF        | 390pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| C4            | 100nF        | 100nF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| R1            | 2M2          | 2M2          | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| R2            | 1k           | 1k           | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| L1            | 1mH          | 1mH          | 0.50$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| IC            | SN74LVC1GU04 | SN74LVC1GU04 | 0.40$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| Total         |              |              | **1.20$** |            |
+
+**Suppliers:**  
+m: www.mouser.com  
+f: www.farnell.com / www.newark.com  
+d: www.digikey.com  
+
+
 
 ## Breadboard
 The oscillators can be build up with SMD components on a breadboard.
@@ -26,7 +44,4 @@ So no extra PCB is necessary:
 ![tinnitus32](pics/tinnitus32_osc_pcb.png "tinnitus32 oscillator build on a breadboard")
 
 
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
+
