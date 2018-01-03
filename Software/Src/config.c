@@ -23,8 +23,14 @@
 #include "stm32f4xx_hal.h"
 #include "config.h"
 
-volatile const uint32_t __attribute__((section (".myConfigSection"))) CONFIG[64] =
-		{1,2,3,4};
+volatile const CONFIG_TypeDef __attribute__((section (".myConfigSection"))) CONFIG =
+	{
+			(VERSION_MAJOR	<< 16 | VERSION_MINOR << 8 | VERSION_BUILD), // Version
+			7,		// cfg01
+			8,		// cfg02
+			9,		// cfg03
+			10		// cfg04
+	};
 
 /**
  * @brief initialize the module
