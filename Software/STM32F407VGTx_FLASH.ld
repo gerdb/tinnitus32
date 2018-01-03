@@ -68,6 +68,12 @@ SECTIONS
     . = ALIGN(4);
   } >EEPROM
 
+  /* placing my named section at given address: */
+  .myConfigSection 0x08008000 :
+  {
+    KEEP(*(.myConfigSection)) /* keep my variable even if not referenced */
+  } >FLASH
+
   /* The program code and other data goes into FLASH */
   .text :
   {
