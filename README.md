@@ -24,3 +24,9 @@ Value for the volume oscillator: C1=100pF
 The oscillators can be build up with SMD components on a breadboard.
 So no extra PCB is necessary:  
 ![tinnitus32](pics/tinnitus32_osc_pcb.png "tinnitus32 oscillator build on a breadboard")
+
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
