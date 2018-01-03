@@ -75,8 +75,7 @@ TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-volatile const uint32_t __attribute__((section (".myConfigSection"))) CONFIG[64] =
-		{1,2,3,4};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
