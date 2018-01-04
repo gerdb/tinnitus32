@@ -7,7 +7,11 @@ and cheap Theremin
 * Excellent audio quality: 16/24bit audio DAC with headphone amplifier
 * Loads waveforms with Theremin sound directly from an USB stick
 * Very fast autotune: 1sec
+* 2 variants: A simple to build basic theremin and a more complex theremin
+ with synthesizer functionality
 * Powerful ARM Cortex-M4 microcontroller with DSP, FPU and 168MHz clock
+
+![tinnitus32 basic](pics/tinnitus32_basic.png "tinnitus32 basic")
 
 # Hardware
 The STM32F407G-DISC1 evaluation board can be used.
@@ -44,4 +48,36 @@ So no extra PCB is necessary:
 ![tinnitus32](pics/tinnitus32_osc_pcb.png "tinnitus32 oscillator build on a breadboard")
 
 
+## Pin maps
 
+### Variant "BASIC THEREMIN"
+| Name       | PIN Name | Connector | Description                                    |
+| ---------- | -------- | --------- | ---------------------------------------------- |
+| GND        | GND      | P2        | Ground for oscillators and multiplexers        |
+| 3V         | 3V       | P2        | Supply for oscillators and multiplexers        |
+| PITCH_OSC  | PE9      | P1        | Signal from pitch oscillator                   |
+| VOLUME_OSC | PE11     | P1        | Signal from volume oscillator                  |
+| ANALOG_1   | PA1      | P1        | Analog input from volume potentiometer         |
+| ANALOG_2   | PA2      | P1        | Analog input from zoom volume potentiometer    |
+| ANALOG_3   | PA3      | P1        | Analog input from shift pitch potentiometer    |
+| ANALOG_4   | PC4      | P1        | Analog input from zoom pitch potentiometer     |
+| ANALOG_5   | PC5      | P1        | Analog input from waveform potentiometer       |
+
+### Variant "SYNTH THEREMIN"
+| Name       | PIN Name | Connector | Description                                    |
+| ---------- | -------- | --------- | ---------------------------------------------- |
+| GND        | GND      | P2        | Ground for oscillators and multiplexers        |
+| 3V         | 3V       | P2        | Supply for oscillators and multiplexers        |
+| PITCH_OSC  | PE9      | P1        | Signal from pitch oscillator                   |
+| VOLUME_OSC | PE11     | P1        | Signal from volume oscillator                  |
+| POT_MUX_A  | PC6      | P2        | Control signal A to multiplexer                |
+| POT_MUX_B  | PC8      | P2        | Control signal B to multiplexer                |
+| POT_MUX_C  | PC9      | P2        | Control signal C to multiplexer                |
+| ANALOG_1   | PA1      | P1        | Analog input from volume potentiometer         |
+| ANALOG_2   | PA2      | P1        | Analog input from zoom volume potentiometer    |
+| ANALOG_3   | PA3      | P1        | Analog input from shift pitch potentiometer    |
+| ANALOG_4   | PC4      | P1        | Analog input from zoom pitch potentiometer     |
+| ANALOG_6   | PB0      | P1        | Analog input from multiplexer 6                |
+| ANALOG_7   | PB1      | P1        | Analog input from multiplexer 7                |
+| ANALOG_8   | PC1      | P1        | Analog input from multiplexer 8                |
+| ANALOG_9   | PC2      | P1        | Analog input from multiplexer 9                |
