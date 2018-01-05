@@ -31,6 +31,7 @@ uint16_t usADCResult[ADC_CHANNELS];
 uint32_t ulPORT_MUX_MASK[8];
 int	iPotMux = 0;
 int iPotTask = 0;
+const uint32_t POT_MULTIPLEXERS = 4;
 
 // Index 0..7  : AD Channel 0 - MUX 0..7
 // Index 8..15 : AD Channel 1 - MUX 0..7
@@ -154,7 +155,11 @@ void POTS_1msTask(void)
 			// Index 8..15 : AD Channel 1 - MUX 0..7
 			//  ...
 			// Index 64..71: AD Channel 8 - MUX 0..7
-			iPot = i*8 + iPotMux;
+			if (i < (ADC_CHANNELS-POT_MULTIPLEXERS)) {
+				iPot = i*8;
+			} else {
+				iPot = i*8 + iPotMux;
+			}
 
 			// Use the ADC value
 			strPots[iPot].usRawVal = usADCResult[i];
@@ -176,10 +181,4 @@ void POTS_1msTask(void)
 		iPotTask = -1;
 		break;
 	}
-
-
-
-
-
-
 }
