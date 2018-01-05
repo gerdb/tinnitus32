@@ -1,4 +1,4 @@
-![tinnitus32](pics/tinnitus32_logo.png "logo")
+![tinnitus](pics/tinnitus_logo.png "logo")
 
 A digital Theremin based on the STM32 microcontroller.
 
@@ -7,20 +7,20 @@ and cheap Theremin
 * Excellent audio quality: 16/24bit audio DAC with headphone amplifier
 * Loads waveforms with Theremin sound directly from an USB stick
 * Very fast autotune: 1sec
-* 2 variants: A simple to build basic theremin and a more complex theremin
- with synthesizer functionality
+* 2 variants: A simple to build "tinnitus basic" theremin and a more 
+ complex "tinnitus synth" theremin with synthesizer functionality
 * Powerful ARM Cortex-M4 microcontroller with DSP, FPU and 168MHz clock
 
-![tinnitus32 basic](pics/tinnitus32_basic.png "tinnitus32 basic")
+![tinnitus basic](pics/tinnitus_basic.png "tinnitus basic")
 
 # Hardware
 The STM32F407G-DISC1 evaluation board can be used.
 So you need only 2 additional oscillators for basic operation.  
-![tinnitus32](pics/stm32F407_disco.png "STM32F407G-DISC1")
+![tinnitus](pics/stm32F407_disco.png "STM32F407G-DISC1")
 
 # Example of an LC colpitts oscillator 
 ### Schematic
-![tinnitus32](pics/tinnitus32_osc_sch.png "tinnitus32 oscillator schematic")
+![tinnitus](pics/tinnitus_osc_sch.png "tinnitus oscillator schematic")
 
 ### Bill of material
 | Component     | Pitch        | Volume       | Price | Supplier   |
@@ -45,16 +45,16 @@ d: www.digikey.com
 ## Breadboard
 The oscillators can be build up with SMD components on a breadboard.
 So no extra PCB is necessary:  
-![tinnitus32](pics/tinnitus32_osc_pcb.png "tinnitus32 oscillator build on a breadboard")
+![tinnitus](pics/tinnitus_osc_pcb.png "tinnitus oscillator build on a breadboard")
 
 
 ## Pin maps
 
-### Variant "BASIC THEREMIN"
+### Variant "tinnitus basic"
 | Name       | PIN Name | Connector | Description                                    |
 | ---------- | -------- | --------- | ---------------------------------------------- |
-| GND        | GND      | P2        | Ground for oscillators and multiplexers        |
-| 3V         | 3V       | P2        | Supply for oscillators and multiplexers        |
+| GND        | GND      | P1        | Ground for oscillators and potentiometers      |
+| VDD        | VDD      | P1        | 3V Supply for oscillators and potentiometers   |
 | PITCH_OSC  | PE9      | P1        | Signal from pitch oscillator                   |
 | VOLUME_OSC | PE11     | P1        | Signal from volume oscillator                  |
 | ANALOG_1   | PA1      | P1        | Analog input from volume potentiometer         |
@@ -63,11 +63,11 @@ So no extra PCB is necessary:
 | ANALOG_4   | PC4      | P1        | Analog input from zoom pitch potentiometer     |
 | ANALOG_5   | PC5      | P1        | Analog input from waveform potentiometer       |
 
-### Variant "SYNTH THEREMIN"
+### Variant "tinnitus synth"
 | Name       | PIN Name | Connector | Description                                    |
 | ---------- | -------- | --------- | ---------------------------------------------- |
-| GND        | GND      | P2        | Ground for oscillators and multiplexers        |
-| 3V         | 3V       | P2        | Supply for oscillators and multiplexers        |
+| GND        | GND      | P1        | Ground for oscillators and potentiometers      |
+| VDD        | VDD      | P1        | 3V Supply for oscillators and potentiometers   |
 | PITCH_OSC  | PE9      | P1        | Signal from pitch oscillator                   |
 | VOLUME_OSC | PE11     | P1        | Signal from volume oscillator                  |
 | POT_MUX_A  | PC6      | P2        | Control signal A to multiplexer                |
