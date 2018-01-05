@@ -2,7 +2,7 @@
 
 A digital Theremin based on the STM32 microcontroller.
 
-* Easy to build: Only a STM32 evaluation board and 2 oscillators for a basic
+* Easy to build: Only an STM32 evaluation board and 2 oscillators for a basic
 and cheap Theremin
 * Excellent audio quality: 16/24bit audio DAC with headphone amplifier
 * Loads waveforms with Theremin sound directly from an USB stick
