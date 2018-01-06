@@ -33,6 +33,8 @@
 /* Function prototypes ----------------------------------------------------- */
 void AUDIO_OUT_Init();
 void AUDIO_OUT_I2S_IRQHandler(void);
+void AUDIO_OUT_1msTask(void);
+
 
 
 #endif /* AUDIO_OUT_H_ */

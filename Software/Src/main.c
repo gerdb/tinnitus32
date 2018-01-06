@@ -166,6 +166,7 @@ int main(void)
 		siFlag1ms = 0;
 	    THEREMIN_1msTask();
 	    POTS_1msTask();
+	    AUDIO_OUT_1msTask();
 
 		siTaskCnt++;
 		if (siTaskCnt >= 10000)

@@ -28,6 +28,11 @@
 #define POT_STAB_THERESHOLD 40
 #define POT_STAB_TIME 10
 
+
+/* Constants ------------------------------------------------------------ */
+
+#define POT_VOLUME 0
+
 /* Types ---------------------------------------------------------------- */
 typedef struct
 {
@@ -35,10 +40,18 @@ typedef struct
   uint16_t	usStabilized;
   int   	iStabilizeCnt;
   int		bChanged;
+  int   	iMaxValue;
 }POTS_PotTypeDef;
+
+
+/* global variables ------------------------------------------------------ */
+extern POTS_PotTypeDef strPots[];
+
 
 /* Function prototypes ----------------------------------------------------- */
 void POTS_Init(void);
 void POTS_1msTask(void);
+int POTS_GetScaledValue(int channel);
+int POTS_HasChanged(int channel);
 
 #endif /* POTS_H_ */

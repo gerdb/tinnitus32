@@ -27,6 +27,7 @@
 #include "stm32f4xx_hal.h"
 #include "audio_out.h"
 #include "theremin.h"
+#include "pots.h"
 
 __IO uint32_t I2S_DR;
 
@@ -92,6 +93,19 @@ void AUDIO_OUT_Init(void)
 
 		    hi2s3.Instance->DR = 0;
 	  }
+
+	  // Set the pot from 0.. 100
+	  strPots[POT_VOLUME].iMaxValue = 100;
+}
+
+/*
+ * @brief 1ms Task to set the volume of the DAC headphone amplifier
+ *
+ */
+void AUDIO_OUT_1msTask(void)
+{
+	if (POTS_HasChanged(POT_VOLUME))
+		pAudioDrv->SetVolume(AUDIO_I2C_ADDRESS, POTS_GetScaledValue(POT_VOLUME));
 }
 
 /*

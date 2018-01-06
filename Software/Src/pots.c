@@ -175,10 +175,36 @@ void POTS_1msTask(void)
 			{
 				strPots[iPot].usStabilized = strPots[iPot].usRawVal;
 				strPots[iPot].iStabilizeCnt --;
+				strPots[iPot].bChanged = 1;
+			} else {
+				strPots[iPot].bChanged = 0;
 			}
 		}
 		// Next iPotTask will be 0
 		iPotTask = -1;
 		break;
 	}
+}
+
+
+/**
+ * @brief Get the scaled pot value
+ *
+ * @channel Potentiometer
+ * @return the scaled pot value
+ */
+int POTS_GetScaledValue(int channel)
+{
+	return (strPots[channel].usStabilized * strPots[channel].iMaxValue) / 4096;
+}
+
+/**
+ * @brief returns the bChanged flag
+ *
+ * @channel Potentiometer
+ * @return 1, if the pot value has changed
+ */
+int POTS_HasChanged(int channel)
+{
+	return strPots[channel].bChanged;
 }
