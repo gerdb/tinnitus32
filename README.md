@@ -54,7 +54,7 @@ So no extra PCB is necessary:
 | Name       | PIN Name | Connector | Description                                    |
 | ---------- | -------- | --------- | ---------------------------------------------- |
 | GND        | GND      | P1        | Ground for oscillators and potentiometers      |
-| VDD        | VDD      | P1        | 3V Supply for oscillators and potentiometers   |
+| VDD        | VDD      | P1        | 3V supply for oscillators and potentiometers   |
 | PITCH_OSC  | PE9      | P1        | Signal from pitch oscillator                   |
 | VOLUME_OSC | PE11     | P1        | Signal from volume oscillator                  |
 | ANALOG_1   | PA1      | P1        | Analog input from volume potentiometer         |
@@ -67,7 +67,7 @@ So no extra PCB is necessary:
 | Name       | PIN Name | Connector | Description                                    |
 | ---------- | -------- | --------- | ---------------------------------------------- |
 | GND        | GND      | P1        | Ground for oscillators and potentiometers      |
-| VDD        | VDD      | P1        | 3V Supply for oscillators and potentiometers   |
+| VDD        | VDD      | P1        | 3V supply for oscillators and potentiometers   |
 | PITCH_OSC  | PE9      | P1        | Signal from pitch oscillator                   |
 | VOLUME_OSC | PE11     | P1        | Signal from volume oscillator                  |
 | POT_MUX_A  | PC6      | P2        | Control signal A to multiplexer                |
@@ -81,3 +81,13 @@ So no extra PCB is necessary:
 | ANALOG_7   | PB1      | P1        | Analog input from multiplexer 7                |
 | ANALOG_8   | PC1      | P1        | Analog input from multiplexer 8                |
 | ANALOG_9   | PC2      | P1        | Analog input from multiplexer 9                |
+
+## Auto-tune
+The blue button on the STM32 discovery board starts the auto-tune procedure.
+
+![auto tune button](pics/auto_tune.png "auto tune")  
+You can also use an additional button and connect it to:  
+| Name       | PIN Name | Connector | Description                   |
+| ---------- | -------- | --------- | ----------------------------- |
+| VDD        | VDD      | P1        | 3V supply auto-tune button    |
+| Auto-tune  | PA0      | P1        | Signal from auto-tune button  |
