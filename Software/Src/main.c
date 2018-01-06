@@ -169,7 +169,7 @@ int main(void)
 	    AUDIO_OUT_1msTask();
 
 		siTaskCnt++;
-		if (siTaskCnt >= 10000)
+		if (siTaskCnt >= 1000)
 		{
 			siTaskCnt = 0;
 		    THEREMIN_1sTask();

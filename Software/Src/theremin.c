@@ -26,8 +26,9 @@
 #include "theremin.h"
 #include <math.h>
 
+
 uint16_t usCC[8];
-int16_t ssWaveTable[4 * 1024];
+int16_t ssWaveTable[4096];
 
 // Linearization tables for pitch an volume
 uint32_t ulPitchLinTable[1024];
@@ -95,9 +96,9 @@ void THEREMIN_Init(void)
 		//uiPitchLinTable[i] = i ;
 	}
 
-	for (int i = 0; i < (4 * 1024); i++)
+	for (int i = 0; i < (4096); i++)
 	{
-		ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
+		ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 4096);
 	}
 
 //	  for (int i = 0; i<1024; i++)
@@ -137,7 +138,7 @@ inline void THEREMIN_96kHzDACTask(void)
 	//		uiWaveTableIndex += siPitch;
 	//	}
 
-	ulWaveTableIndex += slPitch * 2;
+	ulWaveTableIndex += slPitch;
 
 	// WAV output to audio DAC
 	usDACValue =
@@ -158,11 +159,12 @@ inline void THEREMIN_96kHzDACTask(void)
 	if (usVolPeriod < 2000)
 		usVolPeriod *= 2;
 
-	//	for (int i=0;i<7;i++)
-	//	{
-	//		cc[i] = cc[i+1];
-	//	}
-	//	cc[7] = usPitchPeriod;
+
+//	for (int i=0;i<7;i++)
+//	{
+//		usCC[i] = usCC[i+1];
+//	}
+//	usCC[7] = usPitchPeriod;
 
 	// Low pass filter period values
 	// factor *1024 is necessary, because of the /1024 integer division
@@ -182,7 +184,7 @@ inline void THEREMIN_96kHzDACTask(void)
 				- slVolPeriodeFilt) / 1024;
 	}
 
-	slPitch = (slPitchPeriodeFilt - slPitchOffset) * (1024 / 1024);
+	slPitch = (slPitchPeriodeFilt - slPitchOffset) * 8;
 	slVol = ((slVolPeriodeFilt - slVolOffset) / 16384);
 
 	// Limit volume and pitch values
@@ -279,7 +281,7 @@ void THEREMIN_1sTask(void)
 #ifdef DEBUG
 	if (siAutotune == 0)
 	{
-		//printf("%d  %d\n", slPitchPeriodeFilt / 10000, slVol);
+		//printf("%d  %d\n", slPitch, slVol);
 	}
 #endif
 }
