@@ -86,7 +86,8 @@ So no extra PCB is necessary:
 The blue button on the STM32 discovery board starts the auto-tune procedure.
 
 ![auto tune button](pics/auto_tune.png "auto tune")  
-You can also use an additional button and connect it to:  
+You can also use an additional button and connect it to: 
+
 | Name       | PIN Name | Connector | Description                   |
 | ---------- | -------- | --------- | ----------------------------- |
 | VDD        | VDD      | P1        | 3V supply auto-tune button    |
