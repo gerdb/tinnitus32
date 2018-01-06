@@ -28,6 +28,7 @@
 #include "audio_out.h"
 #include "theremin.h"
 #include "pots.h"
+#include <math.h>
 
 __IO uint32_t I2S_DR;
 
@@ -94,8 +95,8 @@ void AUDIO_OUT_Init(void)
 		    hi2s3.Instance->DR = 0;
 	  }
 
-	  // Set the pot from 0.. 100
-	  strPots[POT_VOLUME].iMaxValue = 100;
+	  // Set the pot from 0.. 85
+	  strPots[POT_VOLUME].iMaxValue = 85;
 }
 
 /*
@@ -104,8 +105,11 @@ void AUDIO_OUT_Init(void)
  */
 void AUDIO_OUT_1msTask(void)
 {
-	if (POTS_HasChanged(POT_VOLUME))
-		pAudioDrv->SetVolume(AUDIO_I2C_ADDRESS, POTS_GetScaledValue(POT_VOLUME));
+	if (POTS_HasChanged(POT_VOLUME)) {
+		float vol =  ((float)POTS_GetScaledValue(POT_VOLUME))/85.0f;
+		vol = powf(vol, 0.2f);
+		pAudioDrv->SetVolume(AUDIO_I2C_ADDRESS,vol * 85);
+	}
 }
 
 /*
