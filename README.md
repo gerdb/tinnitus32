@@ -91,3 +91,7 @@ You can also use an additional button and connect it to:
 | ---------- | -------- | --------- | ----------------------------- |
 | VDD        | VDD      | P1        | 3V supply auto-tune button    |
 | Auto-tune  | PA0      | P1        | Signal from auto-tune button  |
+
+
+## Programming software for STM32
+http://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/stm32cubeprog.html
