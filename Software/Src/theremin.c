@@ -48,7 +48,8 @@ int32_t slPitchPeriodeFilt;	// low pass filtered period
 int32_t slPitch;			// pitch value
 float fPitch;			// pitch value
 
-float b = 0.5f;
+float fPitchScale = 1.0f;
+float fPitchShift = 1.0f;
 union
 {
 	float f;
@@ -126,8 +127,8 @@ inline void THEREMIN_96kHzDACTask(void)
 
 	// fast pow approximation:
 	// powf_fast() from https://github.com/ekmett/approximate/blob/master/cbits/fast.c
-	u.f = fPitch * 0.0000001f;
-	u.i = (int) (b * (u.i - 1064866805) + 1064866805);
+	u.f = fPitch * 0.0000001f * fPitchShift;
+	u.i = (int) (fPitchScale * (u.i - 1064866805) + 1064866805);
 	slWavStep = (int32_t) (u.f*10000000.0f);
 	if (slWavStep > 0)
 	{
@@ -254,8 +255,17 @@ void THEREMIN_1msTask(void)
 	if (POTS_HasChanged(POT_PITCH_SCALE)) {
 		// from 2^0.25 ... 2^4.0
 		// 2^((POT-2048)/1024)
-		b = powf(2, ((float)(POTS_GetScaledValue(POT_PITCH_SCALE)-2048))*0.000976562f /* 1/1024 */);
+		fPitchScale = powf(2, ((float)(POTS_GetScaledValue(POT_PITCH_SCALE)-2048))*0.000976562f /* 1/1024 */);
 	}
+
+	// pitch shift pot
+	if (POTS_HasChanged(POT_PITCH_SHIFT)) {
+		// from 2^0.25 ... 2^4.0
+		// 2^((POT-2048)/1024)
+		fPitchShift = powf(2, ((float)(POTS_GetScaledValue(POT_PITCH_SHIFT)-2048))*0.000976562f /* 1/1024 */);
+	}
+
+
 }
 
 /**

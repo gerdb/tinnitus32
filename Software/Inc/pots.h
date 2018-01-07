@@ -33,6 +33,7 @@
 
 #define POT_VOLUME_OUT	0
 #define POT_PITCH_SCALE	8
+#define POT_PITCH_SHIFT	16
 
 /* Types ---------------------------------------------------------------- */
 typedef struct
