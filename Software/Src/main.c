@@ -141,9 +141,9 @@ int main(void)
 #ifdef DEBUG
   initialise_monitor_handles();
 #endif
+  POTS_Init();
   THEREMIN_Init();
   AUDIO_OUT_Init();
-  POTS_Init();
 
   HAL_TIM_Base_Start(&htim1);
   HAL_TIM_IC_Start(&htim1,TIM_CHANNEL_1);

@@ -31,7 +31,8 @@
 
 /* Constants ------------------------------------------------------------ */
 
-#define POT_VOLUME 0
+#define POT_VOLUME_OUT	0
+#define POT_PITCH_SCALE	8
 
 /* Types ---------------------------------------------------------------- */
 typedef struct

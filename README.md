@@ -7,18 +7,17 @@ and cheap Theremin
 * Excellent audio quality: 16/24bit audio DAC with headphone amplifier
 * Loads waveforms with Theremin sound directly from an USB stick
 * Very fast autotune: 1sec
-* 2 variants: A simple to build "tinnitus basic" theremin and a more 
- complex "tinnitus synth" theremin with synthesizer functionality
+* 2 variants: A simple to build "tinnitus basic" theremin and a more complex "tinnitus synth" theremin with synthesizer functionality
 * Powerful ARM Cortex-M4 microcontroller with DSP, FPU and 168MHz clock
 
 ![tinnitus basic](pics/tinnitus_basic.png "tinnitus basic")
 
 # Hardware
 The STM32F407G-DISC1 evaluation board can be used.
-So you need only 2 additional oscillators for basic operation.  
+So you need only 2 additional oscillators for basic operation.
 ![tinnitus](pics/stm32F407_disco.png "STM32F407G-DISC1")
 
-# Example of an LC colpitts oscillator 
+# Example of an LC colpitts oscillator
 ### Schematic
 ![tinnitus](pics/tinnitus_osc_sch.png "tinnitus oscillator schematic")
 
@@ -35,16 +34,16 @@ So you need only 2 additional oscillators for basic operation.
 | IC            | SN74LVC1GU04 | SN74LVC1GU04 | 0.40$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 | Total         |              |              | **1.20$** |            |
 
-**Suppliers:**  
-m: www.mouser.com  
-f: www.farnell.com / www.newark.com  
-d: www.digikey.com  
+**Suppliers:**
+m: www.mouser.com
+f: www.farnell.com / www.newark.com
+d: www.digikey.com
 
 
 
 ## Breadboard
 The oscillators can be build up with SMD components on a breadboard.
-So no extra PCB is necessary:  
+So no extra PCB is necessary:
 ![tinnitus](pics/tinnitus_osc_pcb.png "tinnitus oscillator build on a breadboard")
 
 
@@ -85,8 +84,8 @@ So no extra PCB is necessary:
 ## Auto-tune
 The blue button on the STM32 discovery board starts the auto-tune procedure.
 
-![auto tune button](pics/auto_tune.png "auto tune")  
-You can also use an additional button and connect it to: 
+![auto tune button](pics/auto_tune.png "auto tune")
+You can also use an additional button and connect it to:
 
 | Name       | PIN Name | Connector | Description                   |
 | ---------- | -------- | --------- | ----------------------------- |

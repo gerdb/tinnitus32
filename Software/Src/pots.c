@@ -110,6 +110,7 @@ void POTS_Init(void)
 		strPots[i].usStabilized = 0;
 		strPots[i].iStabilizeCnt = 0;
 		strPots[i].bChanged = 0;
+		strPots[i].iMaxValue = 4096;
 	}
 
 	// Start with -1, so in the next task, the first value will be 0
@@ -170,7 +171,7 @@ void POTS_1msTask(void)
 				strPots[iPot].iStabilizeCnt = POT_STAB_TIME;
 			}
 
-			// Update the stabilzed value a certain time after change detection
+			// Update the stabilized value a certain time after change detection
 			if (strPots[iPot].iStabilizeCnt != 0)
 			{
 				strPots[iPot].usStabilized = strPots[iPot].usRawVal;

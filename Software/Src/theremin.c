@@ -24,8 +24,8 @@
 #include "../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h"
 #include "stm32f4xx_hal.h"
 #include "theremin.h"
+#include "pots.h"
 #include <math.h>
-
 
 uint16_t usCC[8];
 int16_t ssWaveTable[4096];
@@ -47,6 +47,14 @@ int32_t slPitchPeriodeFilt;	// low pass filtered period
 // wavetablefrq = Audiofreq / 48000Hz * 2exp(20) * 1024 /2
 // wavetablefrq = Audiofreq * 11184.81066 ...
 int32_t slPitch;			// pitch value
+float fPitch;			// pitch value
+
+float b = 0.5f;
+union
+{
+	float f;
+	int i;
+} u;
 
 uint16_t usVolCC;			// value of capture compare register
 uint16_t usVolLastCC;		// last value (last task)
@@ -57,14 +65,12 @@ int32_t slVol;				// volume value
 
 uint32_t ulWaveTableIndex = 0;
 
-
 // Auto-tune
 int siAutotune = 0;			// Auto-tune down counter
 uint32_t ulLedCircleSpeed;	// LED indicator speed
 uint32_t ulLedCirclePos;	// LED indicator position
 int32_t slMinPitchPeriode;	// minimum pitch value during auto-tune
-int32_t slMinVolPeriode = 0;// minimum volume value during auto-tune
-
+int32_t slMinVolPeriode = 0;	// minimum volume value during auto-tune
 
 uint16_t usDACValue;		// wave table output for audio DAC
 
@@ -122,6 +128,7 @@ void THEREMIN_Init(void)
  */
 inline void THEREMIN_96kHzDACTask(void)
 {
+	int32_t slWavStep;
 	//uint32_t p1,p2;
 	//
 	//	if (siPitch < 16384*1024)
@@ -138,7 +145,15 @@ inline void THEREMIN_96kHzDACTask(void)
 	//		uiWaveTableIndex += siPitch;
 	//	}
 
-	ulWaveTableIndex += slPitch;
+
+	u.f = fPitch * 0.0000001f;
+	u.i = (int) (b * (u.i - 1064866805) + 1064866805);
+	slWavStep = (int32_t) (u.f*10000000.0f);
+	if (slWavStep > 0)
+	{
+		ulWaveTableIndex += slWavStep;
+	}
+	ulWaveTableIndex +=
 
 	// WAV output to audio DAC
 	usDACValue =
@@ -158,7 +173,6 @@ inline void THEREMIN_96kHzDACTask(void)
 		usPitchPeriod *= 2;
 	if (usVolPeriod < 2000)
 		usVolPeriod *= 2;
-
 
 //	for (int i=0;i<7;i++)
 //	{
@@ -184,7 +198,7 @@ inline void THEREMIN_96kHzDACTask(void)
 				- slVolPeriodeFilt) / 1024;
 	}
 
-	slPitch = (slPitchPeriodeFilt - slPitchOffset) * 8;
+	fPitch = (float) ((slPitchPeriodeFilt - slPitchOffset) * 8);
 	slVol = ((slVolPeriodeFilt - slVolOffset) / 16384);
 
 	// Limit volume and pitch values
@@ -195,10 +209,6 @@ inline void THEREMIN_96kHzDACTask(void)
 	if (slVol > 1023)
 	{
 		slVol = 1023;
-	}
-	if (slPitch < 0)
-	{
-		slPitch = 0;
 	}
 
 	// Store values for next task
@@ -270,6 +280,12 @@ void THEREMIN_1msTask(void)
 		}
 	}
 
+	// pitch scale pot
+	if (POTS_HasChanged(POT_PITCH_SCALE)) {
+		// from 2^0.25 ... 2^4.0
+		// 2^((POT-2048)/1024)
+		b = powf(2, ((float)(POTS_GetScaledValue(POT_PITCH_SCALE)-2048))*0.000976562f /* 1/1024 */);
+	}
 }
 
 /**
@@ -281,7 +297,7 @@ void THEREMIN_1sTask(void)
 #ifdef DEBUG
 	if (siAutotune == 0)
 	{
-		//printf("%d  %d\n", slPitch, slVol);
+		//printf("%d\n", (int32_t)fPitch);
 	}
 #endif
 }
