@@ -31,7 +31,6 @@ uint16_t usCC[8];
 int16_t ssWaveTable[4096];
 
 // Linearization tables for pitch an volume
-uint32_t ulPitchLinTable[1024];
 uint32_t ulVolLinTable[1024];
 
 // Pitch
@@ -96,11 +95,6 @@ void THEREMIN_Init(void)
 		}
 
 	}
-	for (int i = 0; i < 1024; i++)
-	{
-		ulPitchLinTable[i] = pow(((double) i) / 1023.0, 1.0) * 1023.0;
-		//uiPitchLinTable[i] = i ;
-	}
 
 	for (int i = 0; i < (4096); i++)
 	{
@@ -129,23 +123,9 @@ void THEREMIN_Init(void)
 inline void THEREMIN_96kHzDACTask(void)
 {
 	int32_t slWavStep;
-	//uint32_t p1,p2;
-	//
-	//	if (siPitch < 16384*1024)
-	//	{
-	//		// 10.000.000 = 1024
-	//		p1 = uiPitchLinTable[ (siPitch / 16384)  ] * 16384;
-	//		p2 = uiPitchLinTable[ (siPitch / 16384)+1] * 16384;
-	//
-	//		// Interpolate between both points
-	//		uiWaveTableIndex += p1 + ( (p2-p1) * (siPitch & 0x00003FFF) ) / 16384;
-	//	}
-	//	else
-	//	{
-	//		uiWaveTableIndex += siPitch;
-	//	}
 
-
+	// fast pow approximation:
+	// powf_fast() from https://github.com/ekmett/approximate/blob/master/cbits/fast.c
 	u.f = fPitch * 0.0000001f;
 	u.i = (int) (b * (u.i - 1064866805) + 1064866805);
 	slWavStep = (int32_t) (u.f*10000000.0f);
@@ -254,16 +234,6 @@ void THEREMIN_1msTask(void)
 			slMinVolPeriode = slVolPeriodeFilt;
 		}
 		siAutotune--;
-
-//    		if (siAutotune == 4900)
-//    		{
-//    			siStartPitchPeriode = pitch_periodeFilt;
-//    		}
-//
-//    		if (siAutotune < 4500 && (pitch_periodeFilt > siMinPitchPeriode + 16*1024))
-//    		{
-//    			siAutotune = 0;
-//    		}
 
 		// LED indicator
 		ulLedCircleSpeed = siAutotune;
