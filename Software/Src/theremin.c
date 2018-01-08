@@ -50,11 +50,15 @@ float fPitch;			// pitch value
 
 float fPitchScale = 1.0f;
 float fPitchShift = 1.0f;
+float fVolScale = 1.0f;
 union
 {
 	float f;
 	int i;
 } u;
+
+float fVol = 0.0;			// volume value
+
 
 uint16_t usVolCC;			// value of capture compare register
 uint16_t usVolLastCC;		// last value (last task)
@@ -62,6 +66,7 @@ uint16_t usVolPeriod;		// period of oscillator
 int32_t slVolOffset;		// offset value (result of auto-tune)
 int32_t slVolPeriodeFilt;	// low pass filtered period
 int32_t slVol;				// volume value
+int32_t slVol2;				// volume value
 
 uint32_t ulWaveTableIndex = 0;
 
@@ -134,12 +139,39 @@ inline void THEREMIN_96kHzDACTask(void)
 	{
 		ulWaveTableIndex += slWavStep;
 	}
-	ulWaveTableIndex +=
+
+	// logarithmic scale of the volume raw value
+	u.f = (float)(slVol);
+	fVol =  (u.i - 1064866805) * 8.262958405176314e-8f; /* 1 / 12102203.0; */
+
+//	fVol = ;
+	slVol = (int32_t)(((6.5f - fVol) * fVolScale)*1024.0f);
+
+	// Limit volume and pitch values
+	if (slVol < 0)
+	{
+		slVol = 0;
+	}
+	if (slVol > 1023)
+	{
+		slVol = 1023;
+	}
+
+//	if (fVol < 0.0f)
+//	{
+//		fVol = 0.0f;
+//	}
+//	if (fVol > 0.99f)
+//	{
+//		fVol = 0.99f;
+//	}
+//	slVol2 = slVol;
 
 	// WAV output to audio DAC
 	usDACValue =
 			(ssWaveTable[ulWaveTableIndex >> 20 /* use only the 12MSB of the 32bit counter*/])
-					* ulVolLinTable[slVol] / 1024;
+//					* fVol;
+					* slVol / 1024;
 
 	// Get the input capture timestamps
 	usPitchCC = htim1.Instance->CCR1;
@@ -182,15 +214,6 @@ inline void THEREMIN_96kHzDACTask(void)
 	fPitch = (float) ((slPitchPeriodeFilt - slPitchOffset) * 8);
 	slVol = ((slVolPeriodeFilt - slVolOffset) / 16384);
 
-	// Limit volume and pitch values
-	if (slVol < 0)
-	{
-		slVol = 0;
-	}
-	if (slVol > 1023)
-	{
-		slVol = 1023;
-	}
 
 	// Store values for next task
 	usPitchLastCC = usPitchCC;
@@ -247,7 +270,7 @@ void THEREMIN_1msTask(void)
 		{
 			// Use minimum values for offset of pitch and volume
 			slPitchOffset = slMinPitchPeriode;
-			slVolOffset = slMinVolPeriode + 16384 * 128;
+			slVolOffset = slMinVolPeriode;// + 16384 * 128;
 		}
 	}
 
@@ -265,6 +288,13 @@ void THEREMIN_1msTask(void)
 		fPitchShift = powf(2, ((float)(POTS_GetScaledValue(POT_PITCH_SHIFT)-2048))*0.000976562f /* 1/1024 */);
 	}
 
+	// volume scale pot
+	if (POTS_HasChanged(POT_VOL_SCALE)) {
+		// from 2^0.25 ... 2^4.0
+		// 2^((POT-2048)/1024)
+		fVolScale = powf(2, ((float)(POTS_GetScaledValue(POT_VOL_SCALE)-2048))*0.000976562f /* 1/1024 */);
+	}
+
 
 }
 
@@ -277,7 +307,7 @@ void THEREMIN_1sTask(void)
 #ifdef DEBUG
 	if (siAutotune == 0)
 	{
-		//printf("%d\n", (int32_t)fPitch);
+		//printf("%d %d\n", slVol2, (int32_t)(fVol*1000.0));
 	}
 #endif
 }
