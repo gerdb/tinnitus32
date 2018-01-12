@@ -81,12 +81,29 @@ uint16_t usDACValue;		// wave table output for audio DAC
 
 extern TIM_HandleTypeDef htim1;	// Handle of timer for input capture
 
+#ifdef DEBUG
+	uint32_t ulStopwatch = 0;
+	#define STOPWATCH_START() DWT->CYCCNT = 0;
+	#define STOPWATCH_STOP() ulStopwatch = DWT->CYCCNT;
+#else
+	#define STOPWATCH_START() ;
+	#define STOPWATCH_STOP() ;
+#endif
+
+
 /**
  * @brief Initialize the module
  *
  */
 void THEREMIN_Init(void)
 {
+#ifdef DEBUG
+	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+	DWT->CYCCNT = 0;
+	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+#endif
+
+
 	for (int i = 0; i < 1024; i++)
 	{
 		if (i < 32)
@@ -130,23 +147,27 @@ inline void THEREMIN_96kHzDACTask(void)
 {
 	int32_t slWavStep;
 
+
+	// cycles: 71
 	// fast pow approximation:
 	// powf_fast() from https://github.com/ekmett/approximate/blob/master/cbits/fast.c
 	u.f = fPitch * 0.0000001f * fPitchShift;
 	u.i = (int) (fPitchScale * (u.i - 1064866805) + 1064866805);
 	slWavStep = (int32_t) (u.f*10000000.0f);
+
+	// cycles:12
 	if (slWavStep > 0)
 	{
 		ulWaveTableIndex += slWavStep;
 	}
 
+	// cycles: 44
 	// logarithmic scale of the volume raw value
 	u.f = (float)(slVol);
 	fVol =  (u.i - 1064866805) * 8.262958405176314e-8f; /* 1 / 12102203.0; */
-
-//	fVol = ;
 	slVol = (int32_t)(((6.5f - fVol) * fVolScale)*1024.0f);
 
+	// cycles: 18
 	// Limit volume and pitch values
 	if (slVol < 0)
 	{
@@ -167,21 +188,25 @@ inline void THEREMIN_96kHzDACTask(void)
 //	}
 //	slVol2 = slVol;
 
+	// cycles: 29
 	// WAV output to audio DAC
 	usDACValue =
 			(ssWaveTable[ulWaveTableIndex >> 20 /* use only the 12MSB of the 32bit counter*/])
 //					* fVol;
 					* slVol / 1024;
 
+	// cycles: 29
 	// Get the input capture timestamps
 	usPitchCC = htim1.Instance->CCR1;
 	usVolCC = htim1.Instance->CCR2;
 
+	// cycles: 26
 	// Calculate the period by the capture compare value and
 	// the last capture compare value
 	usPitchPeriod = usPitchCC - usPitchLastCC;
 	usVolPeriod = usVolCC - usVolLastCC;
 
+	// cycles: 9
 	if (usPitchPeriod < 2000)
 		usPitchPeriod *= 2;
 	if (usVolPeriod < 2000)
@@ -193,6 +218,7 @@ inline void THEREMIN_96kHzDACTask(void)
 //	}
 //	usCC[7] = usPitchPeriod;
 
+	// cycles: 29
 	// Low pass filter period values
 	// factor *1024 is necessary, because of the /1024 integer division
 	// factor *1024 is necessary, because we want to oversample the input signal
@@ -203,6 +229,7 @@ inline void THEREMIN_96kHzDACTask(void)
 				- slPitchPeriodeFilt) / 1024;
 	}
 
+	// cycles: 21
 	// Low pass filter volume values
 	if (usVolPeriod != 0)
 	{
@@ -211,10 +238,11 @@ inline void THEREMIN_96kHzDACTask(void)
 				- slVolPeriodeFilt) / 1024;
 	}
 
+	// cycles: 34
 	fPitch = (float) ((slPitchPeriodeFilt - slPitchOffset) * 8);
 	slVol = ((slVolPeriodeFilt - slVolOffset) / 16384);
 
-
+	// cycles: 9
 	// Store values for next task
 	usPitchLastCC = usPitchCC;
 	usVolLastCC = usVolCC;
@@ -308,6 +336,8 @@ void THEREMIN_1sTask(void)
 	if (siAutotune == 0)
 	{
 		//printf("%d %d\n", slVol2, (int32_t)(fVol*1000.0));
+		//printf("Stopwatch %d\n", ulStopwatch);
+
 	}
 #endif
 }
