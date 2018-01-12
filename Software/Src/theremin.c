@@ -142,6 +142,7 @@ void THEREMIN_Init(void)
 /**
  * @brief 96kHz DAC task called in interrupt
  *
+ * At 168MHz the absolute maximum cycle count would be 168MHz/96kHz = 1750
  */
 inline void THEREMIN_96kHzDACTask(void)
 {

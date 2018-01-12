@@ -57,6 +57,7 @@
 #include "audio_out.h"
 #include "theremin.h"
 #include "pots.h"
+#include "eeprom.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -75,7 +76,8 @@ TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+uint16_t VirtAddVarTab[NB_OF_VAR] = {0x5555, 0x6666, 0x7777};
+uint16_t VarDataTmp = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -145,6 +147,34 @@ int main(void)
   THEREMIN_Init();
   AUDIO_OUT_Init();
 
+  /* Unlock the Flash Program Erase controller */
+ HAL_FLASH_Unlock();
+
+
+  /* EEPROM Init */
+  if( EE_Init() != EE_OK)
+  {
+	  printf("EEProm error \n");
+  }
+  /* read the last stored variables data*/
+  if(EE_ReadVariable(VirtAddVarTab[0], &VarDataTmp) != HAL_OK)
+  {
+	  printf("EEProm Read error \n");
+  }
+  else
+  {
+	  printf("EEProm Val: %d \n", VarDataTmp);
+  }
+
+  if((EE_WriteVariable(VirtAddVarTab[0],  0x1234)) != HAL_OK)
+  {
+	  printf("EEProm Write error \n");
+  }
+  else
+  {
+	  printf("EEProm Write ok \n");
+  }
+
   HAL_TIM_Base_Start(&htim1);
   HAL_TIM_IC_Start(&htim1,TIM_CHANNEL_1);
   HAL_TIM_IC_Start(&htim1,TIM_CHANNEL_2);
@@ -173,6 +203,16 @@ int main(void)
 		{
 			siTaskCnt = 0;
 		    THEREMIN_1sTask();
+
+		    /* read the last stored variables data*/
+		    if(EE_ReadVariable(VirtAddVarTab[0], &VarDataTmp) != HAL_OK)
+		    {
+		  	  printf("EEProm Read2 error \n");
+		    }
+		    else
+		    {
+		  	  printf("EEProm Val2: %d \n", VarDataTmp);
+		    }
 		}
 	}
   }
