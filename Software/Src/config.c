@@ -22,15 +22,22 @@
  */
 #include "stm32f4xx_hal.h"
 #include "config.h"
+#include "eeprom.h"
 
 volatile const CONFIG_TypeDef __attribute__((section (".myConfigSection"))) CONFIG =
-	{
-			(VERSION_MAJOR	<< 16 | VERSION_MINOR << 8 | VERSION_BUILD), // Version
-			7,		// cfg01
-			8,		// cfg02
-			9,		// cfg03
-			10		// cfg04
-	};
+{ (VERSION_MAJOR << 16 | VERSION_MINOR << 8 | VERSION_BUILD), // Version
+		7,		// cfg01
+		8,		// cfg02
+		9,		// cfg03
+		10		// cfg04
+		};
+
+uint16_t VirtAddVarTab[NB_OF_VAR] = {
+		EEPROM_ADDR_PITCH_AUTOTUNE_H,
+		EEPROM_ADDR_PITCH_AUTOTUNE_L,
+		EEPROM_ADDR_VOL_AUTOTUNE_H,
+		EEPROM_ADDR_VOL_AUTOTUNE_L
+};
 
 /**
  * @brief initialize the module
@@ -38,4 +45,57 @@ volatile const CONFIG_TypeDef __attribute__((section (".myConfigSection"))) CONF
 void CONFIG_Init(void)
 {
 
+	/* Unlock the Flash Program Erase controller */
+	HAL_FLASH_Unlock();
+
+	/* EEPROM Init */
+	if (EE_Init() != EE_OK)
+	{
+		printf("EEProm error \n");
+	}
+}
+
+/**
+ * @brief Writes a 32 bit value to a virtual EEProm address
+ *
+ * @param addr: the virtual eeprom address
+ * @value the 32bit value to write
+ */
+void CONFIG_Write_SLong(int addr, int32_t value)
+{
+	if ((EE_WriteVariable((uint16_t)addr, (uint16_t)( (uint32_t)value >> 16 ) ) ) != HAL_OK)
+	{
+		return;
+	}
+
+	if ((EE_WriteVariable((uint16_t)(addr+1), (uint16_t)value )) != HAL_OK)
+	{
+		return;
+	}
+}
+
+/**
+ * @brief Reads a 32 bit value from a virtual EEProm address
+ *
+ * @param addr: the virtual eeprom address
+ * @return the 32bit value to write
+ */
+int32_t CONFIG_Read_SLong(int addr)
+{
+	uint16_t VarDataTmp = 0;
+	int32_t value = 0;
+
+	if (EE_ReadVariable((uint16_t)addr, &VarDataTmp) != HAL_OK)
+	{
+		return 0;
+	}
+	value = VarDataTmp;
+	value <<= 16;
+
+	if (EE_ReadVariable((uint16_t)(addr+1), &VarDataTmp) != HAL_OK)
+	{
+		return 0;
+	}
+	value |= VarDataTmp;
+	return value;
 }

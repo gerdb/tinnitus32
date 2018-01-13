@@ -25,6 +25,7 @@
 #include "stm32f4xx_hal.h"
 #include "theremin.h"
 #include "pots.h"
+#include "config.h"
 #include <math.h>
 
 uint16_t usCC[8];
@@ -102,6 +103,10 @@ void THEREMIN_Init(void)
 	DWT->CYCCNT = 0;
 	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
 #endif
+
+	// Read auto-tune values from virtual EEPRom
+	slPitchOffset = CONFIG_Read_SLong(EEPROM_ADDR_PITCH_AUTOTUNE_H);
+	slVolOffset = CONFIG_Read_SLong(EEPROM_ADDR_VOL_AUTOTUNE_H);
 
 
 	for (int i = 0; i < 1024; i++)
@@ -300,6 +305,9 @@ void THEREMIN_1msTask(void)
 			// Use minimum values for offset of pitch and volume
 			slPitchOffset = slMinPitchPeriode;
 			slVolOffset = slMinVolPeriode;// + 16384 * 128;
+
+			CONFIG_Write_SLong(EEPROM_ADDR_PITCH_AUTOTUNE_H, slPitchOffset);
+			CONFIG_Write_SLong(EEPROM_ADDR_VOL_AUTOTUNE_H,   slVolOffset);
 		}
 	}
 

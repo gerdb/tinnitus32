@@ -29,6 +29,14 @@
 #define VERSION_BUILD	1
 
 
+// Virtual EEProm addresses. 32bit values need 2 addresses
+#define EEPROM_ADDR_PITCH_AUTOTUNE_H	0
+#define EEPROM_ADDR_PITCH_AUTOTUNE_L	1
+#define EEPROM_ADDR_VOL_AUTOTUNE_H		2
+#define EEPROM_ADDR_VOL_AUTOTUNE_L		3
+// !! Update also NB_OF_VAR in eeprom.h !!
+
+
 /* Types ---------------------------------------------------------------- */
 typedef struct
 {
@@ -103,5 +111,7 @@ typedef struct
 
 /* Function prototypes ----------------------------------------------------- */
 void CONFIG_Init(void);
+void CONFIG_Write_SLong(int addr, int32_t value);
+int32_t CONFIG_Read_SLong(int addr);
 
 #endif /* CONFIG_H_ */
