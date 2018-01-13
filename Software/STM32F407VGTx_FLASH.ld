@@ -44,8 +44,9 @@ MEMORY
 RAM (xrw)	: ORIGIN = 0x20000000, LENGTH = 128K
 CCMRAM (rw)	: ORIGIN = 0x10000000, LENGTH =  64K
 VECTOR (rx)	: ORIGIN = 0x08000000, LENGTH =  16K
-EEPROM (rx)	: ORIGIN = 0x08004000, LENGTH =  32K
-FLASH (rx)	: ORIGIN = 0x0800C000, LENGTH = 976K
+MYFREE (rx)	: ORIGIN = 0x08004000, LENGTH =  16K
+EEPROM (rx)	: ORIGIN = 0x08008000, LENGTH =  32K
+FLASH (rx)	: ORIGIN = 0x08010000, LENGTH = 960K
 }
 
 /* Define output sections */
@@ -69,7 +70,7 @@ SECTIONS
   } >EEPROM
 
   /* placing my named section at given address: */
-  .myConfigSection 0x0800C000 :
+  .myConfigSection 0x08010000 :
   {
     KEEP(*(.myConfigSection)) /* keep my variable even if not referenced */
   } >FLASH
