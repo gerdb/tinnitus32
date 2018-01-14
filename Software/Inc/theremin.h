@@ -34,5 +34,6 @@ void THEREMIN_Init(void);
 void THEREMIN_96kHzDACTask(void);
 void THEREMIN_1msTask(void);
 void THEREMIN_1sTask(void);
+void THEREMIN_Calc_VolumeTable(void);
 
 #endif /* THEREMIN_H_ */

@@ -26,10 +26,7 @@
 
 volatile const CONFIG_TypeDef __attribute__((section (".myConfigSection"))) CONFIG =
 { (VERSION_MAJOR << 16 | VERSION_MINOR << 8 | VERSION_BUILD), // Version
-		7,		// cfg01
-		8,		// cfg02
-		9,		// cfg03
-		10		// cfg04
+		0,	// VolumeShift
 		};
 
 uint16_t VirtAddVarTab[NB_OF_VAR] = {

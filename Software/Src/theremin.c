@@ -28,6 +28,7 @@
 #include "config.h"
 #include <math.h>
 
+
 uint16_t usCC[8];
 int16_t ssWaveTable[4096];
 
@@ -52,11 +53,16 @@ float fPitch;			// pitch value
 float fPitchScale = 1.0f;
 float fPitchShift = 1.0f;
 float fVolScale = 1.0f;
-union
+float fVolShift = 0.0f;
+
+// Union to convert between float and int
+typedef union
 {
 	float f;
 	int i;
-} u;
+	uint32_t ui;
+} floatint_ut;
+
 
 float fVol = 0.0;			// volume value
 
@@ -67,7 +73,7 @@ uint16_t usVolPeriod;		// period of oscillator
 int32_t slVolOffset;		// offset value (result of auto-tune)
 int32_t slVolPeriodeFilt;	// low pass filtered period
 int32_t slVol;				// volume value
-int32_t slVol2;				// volume value
+//int32_t slVol2;				// volume value
 
 uint32_t ulWaveTableIndex = 0;
 
@@ -108,21 +114,11 @@ void THEREMIN_Init(void)
 	slPitchOffset = CONFIG_Read_SLong(EEPROM_ADDR_PITCH_AUTOTUNE_H);
 	slVolOffset = CONFIG_Read_SLong(EEPROM_ADDR_VOL_AUTOTUNE_H);
 
+	// Get the VolumeShift value from the flash configuration
+	fVolShift = ((float)(CONFIG.VolumeShift))*0.1f + 11.5f;
 
-	for (int i = 0; i < 1024; i++)
-	{
-		if (i < 32)
-		{
-			ulVolLinTable[31 - i] = 596 + i * 4;
+	THEREMIN_Calc_VolumeTable();
 
-		}
-		else
-		{
-			ulVolLinTable[i] = 1023
-					- (pow(((double) i) / 1023.0, 0.25) * 1023.0);
-		}
-
-	}
 
 	for (int i = 0; i < (4096); i++)
 	{
@@ -144,6 +140,44 @@ void THEREMIN_Init(void)
 //	  }
 }
 
+
+/**
+ * @brief Recalculates the volume table
+ *
+ */
+void THEREMIN_Calc_VolumeTable(void)
+{
+	floatint_ut u;
+	uint32_t val;
+	float f;
+
+	for (int32_t i = 0; i < 1024; i++)
+	{
+		// Calculate back the x values of the table
+		u.ui = (i << 17) + 1065353216;
+		// And now calculate the precise log2 value instead of only the approximation
+		// used for x values in THEREMIN_96kHzDACTask(void) when using the table.
+		f = (fVolShift-log2f(u.f)) * 300.0f * fVolScale;
+
+		// Limit the float value before we square it;
+		if (f > 1024.0)
+			f = 1024.0;
+		if (f < 0.0)
+			f = 0.0;
+
+		// Square the volume value
+		val = (uint32_t)((f*f)*0.000976562f); /* =1/1024 */;
+		// Limit it to maximum
+		if (val > 1023)
+		{
+			val = 1023;
+		}
+
+		// Fill the volume table
+		ulVolLinTable[i] = val;
+	}
+}
+
 /**
  * @brief 96kHz DAC task called in interrupt
  *
@@ -152,7 +186,8 @@ void THEREMIN_Init(void)
 inline void THEREMIN_96kHzDACTask(void)
 {
 	int32_t slWavStep;
-
+	int32_t p1,p2,tabix, tabsub;
+	floatint_ut u;
 
 	// cycles: 71
 	// fast pow approximation:
@@ -167,22 +202,35 @@ inline void THEREMIN_96kHzDACTask(void)
 		ulWaveTableIndex += slWavStep;
 	}
 
-	// cycles: 44
-	// logarithmic scale of the volume raw value
+	// cycles: 39 .. 43
+	// scale of the volume raw value by LUT with interpolation
+	// float bias: 127, so 127 << 23bit mantissa is: 1065353216
+	// We use (4 bit of) the exponent and 6 bit of the mantissa
+	if (slVol < 1)
+	{
+		slVol = 1;
+	}
+	if (slVol > 32767)
+	{
+		slVol = 32767;
+	}
 	u.f = (float)(slVol);
-	fVol =  (u.i - 1064866805) * 8.262958405176314e-8f; /* 1 / 12102203.0; */
-	slVol = (int32_t)(((6.5f - fVol) * fVolScale)*1024.0f);
+	tabix = ((u.ui-1065353216) >> 17);
+	tabsub = u.ui & 0x0001FFFF;
+	p1 = ulVolLinTable[tabix    ];
+	p2 = ulVolLinTable[tabix + 1];
+	slVol = p1 + (( (p2-p1) * tabsub ) >> 17);
 
 	// cycles: 18
 	// Limit volume and pitch values
-	if (slVol < 0)
-	{
-		slVol = 0;
-	}
-	if (slVol > 1023)
-	{
-		slVol = 1023;
-	}
+//	if (slVol < 0)
+//	{
+//		slVol = 0;
+//	}
+//	if (slVol > 1023)
+//	{
+//		slVol = 1023;
+//	}
 
 //	if (fVol < 0.0f)
 //	{
@@ -192,7 +240,6 @@ inline void THEREMIN_96kHzDACTask(void)
 //	{
 //		fVol = 0.99f;
 //	}
-//	slVol2 = slVol;
 
 	// cycles: 29
 	// WAV output to audio DAC
@@ -246,7 +293,8 @@ inline void THEREMIN_96kHzDACTask(void)
 
 	// cycles: 34
 	fPitch = (float) ((slPitchPeriodeFilt - slPitchOffset) * 8);
-	slVol = ((slVolPeriodeFilt - slVolOffset) / 16384);
+	slVol = ((slVolPeriodeFilt - slVolOffset) / 4096);
+
 
 	// cycles: 9
 	// Store values for next task
@@ -330,6 +378,7 @@ void THEREMIN_1msTask(void)
 		// from 2^0.25 ... 2^4.0
 		// 2^((POT-2048)/1024)
 		fVolScale = powf(2, ((float)(POTS_GetScaledValue(POT_VOL_SCALE)-2048))*0.000976562f /* 1/1024 */);
+		THEREMIN_Calc_VolumeTable();
 	}
 
 
@@ -344,7 +393,7 @@ void THEREMIN_1sTask(void)
 #ifdef DEBUG
 	if (siAutotune == 0)
 	{
-		//printf("%d %d\n", slVol2, (int32_t)(fVol*1000.0));
+		//printf("%d %d\n", slVol2, test);
 		//printf("Stopwatch %d\n", ulStopwatch);
 
 	}
