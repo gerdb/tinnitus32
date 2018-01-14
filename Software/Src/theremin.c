@@ -73,6 +73,9 @@ uint16_t usVolPeriod;		// period of oscillator
 int32_t slVolOffset;		// offset value (result of auto-tune)
 int32_t slVolPeriodeFilt;	// low pass filtered period
 int32_t slVol;				// volume value
+int32_t slVolFiltL;			// volume value, filtered (internal filter value)
+int32_t slVolFilt;			// volume value, filtered
+
 //int32_t slVol2;				// volume value
 
 uint32_t ulWaveTableIndex = 0;
@@ -221,32 +224,16 @@ inline void THEREMIN_96kHzDACTask(void)
 	p2 = ulVolLinTable[tabix + 1];
 	slVol = p1 + (( (p2-p1) * tabsub ) >> 17);
 
-	// cycles: 18
-	// Limit volume and pitch values
-//	if (slVol < 0)
-//	{
-//		slVol = 0;
-//	}
-//	if (slVol > 1023)
-//	{
-//		slVol = 1023;
-//	}
-
-//	if (fVol < 0.0f)
-//	{
-//		fVol = 0.0f;
-//	}
-//	if (fVol > 0.99f)
-//	{
-//		fVol = 0.99f;
-//	}
+	// cycles
+	// Low pass filter the output to avoid aliasing noise.
+	slVolFiltL+= slVol - slVolFilt;
+	slVolFilt = slVolFiltL / 1024 ;
 
 	// cycles: 29
 	// WAV output to audio DAC
 	usDACValue =
 			(ssWaveTable[ulWaveTableIndex >> 20 /* use only the 12MSB of the 32bit counter*/])
-//					* fVol;
-					* slVol / 1024;
+					* slVolFilt / 1024;
 
 	// cycles: 29
 	// Get the input capture timestamps
