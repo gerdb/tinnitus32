@@ -95,7 +95,7 @@ void AUDIO_OUT_Init(void)
 		    hi2s3.Instance->DR = 0;
 	  }
 
-	  // Set the pot from 0.. 85
+	  // Set the volume pot from 0.. 85
 	  strPots[POT_VOLUME_OUT].iMaxValue = 85;
 }
 

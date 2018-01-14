@@ -44,9 +44,13 @@ typedef struct
 
 }WAVE_FormatTypeDef;
 
+/* global variables -------------------------------------------------------- */
+extern int bMounted;
+
 /* Function prototypes ----------------------------------------------------- */
 void USB_STICK_Connected(void);
 void USB_STICK_Disconnected(void);
-
+void USB_STICK_ReadCFile(char* filename);
+void USB_STICK_ReadWAVFile(char* filename);
 
 #endif /* USB_STICK_H_ */

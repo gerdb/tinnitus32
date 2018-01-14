@@ -33,6 +33,15 @@ typedef union
 	uint32_t ui;
 } floatint_ut;
 
+// The different waveforms
+typedef enum
+{
+	SINE = 0,
+	CAT = 1,
+	SAWTOOTH = 2,
+	USBSTICK = 7
+}e_waveform;
+
 /* Global variables  ------------------------------------------------------- */
 extern uint16_t usDACValue;
 extern int16_t ssWaveTable[4 * 1024];
@@ -44,5 +53,6 @@ void THEREMIN_1msTask(void);
 void THEREMIN_1sTask(void);
 void THEREMIN_Calc_VolumeTable(void);
 void THEREMIN_Calc_PitchTable(void);
+void THEREMIN_Calc_WavTable(void);
 
 #endif /* THEREMIN_H_ */

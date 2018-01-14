@@ -35,6 +35,7 @@
 #define POT_PITCH_SCALE	8
 #define POT_PITCH_SHIFT	16
 #define POT_VOL_SCALE	24
+#define POT_WAVEFORM	32
 
 /* Types ---------------------------------------------------------------- */
 typedef struct

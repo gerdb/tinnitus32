@@ -27,8 +27,8 @@
 #include "theremin.h"
 #include "pots.h"
 #include "config.h"
+#include "usb_stick.h"
 #include <math.h>
-
 
 uint16_t usCC[8];
 int16_t ssWaveTable[4096];
@@ -54,7 +54,6 @@ float fPitch;			// pitch value
 
 float fPitchScale = 1.0f;
 float fPitchShift = 1.0f;
-
 
 float fVol = 0.0;			// volume value
 uint16_t usVolCC;			// value of capture compare register
@@ -84,17 +83,18 @@ int32_t slMinVolPeriode = 0;	// minimum volume value during auto-tune
 
 uint16_t usDACValue;		// wave table output for audio DAC
 
+e_waveform eWaveform = SINE;
+
 extern TIM_HandleTypeDef htim1;	// Handle of timer for input capture
 
 #ifdef DEBUG
-	uint32_t ulStopwatch = 0;
-	#define STOPWATCH_START() DWT->CYCCNT = 0;
-	#define STOPWATCH_STOP() ulStopwatch = DWT->CYCCNT;
+uint32_t ulStopwatch = 0;
+#define STOPWATCH_START() DWT->CYCCNT = 0;
+#define STOPWATCH_STOP() ulStopwatch = DWT->CYCCNT;
 #else
-	#define STOPWATCH_START() ;
-	#define STOPWATCH_STOP() ;
+#define STOPWATCH_START() ;
+#define STOPWATCH_STOP() ;
 #endif
-
 
 /**
  * @brief Initialize the module
@@ -113,31 +113,16 @@ void THEREMIN_Init(void)
 	slVolOffset = CONFIG_Read_SLong(EEPROM_ADDR_VOL_AUTOTUNE_H);
 
 	// Get the VolumeShift value from the flash configuration
-	fVolShift = ((float)(CONFIG.VolumeShift))*0.1f + 11.5f;
+	fVolShift = ((float) (CONFIG.VolumeShift)) * 0.1f + 11.5f;
+
+	// 8 Waveforms
+	strPots[POT_WAVEFORM].iMaxValue = 8;
 
 	// Calculate the LUT for volume and pitch
 	THEREMIN_Calc_VolumeTable();
 	THEREMIN_Calc_PitchTable();
+	THEREMIN_Calc_WavTable();
 
-
-	for (int i = 0; i < (4096); i++)
-	{
-		ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
-	}
-
-//	  for (int i = 0; i<1024; i++)
-//	  {
-//		  wavetable[i] = 32767 * sin(((256*3+i)*2*M_PI)/1024);
-//	  }
-//	  for (int i = 1024; i<(4*1024); i++)
-//	  {
-//		  wavetable[i] = -32767;
-//	  }
-
-//	  for (int i = 0; i<(4*1024); i++)
-//	  {
-//		  wavetable[i] = 32767 * sin((((i*1)+100*sin((i*0.1*M_PI)/1024))*M_PI)/1024);
-//	  }
 }
 
 /**
@@ -160,10 +145,11 @@ void THEREMIN_Calc_PitchTable(void)
 		//	u.i = (int) (fPitchScale * (u.i - 1064866805) + 1064866805);
 		//	slWavStep = (int32_t) (u.f*10000000.0f);
 
-		f = expf(logf(u.f * 0.0000001f * fPitchShift ) * fPitchScale) * 10000000.0f;
+		f = expf(logf(u.f * 0.0000001f * fPitchShift) * fPitchScale)
+				* 10000000.0f;
 
 		// Convert it to integer
-		val = (uint32_t)(f);
+		val = (uint32_t) (f);
 		// Limit it to maximum
 		if (val > 500000000)
 		{
@@ -190,7 +176,7 @@ void THEREMIN_Calc_VolumeTable(void)
 		u.ui = (i << 17) + 1065353216;
 		// And now calculate the precise log2 value instead of only the approximation
 		// used for x values in THEREMIN_96kHzDACTask(void) when using the table.
-		f = (fVolShift-log2f(u.f)) * 300.0f * fVolScale;
+		f = (fVolShift - log2f(u.f)) * 300.0f * fVolScale;
 
 		// Limit the float value before we square it;
 		if (f > 1024.0)
@@ -199,7 +185,8 @@ void THEREMIN_Calc_VolumeTable(void)
 			f = 0.0;
 
 		// Square the volume value
-		val = (uint32_t)((f*f)*0.000976562f); /* =1/1024 */;
+		val = (uint32_t) ((f * f) * 0.000976562f); /* =1/1024 */
+		;
 		// Limit it to maximum
 		if (val > 1023)
 		{
@@ -211,6 +198,65 @@ void THEREMIN_Calc_VolumeTable(void)
 	}
 }
 
+
+/**
+ * @brief Recalculates the wave LUT
+ *
+ */
+void THEREMIN_Calc_WavTable(void)
+{
+	switch (eWaveform)
+	{
+	case SINE:
+		for (int i = 0; i < 4096; i++)
+		{
+			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
+		}
+		break;
+
+	case CAT:
+		for (int i = 0; i < 4096; i++)
+		{
+			if (i < 1024)
+			{
+				ssWaveTable[i] = 0;
+			}
+			else
+			{
+				ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
+			}
+		}
+		break;
+
+	case SAWTOOTH:
+		for (int i = 0; i < 4096; i++)
+		{
+			ssWaveTable[i] = (i & 0x03FF)*64-32768;
+		}
+		break;
+
+	case USBSTICK:
+		for (int i = 0; i < 4096; i++)
+		{
+			ssWaveTable[i] = 0;
+		}
+		if (bMounted)
+		{
+			USB_STICK_ReadWAVFile("WAV1.WAV");
+			USB_STICK_ReadCFile("WAV1.C");
+		}
+		break;
+
+	default:
+		for (int i = 0; i < 4096; i++)
+		{
+			ssWaveTable[i] = 0;
+		}
+	}
+
+
+}
+
 /**
  * @brief 96kHz DAC task called in interrupt
  *
@@ -218,7 +264,7 @@ void THEREMIN_Calc_VolumeTable(void)
  */
 inline void THEREMIN_96kHzDACTask(void)
 {
-	int32_t p1,p2,tabix, tabsub;
+	int32_t p1, p2, tabix, tabsub;
 	floatint_ut u;
 	uint32_t ulWavStep;
 
@@ -233,11 +279,11 @@ inline void THEREMIN_96kHzDACTask(void)
 	}
 
 	u.f = fPitch;
-	tabix = ((u.ui-1065353216) >> 17);
+	tabix = ((u.ui - 1065353216) >> 17);
 	tabsub = (u.ui & 0x0001FFFF) >> 2;
-	p1 = ulPitchLinTable[tabix    ];
+	p1 = ulPitchLinTable[tabix];
 	p2 = ulPitchLinTable[tabix + 1];
-	ulWavStep = p1 + (( ((p2-p1)>>8) * tabsub ) >> 7);
+	ulWavStep = p1 + ((((p2 - p1) >> 8) * tabsub) >> 7);
 	ulWaveTableIndex += ulWavStep >> 2;
 
 	//test = ulWavStep;
@@ -254,26 +300,25 @@ inline void THEREMIN_96kHzDACTask(void)
 	{
 		slVol = 32767;
 	}
-	u.f = (float)(slVol);
-	tabix = ((u.ui-1065353216) >> 17);
+	u.f = (float) (slVol);
+	tabix = ((u.ui - 1065353216) >> 17);
 	tabsub = u.ui & 0x0001FFFF;
-	p1 = ulVolLinTable[tabix    ];
+	p1 = ulVolLinTable[tabix];
 	p2 = ulVolLinTable[tabix + 1];
-	slVol = p1 + (( (p2-p1) * tabsub ) >> 17);
+	slVol = p1 + (((p2 - p1) * tabsub) >> 17);
 
 	// cycles
 	// Low pass filter the output to avoid aliasing noise.
-	slVolFiltL+= slVol - slVolFilt;
-	slVolFilt = slVolFiltL / 1024 ;
+	slVolFiltL += slVol - slVolFilt;
+	slVolFilt = slVolFiltL / 1024;
 
 	// cycles: 29..38
 	// WAV output to audio DAC
 	tabix = ulWaveTableIndex >> 20; // use only the 12MSB of the 32bit counter
-	tabsub = (ulWaveTableIndex >> 12)  & 0x000000FF;
-	p1 = ssWaveTable[tabix    ];
+	tabsub = (ulWaveTableIndex >> 12) & 0x000000FF;
+	p1 = ssWaveTable[tabix];
 	p2 = ssWaveTable[(tabix + 1) & 0x0FFF];
-	usDACValue = (p1 + (( (p2-p1) * tabsub ) >> 8)) * slVolFilt / 1024;
-
+	usDACValue = (p1 + (((p2 - p1) * tabsub) >> 8)) * slVolFilt / 1024;
 
 	// cycles: 29
 	// Get the input capture timestamps
@@ -321,7 +366,6 @@ inline void THEREMIN_96kHzDACTask(void)
 	// cycles: 34
 	fPitch = (float) ((slPitchPeriodeFilt - slPitchOffset) * 8);
 	slVol = ((slVolPeriodeFilt - slVolOffset) / 4096);
-
 
 	// cycles: 9
 	// Store values for next task
@@ -385,37 +429,52 @@ void THEREMIN_1msTask(void)
 
 			// Use minimum values for offset of pitch and volume
 			slPitchOffset = slMinPitchPeriode;
-			slVolOffset = slMinVolPeriode;// + 16384 * 128;
+			slVolOffset = slMinVolPeriode;	// + 16384 * 128;
 
 			CONFIG_Write_SLong(EEPROM_ADDR_PITCH_AUTOTUNE_H, slPitchOffset);
-			CONFIG_Write_SLong(EEPROM_ADDR_VOL_AUTOTUNE_H,   slVolOffset);
+			CONFIG_Write_SLong(EEPROM_ADDR_VOL_AUTOTUNE_H, slVolOffset);
 		}
 	}
 
 	// pitch scale pot
-	if (POTS_HasChanged(POT_PITCH_SCALE)) {
+	if (POTS_HasChanged(POT_PITCH_SCALE))
+	{
 		// from 2^0.25 ... 2^4.0
 		// 2^((POT-2048)/1024)
-		fPitchScale = powf(2, ((float)(POTS_GetScaledValue(POT_PITCH_SCALE)-2048))*0.000976562f /* 1/1024 */);
+		fPitchScale = powf(2,
+				((float) (POTS_GetScaledValue(POT_PITCH_SCALE) - 2048))
+						* 0.000976562f /* 1/1024 */);
 		THEREMIN_Calc_PitchTable();
 	}
 
 	// pitch shift pot
-	if (POTS_HasChanged(POT_PITCH_SHIFT)) {
+	if (POTS_HasChanged(POT_PITCH_SHIFT))
+	{
 		// from 2^0.25 ... 2^4.0
 		// 2^((POT-2048)/1024)
-		fPitchShift = powf(2, ((float)(POTS_GetScaledValue(POT_PITCH_SHIFT)-2048))*0.000976562f /* 1/1024 */);
+		fPitchShift = powf(2,
+				((float) (POTS_GetScaledValue(POT_PITCH_SHIFT) - 2048))
+						* 0.000976562f /* 1/1024 */);
 		THEREMIN_Calc_PitchTable();
 	}
 
 	// volume scale pot
-	if (POTS_HasChanged(POT_VOL_SCALE)) {
+	if (POTS_HasChanged(POT_VOL_SCALE))
+	{
 		// from 2^0.25 ... 2^4.0
 		// 2^((POT-2048)/1024)
-		fVolScale = powf(2, ((float)(POTS_GetScaledValue(POT_VOL_SCALE)-2048))*0.000976562f /* 1/1024 */);
+		fVolScale = powf(2,
+				((float) (POTS_GetScaledValue(POT_VOL_SCALE) - 2048))
+						* 0.000976562f /* 1/1024 */);
 		THEREMIN_Calc_VolumeTable();
 	}
 
+	// waveform pot
+	if (POTS_HasChanged(POT_WAVEFORM))
+	{
+		eWaveform = POTS_GetScaledValue(POT_WAVEFORM);
+		THEREMIN_Calc_WavTable();
+	}
 
 }
 

@@ -27,15 +27,13 @@
 #include "theremin.h"
 #include "usb_stick.h"
 
-/* Variable used by FatFs*/
+/* Variable used by FatFs */
 int bMounted = 0;
 #define LINELENGTH 256
 char sLine[LINELENGTH];
 uint32_t ulBytesRead;
 
 /* Function prototypes for local functions ------------------------------------ */
-static void USB_STICK_ReadCFile(char* filename);
-static void USB_STICK_ReadWAVFile(char* filename);
 static int USB_STICK_ParseNumber(int* number, const char* line);
 
 /* Local functions ------------------------------------------------------------ */
@@ -80,7 +78,7 @@ static int USB_STICK_ParseNumber(int* number, const char* line)
  * @brief Read an OpenTheremin *.c wave file
  * @param filename: Filename to read
  */
-static void USB_STICK_ReadCFile(char* filename)
+void USB_STICK_ReadCFile(char* filename)
 {
 	int value;
 	int cnt = 0;
@@ -124,7 +122,7 @@ static void USB_STICK_ReadCFile(char* filename)
  * @brief Read an Microsoft *.wav audio file
  * @param filename: Filename to read
  */
-static void USB_STICK_ReadWAVFile(char* filename)
+void USB_STICK_ReadWAVFile(char* filename)
 {
 	WAVE_FormatTypeDef waveformat;
 	unsigned int ulBytesread = 0;
@@ -181,8 +179,6 @@ void USB_STICK_Connected(void)
 	if (f_mount(&USBHFatFS, (TCHAR const*) USBHPath, 0) == FR_OK)
 	{
 		bMounted = 1;
-		USB_STICK_ReadWAVFile("WAV1.WAV");
-		USB_STICK_ReadCFile("WAV1.C");
 	}
 }
 
