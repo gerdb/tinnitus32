@@ -30,6 +30,10 @@
 #define AUDIO_ERROR                     1
 #define AUDIO_TIMEOUT                   2
 
+
+/* Global variables -------------------------------------------------------- */
+extern int bMute;
+
 /* Function prototypes ----------------------------------------------------- */
 void AUDIO_OUT_Init();
 void AUDIO_OUT_I2S_IRQHandler(void);

@@ -24,6 +24,14 @@
 #ifndef THEREMIN_H_
 #define THEREMIN_H_
 
+/* Types  ------------------------------------------------------------------ */
+// Union to convert between float and int
+typedef union
+{
+	float f;
+	int i;
+	uint32_t ui;
+} floatint_ut;
 
 /* Global variables  ------------------------------------------------------- */
 extern uint16_t usDACValue;
@@ -35,5 +43,6 @@ void THEREMIN_96kHzDACTask(void);
 void THEREMIN_1msTask(void);
 void THEREMIN_1sTask(void);
 void THEREMIN_Calc_VolumeTable(void);
+void THEREMIN_Calc_PitchTable(void);
 
 #endif /* THEREMIN_H_ */

@@ -23,6 +23,7 @@
 
 #include "../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h"
 #include "stm32f4xx_hal.h"
+#include "audio_out.h"
 #include "theremin.h"
 #include "pots.h"
 #include "config.h"
@@ -34,6 +35,7 @@ int16_t ssWaveTable[4096];
 
 // Linearization tables for pitch an volume
 uint32_t ulVolLinTable[1024];
+uint32_t ulPitchLinTable[2048];
 
 // Pitch
 uint16_t usPitchCC;			// value of capture compare register
@@ -52,21 +54,9 @@ float fPitch;			// pitch value
 
 float fPitchScale = 1.0f;
 float fPitchShift = 1.0f;
-float fVolScale = 1.0f;
-float fVolShift = 0.0f;
-
-// Union to convert between float and int
-typedef union
-{
-	float f;
-	int i;
-	uint32_t ui;
-} floatint_ut;
 
 
 float fVol = 0.0;			// volume value
-
-
 uint16_t usVolCC;			// value of capture compare register
 uint16_t usVolLastCC;		// last value (last task)
 uint16_t usVolPeriod;		// period of oscillator
@@ -76,7 +66,12 @@ int32_t slVol;				// volume value
 int32_t slVolFiltL;			// volume value, filtered (internal filter value)
 int32_t slVolFilt;			// volume value, filtered
 
+float fVolScale = 1.0f;
+float fVolShift = 0.0f;
+
 //int32_t slVol2;				// volume value
+
+int32_t test;
 
 uint32_t ulWaveTableIndex = 0;
 
@@ -120,7 +115,9 @@ void THEREMIN_Init(void)
 	// Get the VolumeShift value from the flash configuration
 	fVolShift = ((float)(CONFIG.VolumeShift))*0.1f + 11.5f;
 
+	// Calculate the LUT for volume and pitch
 	THEREMIN_Calc_VolumeTable();
+	THEREMIN_Calc_PitchTable();
 
 
 	for (int i = 0; i < (4096); i++)
@@ -143,9 +140,78 @@ void THEREMIN_Init(void)
 //	  }
 }
 
+/**
+ * @brief Recalculates the pitch LUT
+ *
+ */
+void THEREMIN_Calc_PitchTable(void)
+{
+	floatint_ut u;
+	uint32_t val;
+	float f;
+
+//	static int test2 = 0;
+//	uint32_t ulWavStep, ulWavStepOld;
+//	int32_t p1,p2,tabix, tabsub;
+
+
+
+	for (int32_t i = 0; i < 2048; i++)
+	{
+		// Calculate back the x values of the table
+		u.ui = (i << 17) + 1065353216;
+		// And now calculate the precise log2 value instead of only the approximation
+		// used for x values in THEREMIN_96kHzDACTask(void) when using the table.
+		//	u.f = fPitch * 0.0000001f * fPitchShift;
+		//	u.i = (int) (fPitchScale * (u.i - 1064866805) + 1064866805);
+		//	slWavStep = (int32_t) (u.f*10000000.0f);
+
+		f = expf(logf(u.f * 0.0000001f * fPitchShift ) * fPitchScale) * 10000000.0f;
+
+		// Convert it to integer
+		val = (uint32_t)(f);
+		// Limit it to maximum
+		if (val > 500000000)
+		{
+			val = 500000000;
+		}
+
+
+		if ((i & 15) == 0)
+		{
+			//printf ("pitchtab: %d %d %d %d\n", i, val,(int32_t)u.f, (int32_t)(expf((float)i*0.01f)*1.9118745f));
+		}
+		// Fill the pitch table
+		ulPitchLinTable[i] = val;
+	}
+//	test2 = 0;
+//	for (int32_t i = 0; i < 1000000; i++)
+//	{
+//		test2 ++;
+//		if (test2 > 1000000)
+//		{
+//			test2 = 0;
+//		}
+//		//test2 = 605091;
+//		fPitch = (float)(test2 + 800000) * 100.0f;   ;
+//		u.f = fPitch;
+//		tabix = ((u.ui-1065353216) >> 17);
+//		tabsub = (u.ui & 0x0001FFFF) >> 2;
+//		p1 = ulPitchLinTable[tabix    ];
+//		p2 = ulPitchLinTable[tabix + 1];
+//		ulWavStep = p1 + (( ((p2-p1)>>6) * tabsub ) >> 9);
+//		if (abs(ulWavStep-ulWavStepOld) > 1000)
+//		{
+//			printf("test: %d %d %d %d %d %d %d\n", test2,u.ui, tabix, tabsub, ulWavStep, ulWavStepOld, ulWavStepOld - ulWavStep);
+//		}
+//
+//		ulWavStepOld = ulWavStep;
+//	}
+
+}
 
 /**
- * @brief Recalculates the volume table
+ * @brief Recalculates the volume LUT
  *
  */
 void THEREMIN_Calc_VolumeTable(void)
@@ -188,22 +254,29 @@ void THEREMIN_Calc_VolumeTable(void)
  */
 inline void THEREMIN_96kHzDACTask(void)
 {
-	int32_t slWavStep;
 	int32_t p1,p2,tabix, tabsub;
 	floatint_ut u;
+	uint32_t ulWavStep;
 
-	// cycles: 71
-	// fast pow approximation:
-	// powf_fast() from https://github.com/ekmett/approximate/blob/master/cbits/fast.c
-	u.f = fPitch * 0.0000001f * fPitchShift;
-	u.i = (int) (fPitchScale * (u.i - 1064866805) + 1064866805);
-	slWavStep = (int32_t) (u.f*10000000.0f);
+	// cycles: 59..62
+	// fast pow approximation by LUT with interpolation
+	// float bias: 127, so 127 << 23bit mantissa is: 1065353216
+	// We use (5 bit of) the exponent and 6 bit of the mantissa
 
-	// cycles:12
-	if (slWavStep > 0)
+	if (fPitch < 1.0f)
 	{
-		ulWaveTableIndex += slWavStep;
+		fPitch = 1.0f;
 	}
+
+	u.f = fPitch;
+	tabix = ((u.ui-1065353216) >> 17);
+	tabsub = (u.ui & 0x0001FFFF) >> 2;
+	p1 = ulPitchLinTable[tabix    ];
+	p2 = ulPitchLinTable[tabix + 1];
+	ulWavStep = p1 + (( ((p2-p1)>>8) * tabsub ) >> 7);
+	ulWaveTableIndex += ulWavStep;
+
+//	test = tabix;
 
 	// cycles: 39 .. 43
 	// scale of the volume raw value by LUT with interpolation
@@ -229,11 +302,14 @@ inline void THEREMIN_96kHzDACTask(void)
 	slVolFiltL+= slVol - slVolFilt;
 	slVolFilt = slVolFiltL / 1024 ;
 
-	// cycles: 29
+	// cycles: 29..38
 	// WAV output to audio DAC
-	usDACValue =
-			(ssWaveTable[ulWaveTableIndex >> 20 /* use only the 12MSB of the 32bit counter*/])
-					* slVolFilt / 1024;
+	tabix = ulWaveTableIndex >> 20; // use only the 12MSB of the 32bit counter
+	tabsub = (ulWaveTableIndex >> 12)  & 0x000000FF;
+	p1 = ssWaveTable[tabix    ];
+	p2 = ssWaveTable[tabix + 1];
+	usDACValue = (p1 + (( (p2-p1) * tabsub ) >> 8)) * slVolFilt / 1024;
+
 
 	// cycles: 29
 	// Get the input capture timestamps
@@ -312,6 +388,9 @@ void THEREMIN_1msTask(void)
 			slVolOffset = 0;
 			slVolPeriodeFilt = 0x7FFFFFFF;
 			slMinVolPeriode = 0x7FFFFFFF;
+
+			// Mute the output
+			bMute = 1;
 		}
 	}
 	else
@@ -337,6 +416,9 @@ void THEREMIN_1msTask(void)
 		// Auto-tune is finished
 		if (siAutotune == 0)
 		{
+			// activate output
+			bMute = 0;
+
 			// Use minimum values for offset of pitch and volume
 			slPitchOffset = slMinPitchPeriode;
 			slVolOffset = slMinVolPeriode;// + 16384 * 128;
@@ -351,6 +433,7 @@ void THEREMIN_1msTask(void)
 		// from 2^0.25 ... 2^4.0
 		// 2^((POT-2048)/1024)
 		fPitchScale = powf(2, ((float)(POTS_GetScaledValue(POT_PITCH_SCALE)-2048))*0.000976562f /* 1/1024 */);
+		THEREMIN_Calc_PitchTable();
 	}
 
 	// pitch shift pot
@@ -358,6 +441,7 @@ void THEREMIN_1msTask(void)
 		// from 2^0.25 ... 2^4.0
 		// 2^((POT-2048)/1024)
 		fPitchShift = powf(2, ((float)(POTS_GetScaledValue(POT_PITCH_SHIFT)-2048))*0.000976562f /* 1/1024 */);
+		THEREMIN_Calc_PitchTable();
 	}
 
 	// volume scale pot
@@ -380,9 +464,8 @@ void THEREMIN_1sTask(void)
 #ifdef DEBUG
 	if (siAutotune == 0)
 	{
-		//printf("%d %d\n", slVol2, test);
+		//printf("%d %d\n", (uint32_t)fPitch, test);
 		//printf("Stopwatch %d\n", ulStopwatch);
-
 	}
 #endif
 }

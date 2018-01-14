@@ -38,7 +38,7 @@ static AUDIO_DrvTypeDef           *pAudioDrv;
 static uint8_t Volume = 60;
 
 extern I2S_HandleTypeDef hi2s3;
-
+int bMute = 0;
 
 void AUDIO_OUT_Init(void)
 {
@@ -119,8 +119,15 @@ void AUDIO_OUT_1msTask(void)
  */
 void AUDIO_OUT_I2S_IRQHandler(void)
 {
-	// Fill the audio DAC
-	hi2s3.Instance->DR = usDACValue;
+	if (bMute)
+	{
+		hi2s3.Instance->DR = 0;
+	}
+	else
+	{
+		// Fill the audio DAC
+		hi2s3.Instance->DR = usDACValue;
+	}
 
 	// Get the new value for the next task
 	THEREMIN_96kHzDACTask();
