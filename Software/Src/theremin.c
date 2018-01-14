@@ -122,7 +122,7 @@ void THEREMIN_Init(void)
 
 	for (int i = 0; i < (4096); i++)
 	{
-		ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 4096);
+		ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
 	}
 
 //	  for (int i = 0; i<1024; i++)
@@ -150,12 +150,6 @@ void THEREMIN_Calc_PitchTable(void)
 	uint32_t val;
 	float f;
 
-//	static int test2 = 0;
-//	uint32_t ulWavStep, ulWavStepOld;
-//	int32_t p1,p2,tabix, tabsub;
-
-
-
 	for (int32_t i = 0; i < 2048; i++)
 	{
 		// Calculate back the x values of the table
@@ -175,39 +169,9 @@ void THEREMIN_Calc_PitchTable(void)
 		{
 			val = 500000000;
 		}
-
-
-		if ((i & 15) == 0)
-		{
-			//printf ("pitchtab: %d %d %d %d\n", i, val,(int32_t)u.f, (int32_t)(expf((float)i*0.01f)*1.9118745f));
-		}
 		// Fill the pitch table
 		ulPitchLinTable[i] = val;
 	}
-//	test2 = 0;
-//	for (int32_t i = 0; i < 1000000; i++)
-//	{
-//		test2 ++;
-//		if (test2 > 1000000)
-//		{
-//			test2 = 0;
-//		}
-//		//test2 = 605091;
-//		fPitch = (float)(test2 + 800000) * 100.0f;   ;
-//		u.f = fPitch;
-//		tabix = ((u.ui-1065353216) >> 17);
-//		tabsub = (u.ui & 0x0001FFFF) >> 2;
-//		p1 = ulPitchLinTable[tabix    ];
-//		p2 = ulPitchLinTable[tabix + 1];
-//		ulWavStep = p1 + (( ((p2-p1)>>6) * tabsub ) >> 9);
-//		if (abs(ulWavStep-ulWavStepOld) > 1000)
-//		{
-//			printf("test: %d %d %d %d %d %d %d\n", test2,u.ui, tabix, tabsub, ulWavStep, ulWavStepOld, ulWavStepOld - ulWavStep);
-//		}
-//
-//		ulWavStepOld = ulWavStep;
-//	}
-
 }
 
 /**
@@ -274,9 +238,9 @@ inline void THEREMIN_96kHzDACTask(void)
 	p1 = ulPitchLinTable[tabix    ];
 	p2 = ulPitchLinTable[tabix + 1];
 	ulWavStep = p1 + (( ((p2-p1)>>8) * tabsub ) >> 7);
-	ulWaveTableIndex += ulWavStep;
+	ulWaveTableIndex += ulWavStep >> 2;
 
-//	test = tabix;
+	//test = ulWavStep;
 
 	// cycles: 39 .. 43
 	// scale of the volume raw value by LUT with interpolation
@@ -307,7 +271,7 @@ inline void THEREMIN_96kHzDACTask(void)
 	tabix = ulWaveTableIndex >> 20; // use only the 12MSB of the 32bit counter
 	tabsub = (ulWaveTableIndex >> 12)  & 0x000000FF;
 	p1 = ssWaveTable[tabix    ];
-	p2 = ssWaveTable[tabix + 1];
+	p2 = ssWaveTable[(tabix + 1) & 0x0FFF];
 	usDACValue = (p1 + (( (p2-p1) * tabsub ) >> 8)) * slVolFilt / 1024;
 
 
