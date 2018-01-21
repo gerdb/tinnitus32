@@ -537,6 +537,7 @@ inline void THEREMIN_96kHzDACTask(void)
  */
 void THEREMIN_1msTask(void)
 {
+	int bReqCalcPitchTable = 0;
 	if (siAutotune == 0)
 	{
 		// Start autotune by pressing BUTTON_KEY
@@ -602,7 +603,9 @@ void THEREMIN_1msTask(void)
 		fPitchScale = powf(2,
 				((float) (POTS_GetScaledValue(POT_PITCH_SCALE) - 2048))
 						* 0.000976562f /* 1/1024 */);
-		THEREMIN_Calc_PitchTable();
+
+		// Request the calculation of a new pitch table
+		bReqCalcPitchTable = 1;
 	}
 
 	// pitch shift pot
@@ -613,6 +616,14 @@ void THEREMIN_1msTask(void)
 		fPitchShift = powf(2,
 				((float) (POTS_GetScaledValue(POT_PITCH_SHIFT) - 2048))
 						* 0.000976562f /* 1/1024 */);
+
+		// Request the calculation of a new pitch table
+		bReqCalcPitchTable = 1;
+	}
+
+	// Is it necessary to recalculate the pitch table?
+	if (bReqCalcPitchTable)
+	{
 		THEREMIN_Calc_PitchTable();
 	}
 

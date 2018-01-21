@@ -45,6 +45,8 @@ typedef struct
   int   	iStabilizeCnt;
   int		bChanged;
   int   	iMaxValue;
+  int   	iScaledValue;
+  int   	iScaledValueOld;
 }POTS_PotTypeDef;
 
 

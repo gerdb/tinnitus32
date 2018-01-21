@@ -109,8 +109,10 @@ void POTS_Init(void)
 		strPots[i].usRawVal = 0;
 		strPots[i].usStabilized = 0;
 		strPots[i].iStabilizeCnt = 0;
-		strPots[i].bChanged = 0;
+		strPots[i].bChanged = 1;
 		strPots[i].iMaxValue = 4096;
+		strPots[i].iScaledValue = 0;
+		strPots[i].iScaledValueOld = 0;
 	}
 
 	// Start with -1, so in the next task, the first value will be 0
@@ -175,11 +177,25 @@ void POTS_1msTask(void)
 			if (strPots[iPot].iStabilizeCnt != 0)
 			{
 				strPots[iPot].usStabilized = strPots[iPot].usRawVal;
-				strPots[iPot].iStabilizeCnt --;
-				strPots[iPot].bChanged = 1;
-			} else {
-				strPots[iPot].bChanged = 0;
 			}
+
+			// Scale the pot value
+			strPots[iPot].iScaledValue = (strPots[iPot].usStabilized * strPots[iPot].iMaxValue) / 4096;
+			// Has the scaled value changed?
+			if ((strPots[iPot].iScaledValue != strPots[iPot].iScaledValueOld) && strPots[iPot].iStabilizeCnt != 0)
+			{
+				strPots[iPot].bChanged = 1;
+			}
+
+			// Update the stabilized value a certain time after change detection
+			if (strPots[iPot].iStabilizeCnt != 0)
+			{
+				strPots[iPot].iStabilizeCnt --;
+			}
+
+			strPots[iPot].iScaledValueOld = strPots[iPot].iScaledValue;
+
+
 		}
 		// Next iPotTask will be 0
 		iPotTask = -1;
@@ -196,7 +212,7 @@ void POTS_1msTask(void)
  */
 int POTS_GetScaledValue(int channel)
 {
-	return (strPots[channel].usStabilized * strPots[channel].iMaxValue) / 4096;
+	return strPots[channel].iScaledValue;
 }
 
 /**
@@ -207,5 +223,10 @@ int POTS_GetScaledValue(int channel)
  */
 int POTS_HasChanged(int channel)
 {
-	return strPots[channel].bChanged;
+	int retval = strPots[channel].bChanged;
+
+	strPots[channel].bChanged = 0;
+
+	return retval;
+
 }
