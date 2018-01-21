@@ -82,7 +82,7 @@ int32_t slMinPitchPeriode;	// minimum pitch value during auto-tune
 int32_t slMinVolPeriode = 0;	// minimum volume value during auto-tune
 
 uint16_t usDACValue;		// wave table output for audio DAC
-
+int iWavMask = 0x0FFF;
 e_waveform eWaveform = SINE;
 
 extern TIM_HandleTypeDef htim1;	// Handle of timer for input capture
@@ -200,6 +200,16 @@ void THEREMIN_Calc_VolumeTable(void)
 
 
 /**
+ * @brief Sets the length ov the wave LUT
+ * @length of the LUT, only 2expN values <= 4096 are valid
+ *
+ */
+void THEREMIN_SetWavelength(int length)
+{
+	iWavMask = length - 1;
+}
+
+/**
  * @brief Recalculates the wave LUT
  *
  */
@@ -214,15 +224,19 @@ void THEREMIN_Calc_WavTable(void)
 
 	// Mute as long as new waveform is beeing calculated
 	bMute = 1;
+	THEREMIN_SetWavelength(4096);
 
 
 	switch (eWaveform)
 	{
 	case SINE:
-		for (int i = 0; i < 4096; i++)
+		for (int i = 0; i < 1024; i++)
 		{
 			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
 		}
+		THEREMIN_SetWavelength(1024);
+
+
 		break;
 
 	case CAT:
@@ -245,7 +259,6 @@ void THEREMIN_Calc_WavTable(void)
 		a2 = 0.00001533600755608856f;
 		b1 = -1.9888928005576803f;
 		b2 = 0.9889541445879048f;
-
 		bLpFilt = 1;
 		break;
 
@@ -289,16 +302,10 @@ void THEREMIN_Calc_WavTable(void)
 	case RECTIFIED:
 		for (int i = 0; i < 4096; i++)
 		{
-			int val = 65535 * sin((i * 2 * M_PI) / 2048);
-			if (val >= 0)
-			{
-				ssWaveTable[i] = val - 32768;
-			}
-			else
-			{
-				ssWaveTable[i] = - 32768 - val;
-			}
+			ssWaveTable[i] = 65535 * sin((i * 2 * M_PI) / 2048) - 32768;
 		}
+		THEREMIN_SetWavelength(1024);
+
 		break;
 
 	case USBSTICK:
@@ -442,8 +449,8 @@ inline void THEREMIN_96kHzDACTask(void)
 		// WAV output to audio DAC
 		tabix = ulWaveTableIndex >> 20; // use only the 12MSB of the 32bit counter
 		tabsub = (ulWaveTableIndex >> 12) & 0x000000FF;
-		p1 = ssWaveTable[tabix];
-		p2 = ssWaveTable[(tabix + 1) & 0x0FFF];
+		p1 = ssWaveTable[tabix & iWavMask];
+		p2 = ssWaveTable[(tabix + 1) & iWavMask];
 		result = (float)((p1 + (((p2 - p1) * tabsub) / 256)) * slVolFilt / 1024);
 
 
