@@ -206,6 +206,15 @@ void THEREMIN_Calc_VolumeTable(void)
 void THEREMIN_Calc_WavTable(void)
 {
 	int bLpFilt = 0;
+	float a0=0.0f;
+	float a1=0.0f;
+	float a2=0.0f;
+	float b1=0.0f;
+	float b2=0.0f;
+
+	// Mute as long as new waveform is beeing calculated
+	bMute = 1;
+
 
 	switch (eWaveform)
 	{
@@ -228,6 +237,16 @@ void THEREMIN_Calc_WavTable(void)
 				ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
 			}
 		}
+		// http://www.earlevel.com/main/2013/10/13/biquad-calculator-v2/
+		// 48kHz, Fc=60, Q=0.7071, A=0dB
+
+		a0 = 0.00001533600755608856f;
+		a1 = 0.00003067201511217712f;
+		a2 = 0.00001533600755608856f;
+		b1 = -1.9888928005576803f;
+		b2 = 0.9889541445879048f;
+
+		bLpFilt = 1;
 		break;
 
 	case SAWTOOTH:
@@ -235,7 +254,7 @@ void THEREMIN_Calc_WavTable(void)
 		{
 			ssWaveTable[i] = (i & 0x03FF)*64-32768;
 		}
-		bLpFilt = 0;
+
 
 		break;
 
@@ -274,15 +293,14 @@ void THEREMIN_Calc_WavTable(void)
 			{
 				sample = ((float)ssWaveTable[i]) * 0.8f;
 
-			    /* compute result */
-			    result = 0.000042557681576339705f * sample + 0.00008511536315267941f * x1 + 0.000042557681576339705f * x2
-			    		+1.9868252854194832f * y1 - 0.9869955161457885f * y2;
+			    // the biquad filter
+			    result = a0 * sample + a1 * x1 + a2 * x2 -b1 * y1 - b2 * y2;
 
-			    /* shift x1 to x2, sample to x1 */
+			    // shift x1 to x2, sample to x1
 			    x2 = x1;
 			    x1 = sample;
 
-			    /* shift y1 to y2, result to y1 */
+			    //shift y1 to y2, result to y1
 			    y2 = y1;
 			    y1 = result;
 
@@ -304,6 +322,10 @@ void THEREMIN_Calc_WavTable(void)
 			}
 		}
 	}
+
+	// Mute as long as new waveform is beeing calculated
+	bMute = 0;
+
 }
 
 /**
