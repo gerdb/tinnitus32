@@ -37,6 +37,8 @@ int16_t ssWaveTable[4096];
 uint32_t ulVolLinTable[1024];
 uint32_t ulPitchLinTable[2048];
 
+float fNonLinTable[1024+1];
+
 // Pitch
 uint16_t usPitchCC;			// value of capture compare register
 uint16_t usPitchLastCC; 	// last value (last task)
@@ -84,6 +86,7 @@ int32_t slMinVolPeriode = 0;	// minimum volume value during auto-tune
 uint16_t usDACValue;		// wave table output for audio DAC
 int iWavMask = 0x0FFF;
 int iWavLength = 4096;
+int bUseNonLinTab = 0;
 e_waveform eWaveform = SINE;
 
 extern TIM_HandleTypeDef htim1;	// Handle of timer for input capture
@@ -227,7 +230,7 @@ void THEREMIN_Calc_WavTable(void)
 	// Mute as long as new waveform is beeing calculated
 	bMute = 1;
 	THEREMIN_SetWavelength(4096);
-
+	bUseNonLinTab = 0;
 
 	switch (eWaveform)
 	{
@@ -284,7 +287,19 @@ void THEREMIN_Calc_WavTable(void)
 		}
 		break;
 
+	case RECTIFIED:
+		for (int i = 0; i < 4096; i++)
+		{
+			ssWaveTable[i] = 65535 * sin((i * 2 * M_PI) / 2048) - 32768;
+		}
+		THEREMIN_SetWavelength(1024);
+
+		break;
+
 	case GLOTTAL:
+
+		// Based on:
+		// http://www.fon.hum.uva.nl/praat/manual/PointProcess__To_Sound__phonation____.html
 		for (int i = 0; i < 768; i++)
 		{
 			ssWaveTable[i] = (int32_t)(621368.0 * (powf((float)i / 768.0f, 3) - powf((float)i / 768.0f, 4))) - 32768 ;
@@ -312,7 +327,14 @@ void THEREMIN_Calc_WavTable(void)
 		{
 			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
 		}
+		for (int i = 0; i < 1024; i++)
+		{
+			fNonLinTable[i] = 32767.0f-(65536.0f*((expf((((float)i/1024.0f)*4.5f)))-1)/(expf(4.5f)-1.0f));
+		}
+		fNonLinTable[1024] = -32768;
+		bUseNonLinTab = 1;
 		THEREMIN_SetWavelength(1024);
+
 		break;
 
 
@@ -333,14 +355,6 @@ void THEREMIN_Calc_WavTable(void)
 		break;
 	 */
 
-	case RECTIFIED:
-		for (int i = 0; i < 4096; i++)
-		{
-			ssWaveTable[i] = 65535 * sin((i * 2 * M_PI) / 2048) - 32768;
-		}
-		THEREMIN_SetWavelength(1024);
-
-		break;
 
 	case USBSTICK:
 		for (int i = 0; i < 4096; i++)
@@ -425,6 +439,8 @@ inline void THEREMIN_96kHzDACTask(void)
 	static volatile float fWavStepFilt = 0.0f;
 	int task48 = 0;
 	float result = 0.0f;
+	int iWavOut;
+
 
 	// cycles: 59..62
 	// fast pow approximation by LUT with interpolation
@@ -485,7 +501,20 @@ inline void THEREMIN_96kHzDACTask(void)
 		tabsub = (ulWaveTableIndex >> 12) & 0x000000FF;
 		p1 = ssWaveTable[tabix & iWavMask];
 		p2 = ssWaveTable[(tabix + 1) & iWavMask];
-		result = (float)((p1 + (((p2 - p1) * tabsub) / 256)) * slVolFilt / 1024);
+		iWavOut = ((p1 + (((p2 - p1) * tabsub) / 256)) * slVolFilt / 1024);
+
+		if (bUseNonLinTab)
+		{
+			tabix = (iWavOut+32768) / 64;
+			tabsub = iWavOut & 0x003F;
+			p1f = fNonLinTable[tabix];
+			p2f = fNonLinTable[tabix + 1];
+			result = (p1f + (((p2f - p1f) * tabsub) * 0.015625f));
+		}
+		else
+		{
+			result = (float)iWavOut;
+		}
 
 
     	if (result > 32767.0)
@@ -500,87 +529,6 @@ inline void THEREMIN_96kHzDACTask(void)
     	{
     		usDACValue = (int16_t)result;
     	}
-
-		/*
-
-
-
-		if (fPitch < 1.0f)
-		{
-			fPitch = 1.0f;
-		}
-
-		u.f = fPitch;
-		tabix = ((u.ui - 1065353216) >> 17);
-		tabsub = (u.ui & 0x0001FFFF) >> 2;
-		p1f = (float)ulPitchLinTable[tabix];
-		p2f = (float)ulPitchLinTable[tabix + 1];
-		fWavStepFilt = (p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f));
-		//fWavStepFilt += ((p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f))- fWavStepFilt) * 0.0001f;
-		//fWavStepFilt = 81460152.0f;
-		ulWaveTableIndex += (uint32_t)fWavStepFilt;
-
-		//test = ulWavStep;
-
-		// cycles: 39 .. 43
-		// scale of the volume raw value by LUT with interpolation
-		// float bias: 127, so 127 << 23bit mantissa is: 1065353216
-		// We use (4 bit of) the exponent and 6 bit of the mantissa
-		if (slVol < 1)
-		{
-			slVol = 1;
-		}
-		if (slVol > 32767)
-		{
-			slVol = 32767;
-		}
-		u.f = (float) (slVol);
-		tabix = ((u.ui - 1065353216) >> 17);
-		tabsub = u.ui & 0x0001FFFF;
-		p1 = ulVolLinTable[tabix];
-		p2 = ulVolLinTable[tabix + 1];
-		slVol = p1 + (((p2 - p1) * tabsub) >> 17);
-
-		// cycles
-		// Low pass filter the output to avoid aliasing noise.
-		slVolFiltL += slVol - slVolFilt;
-		slVolFilt = slVolFiltL / 1024;
-
-		// cycles: 29..38
-		// WAV output to audio DAC
-		tabix = ulWaveTableIndex >> 20; // use only the 12MSB of the 32bit counter
-		tabsub = (ulWaveTableIndex >> 12) & 0x000000FF;
-		p1 = ssWaveTable[tabix];
-		p2 = ssWaveTable[(tabix + 1) & 0x0FFF];
-		sample = (float)((p1 + (((p2 - p1) * tabsub) / 256)) * slVolFilt / 1024);
-
-
-	    // compute result
-	    result = 0.10819418755438784f * sample + 0.21638837510877568f * x1 + 0.10819418755438784f * x2
-	    		+ 1.044815499854966f * y1 - 0.47759225007251715f * y2;
-
-	    //shift x1 to x2, sample to x1
-	    x2 = x1;
-	    x1 = sample;
-
-	    // shift y1 to y2, result to y1
-	    y2 = y1;
-	    y1 = result;
-
-    	if (result > 32767.0)
-    	{
-    		usDACValue = 32767;
-    	}
-    	else if (result < -32768.0)
-    	{
-    		usDACValue = -32768;
-    	}
-    	else
-    	{
-    		usDACValue = (int16_t)result;
-    	}
-    	*/
-
 	}
 
 
