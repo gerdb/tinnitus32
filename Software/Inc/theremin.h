@@ -42,6 +42,10 @@ typedef enum
 	USBSTICK = 7
 }e_waveform;
 
+
+#define TESTPORT_ON()  GPIOD->BSRR = 0x00002000
+#define TESTPORT_OFF() GPIOD->BSRR = 0x20000000
+
 /* Global variables  ------------------------------------------------------- */
 extern uint16_t usDACValue;
 extern int16_t ssWaveTable[4 * 1024];

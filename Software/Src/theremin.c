@@ -205,6 +205,8 @@ void THEREMIN_Calc_VolumeTable(void)
  */
 void THEREMIN_Calc_WavTable(void)
 {
+	int bLpFilt = 0;
+
 	switch (eWaveform)
 	{
 	case SINE:
@@ -233,6 +235,8 @@ void THEREMIN_Calc_WavTable(void)
 		{
 			ssWaveTable[i] = (i & 0x03FF)*64-32768;
 		}
+		bLpFilt = 0;
+
 		break;
 
 	case USBSTICK:
@@ -254,7 +258,52 @@ void THEREMIN_Calc_WavTable(void)
 		}
 	}
 
+	// Additional low pass filter;
+	if (bLpFilt)
+	{
+		float result = 0.0f;
+		float sample = 0.0f;
+		float x1=0.0f;
+		float x2=0.0f;
+		float y1=0.0f;
+		float y2=0.0f;
 
+		for (int run = 0; run < 2; run ++)
+		{
+			for (int i = 0; i < 4096; i++)
+			{
+				sample = ((float)ssWaveTable[i]) * 0.8f;
+
+			    /* compute result */
+			    result = 0.000042557681576339705f * sample + 0.00008511536315267941f * x1 + 0.000042557681576339705f * x2
+			    		+1.9868252854194832f * y1 - 0.9869955161457885f * y2;
+
+			    /* shift x1 to x2, sample to x1 */
+			    x2 = x1;
+			    x1 = sample;
+
+			    /* shift y1 to y2, result to y1 */
+			    y2 = y1;
+			    y1 = result;
+
+			    if (run == 1)
+			    {
+			    	if (result > 32767.0)
+			    	{
+			    		ssWaveTable[i] = 32767;
+			    	}
+			    	else if (result < -32768.0)
+			    	{
+			    		ssWaveTable[i] = -32768;
+			    	}
+			    	else
+			    	{
+						ssWaveTable[i] = (int16_t)result;
+			    	}
+			    }
+			}
+		}
+	}
 }
 
 /**
@@ -265,60 +314,169 @@ void THEREMIN_Calc_WavTable(void)
 inline void THEREMIN_96kHzDACTask(void)
 {
 	int32_t p1, p2, tabix, tabsub;
+	float p1f, p2f;
 	floatint_ut u;
-	uint32_t ulWavStep;
+	static volatile float fWavStepFilt = 0.0f;
+	int task48 = 0;
+	float result = 0.0f;
 
 	// cycles: 59..62
 	// fast pow approximation by LUT with interpolation
 	// float bias: 127, so 127 << 23bit mantissa is: 1065353216
 	// We use (5 bit of) the exponent and 6 bit of the mantissa
+	task48 = 1-task48;
 
-	if (fPitch < 1.0f)
+	if (task48)
 	{
-		fPitch = 1.0f;
+
+		if (fPitch < 1.0f)
+		{
+			fPitch = 1.0f;
+		}
+
+		u.f = fPitch;
+		tabix = ((u.ui - 1065353216) >> 17);
+		tabsub = (u.ui & 0x0001FFFF) >> 2;
+		p1f = (float)ulPitchLinTable[tabix];
+		p2f = (float)ulPitchLinTable[tabix + 1];
+		fWavStepFilt = (p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f));
+		//fWavStepFilt += ((p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f))- fWavStepFilt) * 0.0001f;
+		//fWavStepFilt = 81460152.0f;
+		ulWaveTableIndex += (uint32_t)fWavStepFilt;
+
+
+		//test = ulWavStep;
+
+		// cycles: 39 .. 43
+		// scale of the volume raw value by LUT with interpolation
+		// float bias: 127, so 127 << 23bit mantissa is: 1065353216
+		// We use (4 bit of) the exponent and 6 bit of the mantissa
+		if (slVol < 1)
+		{
+			slVol = 1;
+		}
+		if (slVol > 32767)
+		{
+			slVol = 32767;
+		}
+		u.f = (float) (slVol);
+		tabix = ((u.ui - 1065353216) >> 17);
+		tabsub = u.ui & 0x0001FFFF;
+		p1 = ulVolLinTable[tabix];
+		p2 = ulVolLinTable[tabix + 1];
+		slVol = p1 + (((p2 - p1) * tabsub) >> 17);
+
+		// cycles
+		// Low pass filter the output to avoid aliasing noise.
+		slVolFiltL += slVol - slVolFilt;
+		slVolFilt = slVolFiltL / 1024;
+
+
+
+		// cycles: 29..38
+		// WAV output to audio DAC
+		tabix = ulWaveTableIndex >> 20; // use only the 12MSB of the 32bit counter
+		tabsub = (ulWaveTableIndex >> 12) & 0x000000FF;
+		p1 = ssWaveTable[tabix];
+		p2 = ssWaveTable[(tabix + 1) & 0x0FFF];
+		result = (float)((p1 + (((p2 - p1) * tabsub) / 256)) * slVolFilt / 1024);
+
+
+    	if (result > 32767.0)
+    	{
+    		usDACValue = 32767;
+    	}
+    	else if (result < -32768.0)
+    	{
+    		usDACValue = -32768;
+    	}
+    	else
+    	{
+    		usDACValue = (int16_t)result;
+    	}
+
+		/*
+
+
+
+		if (fPitch < 1.0f)
+		{
+			fPitch = 1.0f;
+		}
+
+		u.f = fPitch;
+		tabix = ((u.ui - 1065353216) >> 17);
+		tabsub = (u.ui & 0x0001FFFF) >> 2;
+		p1f = (float)ulPitchLinTable[tabix];
+		p2f = (float)ulPitchLinTable[tabix + 1];
+		fWavStepFilt = (p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f));
+		//fWavStepFilt += ((p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f))- fWavStepFilt) * 0.0001f;
+		//fWavStepFilt = 81460152.0f;
+		ulWaveTableIndex += (uint32_t)fWavStepFilt;
+
+		//test = ulWavStep;
+
+		// cycles: 39 .. 43
+		// scale of the volume raw value by LUT with interpolation
+		// float bias: 127, so 127 << 23bit mantissa is: 1065353216
+		// We use (4 bit of) the exponent and 6 bit of the mantissa
+		if (slVol < 1)
+		{
+			slVol = 1;
+		}
+		if (slVol > 32767)
+		{
+			slVol = 32767;
+		}
+		u.f = (float) (slVol);
+		tabix = ((u.ui - 1065353216) >> 17);
+		tabsub = u.ui & 0x0001FFFF;
+		p1 = ulVolLinTable[tabix];
+		p2 = ulVolLinTable[tabix + 1];
+		slVol = p1 + (((p2 - p1) * tabsub) >> 17);
+
+		// cycles
+		// Low pass filter the output to avoid aliasing noise.
+		slVolFiltL += slVol - slVolFilt;
+		slVolFilt = slVolFiltL / 1024;
+
+		// cycles: 29..38
+		// WAV output to audio DAC
+		tabix = ulWaveTableIndex >> 20; // use only the 12MSB of the 32bit counter
+		tabsub = (ulWaveTableIndex >> 12) & 0x000000FF;
+		p1 = ssWaveTable[tabix];
+		p2 = ssWaveTable[(tabix + 1) & 0x0FFF];
+		sample = (float)((p1 + (((p2 - p1) * tabsub) / 256)) * slVolFilt / 1024);
+
+
+	    // compute result
+	    result = 0.10819418755438784f * sample + 0.21638837510877568f * x1 + 0.10819418755438784f * x2
+	    		+ 1.044815499854966f * y1 - 0.47759225007251715f * y2;
+
+	    //shift x1 to x2, sample to x1
+	    x2 = x1;
+	    x1 = sample;
+
+	    // shift y1 to y2, result to y1
+	    y2 = y1;
+	    y1 = result;
+
+    	if (result > 32767.0)
+    	{
+    		usDACValue = 32767;
+    	}
+    	else if (result < -32768.0)
+    	{
+    		usDACValue = -32768;
+    	}
+    	else
+    	{
+    		usDACValue = (int16_t)result;
+    	}
+    	*/
+
 	}
 
-	u.f = fPitch;
-	tabix = ((u.ui - 1065353216) >> 17);
-	tabsub = (u.ui & 0x0001FFFF) >> 2;
-	p1 = ulPitchLinTable[tabix];
-	p2 = ulPitchLinTable[tabix + 1];
-	ulWavStep = p1 + ((((p2 - p1) >> 8) * tabsub) >> 7);
-	ulWaveTableIndex += ulWavStep >> 2;
-
-	//test = ulWavStep;
-
-	// cycles: 39 .. 43
-	// scale of the volume raw value by LUT with interpolation
-	// float bias: 127, so 127 << 23bit mantissa is: 1065353216
-	// We use (4 bit of) the exponent and 6 bit of the mantissa
-	if (slVol < 1)
-	{
-		slVol = 1;
-	}
-	if (slVol > 32767)
-	{
-		slVol = 32767;
-	}
-	u.f = (float) (slVol);
-	tabix = ((u.ui - 1065353216) >> 17);
-	tabsub = u.ui & 0x0001FFFF;
-	p1 = ulVolLinTable[tabix];
-	p2 = ulVolLinTable[tabix + 1];
-	slVol = p1 + (((p2 - p1) * tabsub) >> 17);
-
-	// cycles
-	// Low pass filter the output to avoid aliasing noise.
-	slVolFiltL += slVol - slVolFilt;
-	slVolFilt = slVolFiltL / 1024;
-
-	// cycles: 29..38
-	// WAV output to audio DAC
-	tabix = ulWaveTableIndex >> 20; // use only the 12MSB of the 32bit counter
-	tabsub = (ulWaveTableIndex >> 12) & 0x000000FF;
-	p1 = ssWaveTable[tabix];
-	p2 = ssWaveTable[(tabix + 1) & 0x0FFF];
-	usDACValue = (p1 + (((p2 - p1) * tabsub) >> 8)) * slVolFilt / 1024;
 
 	// cycles: 29
 	// Get the input capture timestamps
