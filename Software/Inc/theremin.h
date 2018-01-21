@@ -41,6 +41,7 @@ typedef enum
 	COSPULSE = 2,
 	HARMON = 3,
 	SAWTOOTH = 4,
+	RECTIFIED = 5,
 	USBSTICK = 7
 }e_waveform;
 

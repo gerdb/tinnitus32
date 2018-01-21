@@ -286,6 +286,21 @@ void THEREMIN_Calc_WavTable(void)
 
 		break;
 
+	case RECTIFIED:
+		for (int i = 0; i < 4096; i++)
+		{
+			int val = 65535 * sin((i * 2 * M_PI) / 2048);
+			if (val >= 0)
+			{
+				ssWaveTable[i] = val - 32768;
+			}
+			else
+			{
+				ssWaveTable[i] = - 32768 - val;
+			}
+		}
+		break;
+
 	case USBSTICK:
 		for (int i = 0; i < 4096; i++)
 		{
