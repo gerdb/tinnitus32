@@ -38,7 +38,9 @@ typedef enum
 {
 	SINE = 0,
 	CAT = 1,
-	SAWTOOTH = 2,
+	COSPULSE = 2,
+	HARMON = 3,
+	SAWTOOTH = 4,
 	USBSTICK = 7
 }e_waveform;
 

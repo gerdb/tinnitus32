@@ -249,6 +249,28 @@ void THEREMIN_Calc_WavTable(void)
 		bLpFilt = 1;
 		break;
 
+	case COSPULSE:
+		for (int i = 0; i < 4096; i++)
+		{
+			if (i < 512)
+			{
+				ssWaveTable[i] = - 32767 * cos((i * 2 * M_PI) / 512);
+			}
+			else
+			{
+				ssWaveTable[i] = -32767;
+			}
+		}
+		break;
+
+
+	case HARMON:
+		for (int i = 0; i < 4096; i++)
+		{
+			ssWaveTable[i] = 16384 * (0.8f*sin((i * 2.0f * M_PI) / 1024) + 1.0f * sin((i * 6.0f * M_PI) / 1024)) ;
+		}
+		break;
+
 	case SAWTOOTH:
 		for (int i = 0; i < 4096; i++)
 		{
