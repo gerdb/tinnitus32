@@ -40,8 +40,9 @@ typedef enum
 	CAT = 1,
 	COSPULSE = 2,
 	HARMON = 3,
-	SAWTOOTH = 4,
-	RECTIFIED = 5,
+	RECTIFIED = 4,
+	GLOTTAL = 5,
+	THEREMIN = 6,
 	USBSTICK = 7
 }e_waveform;
 

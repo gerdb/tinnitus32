@@ -83,6 +83,7 @@ int32_t slMinVolPeriode = 0;	// minimum volume value during auto-tune
 
 uint16_t usDACValue;		// wave table output for audio DAC
 int iWavMask = 0x0FFF;
+int iWavLength = 4096;
 e_waveform eWaveform = SINE;
 
 extern TIM_HandleTypeDef htim1;	// Handle of timer for input capture
@@ -206,6 +207,7 @@ void THEREMIN_Calc_VolumeTable(void)
  */
 void THEREMIN_SetWavelength(int length)
 {
+	iWavLength = length;
 	iWavMask = length - 1;
 }
 
@@ -235,8 +237,6 @@ void THEREMIN_Calc_WavTable(void)
 			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
 		}
 		THEREMIN_SetWavelength(1024);
-
-
 		break;
 
 	case CAT:
@@ -284,6 +284,39 @@ void THEREMIN_Calc_WavTable(void)
 		}
 		break;
 
+	case GLOTTAL:
+		for (int i = 0; i < 768; i++)
+		{
+			ssWaveTable[i] = (int32_t)(621368.0 * (powf((float)i / 768.0f, 3) - powf((float)i / 768.0f, 4))) - 32768 ;
+		}
+		for (int i = 768; i < 1024; i++)
+		{
+			ssWaveTable[i] = -32768 ;
+		}
+		THEREMIN_SetWavelength(1024);
+
+		// http://www.earlevel.com/main/2013/10/13/biquad-calculator-v2/
+		// 48kHz, Fc=400, Q=0.7071, A=0dB
+
+		a0 = 0.0006607788720867079f;
+		a1 = 0.0013215577441734157f;
+		a2 = 0.0006607788720867079f;
+		b1 = -1.9259833105871227f;
+		b2 = 0.9286264260754695f;
+		bLpFilt = 1;
+
+		break;
+
+	case THEREMIN:
+		for (int i = 0; i < 1024; i++)
+		{
+			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
+		}
+		THEREMIN_SetWavelength(1024);
+		break;
+
+
+	/*
 	case SAWTOOTH:
 		for (int i = 0; i < 4096; i++)
 		{
@@ -298,6 +331,7 @@ void THEREMIN_Calc_WavTable(void)
 		bLpFilt = 1;
 
 		break;
+	 */
 
 	case RECTIFIED:
 		for (int i = 0; i < 4096; i++)
@@ -339,7 +373,7 @@ void THEREMIN_Calc_WavTable(void)
 
 		for (int run = 0; run < 2; run ++)
 		{
-			for (int i = 0; i < 4096; i++)
+			for (int i = 0; i < iWavLength; i++)
 			{
 				sample = ((float)ssWaveTable[i]) * 0.8f;
 
