@@ -46,11 +46,13 @@ typedef struct
 
 /* global variables -------------------------------------------------------- */
 extern int bMounted;
+extern int bWavLoaded;
 
 /* Function prototypes ----------------------------------------------------- */
 void USB_STICK_Connected(void);
 void USB_STICK_Disconnected(void);
 void USB_STICK_ReadCFile(char* filename);
 void USB_STICK_ReadWAVFile(char* filename);
+void USB_STICK_ReadFiles(void);
 
 #endif /* USB_STICK_H_ */

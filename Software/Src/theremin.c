@@ -89,6 +89,7 @@ int iWavLength = 4096;
 int bUseNonLinTab = 0;
 e_waveform eWaveform = SINE;
 
+
 extern TIM_HandleTypeDef htim1;	// Handle of timer for input capture
 
 #ifdef DEBUG
@@ -232,6 +233,11 @@ void THEREMIN_Calc_WavTable(void)
 	THEREMIN_SetWavelength(4096);
 	bUseNonLinTab = 0;
 
+	if (eWaveform != USBSTICK)
+	{
+		bWavLoaded = 0;
+	}
+
 	switch (eWaveform)
 	{
 	case SINE:
@@ -361,11 +367,7 @@ void THEREMIN_Calc_WavTable(void)
 		{
 			ssWaveTable[i] = 0;
 		}
-		if (bMounted)
-		{
-			USB_STICK_ReadWAVFile("WAV1.WAV");
-			USB_STICK_ReadCFile("WAV1.C");
-		}
+		USB_STICK_ReadFiles();
 		break;
 
 	default:
@@ -442,29 +444,28 @@ inline void THEREMIN_96kHzDACTask(void)
 	int iWavOut;
 
 
-	// cycles: 59..62
-	// fast pow approximation by LUT with interpolation
-	// float bias: 127, so 127 << 23bit mantissa is: 1065353216
-	// We use (5 bit of) the exponent and 6 bit of the mantissa
+
 	task48 = 1-task48;
 
 	if (task48)
 	{
 
-		if (fPitch < 1.0f)
+		if (fPitch >= 1.0f)
 		{
-			fPitch = 1.0f;
+			// cycles: 59..62
+			// fast pow approximation by LUT with interpolation
+			// float bias: 127, so 127 << 23bit mantissa is: 1065353216
+			// We use (5 bit of) the exponent and 6 bit of the mantissa
+			u.f = fPitch;
+			tabix = ((u.ui - 1065353216) >> 17);
+			tabsub = (u.ui & 0x0001FFFF) >> 2;
+			p1f = (float)ulPitchLinTable[tabix];
+			p2f = (float)ulPitchLinTable[tabix + 1];
+			fWavStepFilt = (p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f));
+			//fWavStepFilt += ((p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f))- fWavStepFilt) * 0.0001f;
+			//fWavStepFilt = 81460152.0f;
+			ulWaveTableIndex += (uint32_t)fWavStepFilt;
 		}
-
-		u.f = fPitch;
-		tabix = ((u.ui - 1065353216) >> 17);
-		tabsub = (u.ui & 0x0001FFFF) >> 2;
-		p1f = (float)ulPitchLinTable[tabix];
-		p2f = (float)ulPitchLinTable[tabix + 1];
-		fWavStepFilt = (p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f));
-		//fWavStepFilt += ((p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f))- fWavStepFilt) * 0.0001f;
-		//fWavStepFilt = 81460152.0f;
-		ulWaveTableIndex += (uint32_t)fWavStepFilt;
 
 
 		//test = ulWavStep;
@@ -516,7 +517,7 @@ inline void THEREMIN_96kHzDACTask(void)
 			result = (float)iWavOut;
 		}
 
-
+		// Limit the output to 16bit
     	if (result > 32767.0)
     	{
     		usDACValue = 32767;

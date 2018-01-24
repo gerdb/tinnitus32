@@ -53,6 +53,7 @@ typedef enum
 /* Global variables  ------------------------------------------------------- */
 extern uint16_t usDACValue;
 extern int16_t ssWaveTable[4 * 1024];
+extern e_waveform eWaveform;
 
 /* Function prototypes ----------------------------------------------------- */
 void THEREMIN_Init(void);

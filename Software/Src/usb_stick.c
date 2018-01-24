@@ -29,6 +29,7 @@
 
 /* Variable used by FatFs */
 int bMounted = 0;
+int bWavLoaded = 0;
 #define LINELENGTH 256
 char sLine[LINELENGTH];
 uint32_t ulBytesRead;
@@ -171,6 +172,19 @@ void USB_STICK_ReadWAVFile(char* filename)
 }
 
 /**
+ * @brief Reads the WAV file
+ */
+void USB_STICK_ReadFiles(void)
+{
+	if (bMounted && (eWaveform == USBSTICK) && !bWavLoaded)
+	{
+		USB_STICK_ReadWAVFile("WAV1.WAV");
+		USB_STICK_ReadCFile("WAV1.C");
+		bWavLoaded = 1;
+	}
+}
+
+/**
  * @brief Callback function: An USB stick was connected
  */
 void USB_STICK_Connected(void)
@@ -179,6 +193,7 @@ void USB_STICK_Connected(void)
 	if (f_mount(&USBHFatFS, (TCHAR const*) USBHPath, 0) == FR_OK)
 	{
 		bMounted = 1;
+		USB_STICK_ReadFiles();
 	}
 }
 
@@ -188,4 +203,5 @@ void USB_STICK_Connected(void)
 void USB_STICK_Disconnected(void)
 {
 	bMounted = 0;
+	bWavLoaded = 0;
 }
