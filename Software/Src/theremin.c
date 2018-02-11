@@ -461,7 +461,7 @@ inline void THEREMIN_96kHzDACTask(void)
 			tabsub = (u.ui & 0x0001FFFF) >> 2;
 			p1f = (float)ulPitchLinTable[tabix];
 			p2f = (float)ulPitchLinTable[tabix + 1];
-			fWavStepFilt = (p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f));
+			fWavStepFilt = (p1f + (((p2f - p1f) * tabsub) * 0.000030518f /*1/32768*/));
 			//fWavStepFilt += ((p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f))- fWavStepFilt) * 0.0001f;
 			//fWavStepFilt = 81460152.0f;
 			ulWaveTableIndex += (uint32_t)fWavStepFilt;
@@ -644,7 +644,9 @@ void THEREMIN_1msTask(void)
 			// Use minimum values for offset of pitch and volume
 			slPitchOffset = slMinPitchPeriode;
 			slVolOffset = slMinVolPeriode;	// + 16384 * 128;
-
+#ifdef DEBUG
+		printf("%d %d\n", usPitchPeriod-2048, slPitchOffset/65536/16);
+#endif
 			CONFIG_Write_SLong(EEPROM_ADDR_PITCH_AUTOTUNE_H, slPitchOffset);
 			CONFIG_Write_SLong(EEPROM_ADDR_VOL_AUTOTUNE_H, slVolOffset);
 		}
@@ -653,7 +655,7 @@ void THEREMIN_1msTask(void)
 	// pitch scale pot
 	if (POTS_HasChanged(POT_PITCH_SCALE))
 	{
-		// from 2^0.25 ... 2^4.0
+		// from 2^0.5 ... 2^2.0
 		// 2^((POT-2048)/1024)
 		fPitchScale = powf(2,
 				((float) (POTS_GetScaledValue(POT_PITCH_SCALE) - 2048))
@@ -670,7 +672,7 @@ void THEREMIN_1msTask(void)
 		// 2^((POT-2048)/1024)
 		fPitchShift = powf(2,
 				((float) (POTS_GetScaledValue(POT_PITCH_SHIFT) - 2048))
-						* 0.000976562f /* 1/1024 */);
+						* 0.001953125f /* 1/512 */);
 
 		// Request the calculation of a new pitch table
 		bReqCalcPitchTable = 1;
@@ -711,7 +713,7 @@ void THEREMIN_1sTask(void)
 #ifdef DEBUG
 	if (siAutotune == 0)
 	{
-		//printf("%d %d\n", (uint32_t)fPitch, test);
+		//printf("%d\n", (uint32_t)slPitchPeriodeFilt);
 		//printf("Stopwatch %d\n", ulStopwatch);
 	}
 #endif
