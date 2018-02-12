@@ -40,7 +40,7 @@ typedef enum
 	CAT = 1,
 	COSPULSE = 2,
 	HARMON = 3,
-	RECTIFIED = 4,
+	COMPRESSED = 4,
 	GLOTTAL = 5,
 	THEREMIN = 6,
 	USBSTICK = 7

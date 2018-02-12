@@ -274,9 +274,9 @@ void THEREMIN_Calc_WavTable(void)
 	case COSPULSE:
 		for (int i = 0; i < 4096; i++)
 		{
-			if (i < 512)
+			if (i < 2048)
 			{
-				ssWaveTable[i] = - 32767 * cos((i * 2 * M_PI) / 512);
+				ssWaveTable[i] = - 32767 * cos((i * 2 * M_PI) / 2048);
 			}
 			else
 			{
@@ -293,12 +293,31 @@ void THEREMIN_Calc_WavTable(void)
 		}
 		break;
 
-	case RECTIFIED:
-		for (int i = 0; i < 4096; i++)
+	case COMPRESSED:
+		for (int i = 0; i < 1024; i++)
 		{
-			ssWaveTable[i] = 65535 * sin((i * 2 * M_PI) / 2048) - 32768;
+			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
 		}
+
+		fNonLinTable[512] = 0.0f;
+
+		for (int i = 0; i < 512; i++)
+		{
+			fNonLinTable[513 + i] = powf(((float)i / 512.0f),0.7f) * 32767.0f;
+			fNonLinTable[511 - i] = -fNonLinTable[513 + i];
+		}
+		bUseNonLinTab = 1;
 		THEREMIN_SetWavelength(1024);
+
+		// http://www.earlevel.com/main/2013/10/13/biquad-calculator-v2/
+		// 48kHz, Fc=60, Q=0.7071, A=0dB
+
+		a0 = 0.00001533600755608856f;
+		a1 = 0.00003067201511217712f;
+		a2 = 0.00001533600755608856f;
+		b1 = -1.9888928005576803f;
+		b2 = 0.9889541445879048f;
+		bLpFilt = 1;
 
 		break;
 
@@ -645,7 +664,7 @@ void THEREMIN_1msTask(void)
 			slPitchOffset = slMinPitchPeriode;
 			slVolOffset = slMinVolPeriode;	// + 16384 * 128;
 #ifdef DEBUG
-		printf("%d %d\n", usPitchPeriod-2048, slPitchOffset/65536/16);
+		printf("%d %d\n", usPitchPeriod, usVolPeriod);
 #endif
 			CONFIG_Write_SLong(EEPROM_ADDR_PITCH_AUTOTUNE_H, slPitchOffset);
 			CONFIG_Write_SLong(EEPROM_ADDR_VOL_AUTOTUNE_H, slVolOffset);
