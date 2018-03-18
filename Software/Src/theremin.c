@@ -36,6 +36,7 @@ int16_t ssWaveTable[4096];
 // Linearization tables for pitch an volume
 uint32_t ulVolLinTable[1024];
 uint32_t ulPitchLinTable[2048];
+float fLFOTable[1024];
 
 float fNonLinTable[1024+1];
 
@@ -75,6 +76,9 @@ float fVolShift = 0.0f;
 int32_t test;
 
 uint32_t ulWaveTableIndex = 0;
+uint32_t ulLFOTableIndex = 0;
+
+
 
 // Auto-tune
 int siAutotune = 0;			// Auto-tune down counter
@@ -127,7 +131,20 @@ void THEREMIN_Init(void)
 	THEREMIN_Calc_VolumeTable();
 	THEREMIN_Calc_PitchTable();
 	THEREMIN_Calc_WavTable();
+	THEREMIN_Calc_LFOTable();
 
+}
+
+/**
+ * @brief Create a sin table for general purpose like LFO
+ *
+ */
+void THEREMIN_Calc_LFOTable(void)
+{
+	for (int i = 0; i < 1024; i++)
+	{
+		fLFOTable[i] = 0.95f + 0.05f * sin((i * 2 * M_PI) / 1024.0f);
+	}
 }
 
 /**
@@ -165,6 +182,8 @@ void THEREMIN_Calc_PitchTable(void)
 	}
 }
 
+
+
 /**
  * @brief Recalculates the volume LUT
  *
@@ -184,10 +203,10 @@ void THEREMIN_Calc_VolumeTable(void)
 		f = (fVolShift - log2f(u.f)) * 300.0f * fVolScale;
 
 		// Limit the float value before we square it;
-		if (f > 1024.0)
-			f = 1024.0;
-		if (f < 0.0)
-			f = 0.0;
+		if (f > 1024.0f)
+			f = 1024.0f;
+		if (f < 0.0f)
+			f = 0.0f;
 
 		// Square the volume value
 		val = (uint32_t) ((f * f) * 0.000976562f); /* =1/1024 */
@@ -243,7 +262,7 @@ void THEREMIN_Calc_WavTable(void)
 	case SINE:
 		for (int i = 0; i < 1024; i++)
 		{
-			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
+			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024.0f);
 		}
 		THEREMIN_SetWavelength(1024);
 		break;
@@ -257,7 +276,7 @@ void THEREMIN_Calc_WavTable(void)
 			}
 			else
 			{
-				ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
+				ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024.0f);
 			}
 		}
 		// http://www.earlevel.com/main/2013/10/13/biquad-calculator-v2/
@@ -276,7 +295,7 @@ void THEREMIN_Calc_WavTable(void)
 		{
 			if (i < 2048)
 			{
-				ssWaveTable[i] = - 32767 * cos((i * 2 * M_PI) / 2048);
+				ssWaveTable[i] = - 32767 * cos((i * 2 * M_PI) / 2048.0f);
 			}
 			else
 			{
@@ -289,21 +308,23 @@ void THEREMIN_Calc_WavTable(void)
 	case HARMON:
 		for (int i = 0; i < 4096; i++)
 		{
-			ssWaveTable[i] = 16384 * (0.8f*sin((i * 2.0f * M_PI) / 1024) + 1.0f * sin((i * 6.0f * M_PI) / 1024)) ;
+			ssWaveTable[i] = 16384 * (0.8f*sin((i * 2.0f * M_PI) / 1024.0f) + 1.0f * sin((i * 6.0f * M_PI) / 1024.0f)) ;
 		}
 		break;
 
 	case COMPRESSED:
 		for (int i = 0; i < 1024; i++)
 		{
-			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
+			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024.0f);
 		}
 
 		fNonLinTable[512] = 0.0f;
 
 		for (int i = 0; i < 512; i++)
 		{
-			fNonLinTable[513 + i] = powf(((float)i / 512.0f),0.7f) * 32767.0f;
+			float lin = ((float)i)/511.0;
+
+			fNonLinTable[513 + i] = ((1.0-lin)*((float)i / 512.0f) + lin *powf(((float)i / 512.0f),0.8f)) * 32767.0f;
 			fNonLinTable[511 - i] = -fNonLinTable[513 + i];
 		}
 		bUseNonLinTab = 1;
@@ -350,7 +371,7 @@ void THEREMIN_Calc_WavTable(void)
 	case THEREMIN:
 		for (int i = 0; i < 1024; i++)
 		{
-			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024);
+			ssWaveTable[i] = 32767 * sin((i * 2 * M_PI) / 1024.0);
 		}
 		for (int i = 0; i < 1024; i++)
 		{
@@ -461,13 +482,16 @@ inline void THEREMIN_96kHzDACTask(void)
 	int task48 = 0;
 	float result = 0.0f;
 	int iWavOut;
-
+	float fLFO;
 
 
 	task48 = 1-task48;
 
 	if (task48)
 	{
+		ulLFOTableIndex +=1;
+
+		fLFO = fLFOTable[ulLFOTableIndex & 0x03FF];
 
 		if (fPitch >= 1.0f)
 		{
@@ -483,7 +507,7 @@ inline void THEREMIN_96kHzDACTask(void)
 			fWavStepFilt = (p1f + (((p2f - p1f) * tabsub) * 0.000030518f /*1/32768*/));
 			//fWavStepFilt += ((p1f + (((p2f - p1f) * tabsub) * 0.000007629394531f))- fWavStepFilt) * 0.0001f;
 			//fWavStepFilt = 81460152.0f;
-			ulWaveTableIndex += (uint32_t)fWavStepFilt;
+			ulWaveTableIndex += (uint32_t)(fWavStepFilt  /*  * fLFO*/ );
 		}
 
 
@@ -513,7 +537,7 @@ inline void THEREMIN_96kHzDACTask(void)
 		slVolFiltL += slVol - slVolFilt;
 		slVolFilt = slVolFiltL / 1024;
 
-
+		//slVolFilt *= fLFO;
 
 		// cycles: 29..38
 		// WAV output to audio DAC

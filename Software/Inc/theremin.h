@@ -63,5 +63,8 @@ void THEREMIN_1sTask(void);
 void THEREMIN_Calc_VolumeTable(void);
 void THEREMIN_Calc_PitchTable(void);
 void THEREMIN_Calc_WavTable(void);
+void THEREMIN_Calc_LFOTable(void);
+
+
 
 #endif /* THEREMIN_H_ */
