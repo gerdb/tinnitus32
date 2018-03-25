@@ -153,10 +153,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="494.17447"
-     inkscape:cy="82.083943"
+     inkscape:cx="704.89229"
+     inkscape:cy="195.22103"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer3"
      showgrid="true"
      inkscape:snap-bbox="true"
      inkscape:bbox-paths="true"
@@ -195,7 +195,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -518,101 +518,85 @@
          y="594.47247"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;font-family:'URW Gothic L';-inkscape-font-specification:'URW Gothic L';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1"
          id="tspan4816-2-1-7-2-2-7-9">h</tspan></text>
-    <g
-       id="g5183"
-       transform="matrix(1.5284232,0,0,1.5284232,-64.235258,56.459323)">
-      <path
-         inkscape:connector-curvature="0"
-         id="path4138-32-0-3-7-6-3"
-         d="m 250.8199,215.94182 0,5.28221 0,49.52081 c 0,3.77825 -1.17163,6.41129 -2.99317,8.23284 -1.82155,1.82154 -4.45329,2.99188 -8.23155,2.99188 l -148.562425,0 c -9.879414,0 -17.959975,4.0403 -23.162582,10.09245 -5.202609,6.05215 -7.661539,13.86291 -7.661539,21.60087 0,7.73796 2.45893,15.55002 7.661539,21.60216 5.202607,6.05215 13.283168,10.09116 23.162582,10.09116 8.410766,0 15.100495,-2.43726 20.141055,-6.08565 5.04055,-3.64839 8.43472,-8.2848 11.30338,-12.48079 2.86866,-4.19598 5.28412,-7.97369 7.75697,-10.36842 2.47284,-2.39472 4.60406,-3.59541 8.57974,-3.59541 l 5.28222,0 0,-10.56444 -5.28222,0 c -6.66673,0 -12.1035,2.86571 -15.9292,6.57053 -3.82569,3.70482 -6.43768,8.05916 -9.12911,11.9959 -2.69142,3.93675 -5.38928,7.43367 -8.77575,9.88482 -3.38648,2.45116 -7.458499,4.07902 -13.947085,4.07902 -7.148414,0 -11.840253,-2.56248 -15.151557,-6.41449 -3.311311,-3.85201 -5.108124,-9.2468 -5.108124,-14.71439 0,-5.46759 1.796813,-10.86108 5.108124,-14.71309 3.311304,-3.85202 8.003143,-6.41579 15.151557,-6.41579 l 148.562425,0 c 6.12591,0 11.74634,-2.12976 15.70222,-6.08564 3.95589,-3.95588 6.08694,-9.57762 6.08694,-15.70352 l 0,-49.52081 0,-5.28221 -10.56444,0 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
-         id="path4190-1-3-3-28-7-6"
-         d="m 72.544585,237.73102 0,26.4111 c 0,3.15006 1.253213,6.17691 3.480646,8.40435 2.227432,2.22744 5.254283,3.48064 8.404347,3.48064 l 6.602775,0 0,-10.56444 -6.602775,0 c -0.352258,0 -0.684582,-0.1365 -0.933672,-0.38559 -0.249083,-0.24908 -0.386882,-0.5827 -0.386882,-0.93496 l 0,-9.24388 6.602774,0 0,-10.56444 -6.602774,0 0,-6.60278 -10.564439,0 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#006d9f;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.16978288;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-         inkscape:connector-curvature="0" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
-         id="path4508-2-9-5-7"
-         d="m 118.76401,244.33437 c -6.50133,0 -11.88499,5.38366 -11.88499,11.88499 l 0,19.80833 10.56444,0 0,-19.80833 c 0,-0.79189 0.52866,-1.32055 1.32055,-1.32055 0.79189,0 1.32056,0.52866 1.32056,1.32055 l 0,19.80833 10.56444,0 0,-19.80833 c 0,-6.50133 -5.38366,-11.88499 -11.885,-11.88499 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-         inkscape:connector-curvature="0" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path4284-1-2-6-3-3-5"
-         d="m 93.673462,252.25713 0,23.76998 10.564448,0 0,-23.76998 -10.564448,0 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path4803-2-6-5-3"
-         d="m 106.87902,241.69329 a 7.923329,7.923329 0 0 1 -7.923338,7.92333 7.923329,7.923329 0 0 1 -7.923329,-7.92333 7.923329,7.923329 0 0 1 7.923329,-7.92333 7.923329,7.923329 0 0 1 7.923338,7.92333 z"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
-         sodipodi:nodetypes="cc"
-         inkscape:connector-curvature="0"
-         id="path4805-1-7-1-6-5"
-         d="m 184.79176,269.42495 -9.90416,0"
-         style="display:inline;fill:none;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
-         id="path4508-2-1-2-2-6"
-         d="m 145.17511,244.33437 c -6.50134,0 -11.88499,5.38366 -11.88499,11.88499 l 0,19.80833 10.56443,0 0,-19.80833 c 0,-0.79189 0.52867,-1.32055 1.32056,-1.32055 0.79189,0 1.32055,0.52866 1.32055,1.32055 l 0,19.80833 10.56444,0 0,-19.80833 c 0,-6.50133 -5.38366,-11.88499 -11.88499,-11.88499 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-         inkscape:connector-curvature="0" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path4284-1-2-6-7-3-9-2"
-         d="m 159.70121,252.25713 0,23.76998 10.56444,0 0,-23.76998 -10.56444,0 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path4803-2-9-1-1-9"
-         d="m 172.90677,241.69329 a 7.923329,7.923329 0 0 1 -7.92334,7.92333 7.923329,7.923329 0 0 1 -7.92333,-7.92333 7.923329,7.923329 0 0 1 7.92333,-7.92333 7.923329,7.923329 0 0 1 7.92334,7.92333 z"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
-         id="path4190-1-3-3-2-9-2-1"
-         d="m 174.22732,237.7316 0,26.41109 c 0,3.15007 1.2532,6.17692 3.48064,8.40435 2.22743,2.22744 5.25428,3.48064 8.40436,3.48065 l 6.60277,0 0,-10.56444 -6.60277,0 c -0.35228,0 -0.6846,-0.13651 -0.93368,-0.3856 -0.24909,-0.24908 -0.38688,-0.58269 -0.38688,-0.93496 l 0,-9.24388 6.60277,0 0,-10.56444 -6.60277,0 0,-6.60277 -10.56444,0 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#006d9f;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.16978288;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-         inkscape:connector-curvature="0" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
-         id="path4508-2-0-4-7-2"
-         d="m 207.24119,276.02769 c -6.50134,0 -11.88499,-5.38366 -11.88499,-11.885 l 0,-19.80832 10.56444,0 0,19.80832 c 0,0.79189 0.52866,1.32056 1.32055,1.32056 0.79189,0 1.32056,-0.52867 1.32056,-1.32056 l 0,-19.80832 10.56444,0 0,19.80832 c 0,6.50134 -5.38367,11.885 -11.885,11.885 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-         inkscape:connector-curvature="0" />
-      <path
-         id="path4338-5-4-0-7"
-         d="m 233.91794,244.3366 c -3.18332,-0.057 -6.33922,0.98129 -8.66872,2.97824 -3.38836,2.90466 -4.41039,7.30751 -2.57663,11.10263 1.83377,3.79511 6.18783,6.28924 10.9797,6.28924 0.54928,0 1.00976,0.26475 1.21995,0.69979 0.21021,0.43502 0.10212,0.90078 -0.28628,1.23374 -0.3884,0.33296 -0.93172,0.42562 -1.4392,0.24542 -0.50747,-0.18019 -0.81503,-0.57604 -0.81503,-1.04691 l -10.56443,0 c 0,4.1078 2.91074,7.84141 7.33784,9.41341 4.4271,1.57198 9.56314,0.69585 12.95149,-2.20881 3.38836,-2.90466 4.4104,-7.30751 2.57663,-11.10263 -1.83376,-3.79511 -6.18911,-6.29034 -10.98097,-6.29034 -0.54929,0 -1.00977,-0.26365 -1.21998,-0.69869 -0.21019,-0.43502 -0.10211,-0.90078 0.28629,-1.23375 0.38841,-0.33295 0.93174,-0.42561 1.4392,-0.24541 0.50748,0.18019 0.81504,0.57493 0.81504,1.04581 l 10.56444,0 c 0,-4.10781 -2.90946,-7.84031 -7.33656,-9.41231 -1.38348,-0.49124 -2.83582,-0.74353 -4.28278,-0.76943 z"
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-         inkscape:connector-curvature="0" />
-      <text
-         sodipodi:linespacing="125%"
-         id="text4879-6-3"
-         y="313.16925"
-         x="147.25296"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.35347366px;line-height:125%;font-family:'Boston Traffic';-inkscape-font-specification:'Boston Traffic';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           id="tspan7385-7"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'URW Gothic L';-inkscape-font-specification:'URW Gothic L';text-align:start;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none"
-           y="313.16925"
-           x="147.25296"
-           sodipodi:role="line">basic</tspan></text>
-    </g>
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 319.1237,386.50981 0,8.07345 0,75.68876 c 0,5.77476 -1.79075,9.79916 -4.57483,12.58326 -2.7841,2.78409 -6.80652,4.57286 -12.5813,4.57286 l -227.066253,0 c -15.099926,0 -27.450443,6.17529 -35.402228,15.42553 -7.951788,9.25025 -11.710074,21.1884 -11.710074,33.01528 0,11.82687 3.758286,23.76701 11.710074,33.01724 7.951785,9.25024 20.302302,15.42356 35.402228,15.42356 12.85521,0 23.079947,-3.72516 30.784053,-9.30145 7.7041,-5.57628 12.89182,-12.66268 17.27635,-19.07593 4.38453,-6.41323 8.07637,-12.18717 11.85593,-15.84733 3.77955,-3.66015 7.03696,-5.49531 13.11348,-5.49531 l 8.07346,0 0,-16.14693 -8.07346,0 c -10.18959,0 -18.49927,4.38001 -24.34656,10.04255 -5.84727,5.66253 -9.8395,12.3178 -13.95315,18.33481 -4.11362,6.01702 -8.2371,11.36179 -13.413055,15.10819 -5.175975,3.74641 -11.399743,6.23447 -21.317048,6.23447 -10.925802,0 -18.096918,-3.91656 -23.157992,-9.80406 -5.061084,-5.8875 -7.807375,-14.13302 -7.807375,-22.48981 0,-8.3568 2.746291,-16.60033 7.807375,-22.48783 5.061074,-5.88752 12.23219,-9.80604 23.157992,-9.80604 l 227.066253,0 c 9.36299,0 17.95338,-3.25518 23.99964,-9.30144 6.04628,-6.04626 9.30342,-14.63865 9.30342,-24.00162 l 0,-75.68876 0,-8.07345 -16.14693,0 z"
+       id="path4138-32-0-3-7-6-3"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#006d9f;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.16978288;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 46.643569,419.81293 0,40.36734 c 0,4.81462 1.91544,9.44093 5.3199,12.8454 3.404459,3.40447 8.030768,5.31989 12.845399,5.31989 l 10.091834,0 0,-16.14693 -10.091834,0 c -0.5384,0 -1.046331,-0.20863 -1.427046,-0.58935 -0.380704,-0.3807 -0.59132,-0.89061 -0.59132,-1.42901 l 0,-14.12856 10.091833,0 0,-16.14694 -10.091833,0 0,-10.09184 -16.146933,0 z"
+       id="path4190-1-3-3-28-7-6"
+       inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 117.28641,429.90564 c -9.93678,0 -18.165294,8.22851 -18.165294,18.1653 l 0,30.27551 16.146934,0 0,-30.27551 c 0,-1.21035 0.80802,-2.01836 2.01836,-2.01836 1.21034,0 2.01837,0.80801 2.01837,2.01836 l 0,30.27551 16.14694,0 0,-30.27551 c 0,-9.93679 -8.22851,-18.1653 -18.16531,-18.1653 z"
+       id="path4508-2-9-5-7"
+       inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 78.937435,442.01497 0,36.33059 16.146947,0 0,-36.33059 -16.146947,0 z"
+       id="path4284-1-2-6-3-3-5"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 99.121116,425.86895 a 12.1102,12.1102 0 0 1 -12.110214,12.11021 12.1102,12.1102 0 0 1 -12.1102,-12.11021 12.1102,12.1102 0 0 1 12.1102,-12.1102 12.1102,12.1102 0 0 1 12.110214,12.1102 z"
+       id="path4803-2-6-5-3"
+       inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 218.20476,468.25467 -15.13775,0"
+       id="path4805-1-7-1-6-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 157.65375,429.90564 c -9.9368,0 -18.1653,8.22851 -18.1653,18.1653 l 0,30.27551 16.14692,0 0,-30.27551 c 0,-1.21035 0.80804,-2.01836 2.01838,-2.01836 1.21034,0 2.01836,0.80801 2.01836,2.01836 l 0,30.27551 16.14693,0 0,-30.27551 c 0,-9.93679 -8.22851,-18.1653 -18.16529,-18.1653 z"
+       id="path4508-2-1-2-2-6"
+       inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 179.85578,442.01497 0,36.33059 16.14693,0 0,-36.33059 -16.14693,0 z"
+       id="path4284-1-2-6-7-3-9-2"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 200.03946,425.86895 a 12.1102,12.1102 0 0 1 -12.11022,12.11021 12.1102,12.1102 0 0 1 -12.1102,-12.11021 12.1102,12.1102 0 0 1 12.1102,-12.1102 12.1102,12.1102 0 0 1 12.11022,12.1102 z"
+       id="path4803-2-9-1-1-9"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#006d9f;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.16978288;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 202.05782,419.81382 0,40.36732 c 0,4.81464 1.91542,9.44095 5.31989,12.8454 3.40446,3.40447 8.03076,5.31989 12.84542,5.31991 l 10.09183,0 0,-16.14694 -10.09183,0 c -0.53843,0 -1.04636,-0.20864 -1.42706,-0.58936 -0.38071,-0.3807 -0.59131,-0.89059 -0.59131,-1.42901 l 0,-14.12856 10.09182,0 0,-16.14694 -10.09182,0 0,-10.09182 -16.14694,0 z"
+       id="path4190-1-3-3-2-9-2-1"
+       inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 252.51698,478.34645 c -9.93679,0 -18.16529,-8.22851 -18.16529,-18.16531 l 0,-30.2755 16.14694,0 0,30.2755 c 0,1.21034 0.80801,2.01837 2.01835,2.01837 1.21035,0 2.01838,-0.80803 2.01838,-2.01837 l 0,-30.2755 16.14693,0 0,30.2755 c 0,9.9368 -8.22852,18.16531 -18.16531,18.16531 z"
+       id="path4508-2-0-4-7-2"
+       inkscape:export-filename="/home/gerd/Documents/Elektronik/theremin/workspace/Theremin32/pics/theremin32_logo.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.16978288;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 293.29035,429.90905 c -4.86546,-0.0871 -9.68901,1.49983 -13.24947,4.55201 -5.17885,4.43955 -6.74095,11.16897 -3.93819,16.96952 2.80278,5.80053 9.45763,9.61262 16.78163,9.61262 0.83954,0 1.54334,0.40465 1.8646,1.06958 0.32129,0.66489 0.15609,1.37677 -0.43755,1.88567 -0.59364,0.50891 -1.42407,0.65053 -2.19971,0.37511 -0.77563,-0.27541 -1.24571,-0.88044 -1.24571,-1.60012 l -16.14692,0 c 0,6.27845 4.44884,11.98499 11.21532,14.38767 6.76649,2.40265 14.61653,1.06355 19.79536,-3.376 5.17885,-4.43955 6.74096,-11.16896 3.93818,-16.96951 -2.80276,-5.80054 -9.45958,-9.61431 -16.78357,-9.61431 -0.83954,0 -1.54335,-0.40296 -1.86464,-1.06789 -0.32126,-0.66489 -0.15607,-1.37677 0.43757,-1.88569 0.59365,-0.50889 1.42409,-0.65051 2.19971,-0.37509 0.77564,0.2754 1.24572,0.87873 1.24572,1.59844 l 16.14694,0 c 0,-6.27847 -4.44689,-11.98331 -11.21337,-14.38599 -2.11454,-0.75083 -4.33433,-1.13643 -6.5459,-1.17602 z"
+       id="path4338-5-4-0-7" />
     <g
        transform="translate(-212.59844,690.94487)"
        style="display:inline"

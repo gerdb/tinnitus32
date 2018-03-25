@@ -2,19 +2,17 @@
 
 A digital Theremin based on the STM32 microcontroller.
 
-* Easy to build: Only an STM32 evaluation board and 2 oscillators for a basic
-and cheap Theremin
+* Easy to build: Only an STM32 evaluation board and 2 oscillators for a Theremin
 * Excellent audio quality: 16/24bit audio DAC with headphone amplifier
 * Loads waveforms with Theremin sound directly from an USB stick
 * Very fast autotune: 1sec
-* 2 variants: A simple to build "tinnitus basic" theremin and a more complex "tinnitus synth" theremin with synthesizer functionality
 * Powerful ARM Cortex-M4 microcontroller with DSP, FPU and 168MHz clock
 
 ![tinnitus basic](pics/tinnitus_basic.png "tinnitus basic")
 
 # Hardware
 The STM32F407G-DISC1 evaluation board can be used.
-So you need only 2 additional oscillators for basic operation.
+So you need only 2 additional oscillators and some pots.
 ![tinnitus](pics/stm32F407_disco.png "STM32F407G-DISC1")
 
 # Example of an LC colpitts oscillator
@@ -49,7 +47,6 @@ So no extra PCB is necessary:
 
 ## Pin maps
 
-### Variant "tinnitus basic"
 | Name       | PIN Name | Connector | Description                                    |
 | ---------- | -------- | --------- | ---------------------------------------------- |
 | GND        | GND      | P1        | Ground for oscillators and potentiometers      |
@@ -62,24 +59,7 @@ So no extra PCB is necessary:
 | ANALOG_4   | PC4      | P1        | Analog input from zoom pitch potentiometer     |
 | ANALOG_5   | PC5      | P1        | Analog input from waveform potentiometer       |
 
-### Variant "tinnitus synth"
-| Name       | PIN Name | Connector | Description                                    |
-| ---------- | -------- | --------- | ---------------------------------------------- |
-| GND        | GND      | P1        | Ground for oscillators and potentiometers      |
-| VDD        | VDD      | P1        | 3V supply for oscillators and potentiometers   |
-| PITCH_OSC  | PE9      | P1        | Signal from pitch oscillator                   |
-| VOLUME_OSC | PE11     | P1        | Signal from volume oscillator                  |
-| POT_MUX_A  | PC6      | P2        | Control signal A to multiplexer                |
-| POT_MUX_B  | PC8      | P2        | Control signal B to multiplexer                |
-| POT_MUX_C  | PC9      | P2        | Control signal C to multiplexer                |
-| ANALOG_1   | PA1      | P1        | Analog input from volume potentiometer         |
-| ANALOG_2   | PA2      | P1        | Analog input from zoom volume potentiometer    |
-| ANALOG_3   | PA3      | P1        | Analog input from shift pitch potentiometer    |
-| ANALOG_4   | PC4      | P1        | Analog input from zoom pitch potentiometer     |
-| ANALOG_6   | PB0      | P1        | Analog input from multiplexer 6                |
-| ANALOG_7   | PB1      | P1        | Analog input from multiplexer 7                |
-| ANALOG_8   | PC1      | P1        | Analog input from multiplexer 8                |
-| ANALOG_9   | PC2      | P1        | Analog input from multiplexer 9                |
+
 
 ## Auto-tune
 The blue button on the STM32 discovery board starts the auto-tune procedure.
