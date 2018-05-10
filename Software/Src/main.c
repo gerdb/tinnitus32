@@ -528,24 +528,29 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(CS_I2C_SPI_GPIO_Port, CS_I2C_SPI_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, CS_I2C_SPI_Pin|PITCH_LED_0_Pin|PITCH_LED_1_Pin|PITCH_LED_2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(OTG_FS_PowerSwitchOn_GPIO_Port, OTG_FS_PowerSwitchOn_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, LD4_Pin|LD3_Pin|LD5_Pin|LD6_Pin 
+  HAL_GPIO_WritePin(GPIOB, PITCH_LED_3_Pin|PITCH_LED_4_Pin|PITCH_LED_5_Pin|PITCH_LED_6_Pin 
+                          |PITCH_LED_7_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, PITCH_LED_8_Pin|PITCH_LED_9_Pin|PITCH_LED_10_Pin|PITCH_LED_11_Pin 
+                          |LD4_Pin|LD3_Pin|LD5_Pin|LD6_Pin 
                           |Audio_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, POT_MUX_A_Pin|POT_MUX_B_Pin|POT_MUX_C_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : CS_I2C_SPI_Pin */
-  GPIO_InitStruct.Pin = CS_I2C_SPI_Pin;
+  /*Configure GPIO pins : CS_I2C_SPI_Pin PITCH_LED_0_Pin PITCH_LED_1_Pin PITCH_LED_2_Pin */
+  GPIO_InitStruct.Pin = CS_I2C_SPI_Pin|PITCH_LED_0_Pin|PITCH_LED_1_Pin|PITCH_LED_2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(CS_I2C_SPI_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pins : OTG_FS_PowerSwitchOn_Pin POT_MUX_A_Pin POT_MUX_B_Pin POT_MUX_C_Pin */
   GPIO_InitStruct.Pin = OTG_FS_PowerSwitchOn_Pin|POT_MUX_A_Pin|POT_MUX_B_Pin|POT_MUX_C_Pin;
@@ -582,9 +587,20 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
   HAL_GPIO_Init(CLK_IN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LD4_Pin LD3_Pin LD5_Pin LD6_Pin 
+  /*Configure GPIO pins : PITCH_LED_3_Pin PITCH_LED_4_Pin PITCH_LED_5_Pin PITCH_LED_6_Pin 
+                           PITCH_LED_7_Pin */
+  GPIO_InitStruct.Pin = PITCH_LED_3_Pin|PITCH_LED_4_Pin|PITCH_LED_5_Pin|PITCH_LED_6_Pin 
+                          |PITCH_LED_7_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PITCH_LED_8_Pin PITCH_LED_9_Pin PITCH_LED_10_Pin PITCH_LED_11_Pin 
+                           LD4_Pin LD3_Pin LD5_Pin LD6_Pin 
                            Audio_RST_Pin */
-  GPIO_InitStruct.Pin = LD4_Pin|LD3_Pin|LD5_Pin|LD6_Pin 
+  GPIO_InitStruct.Pin = PITCH_LED_8_Pin|PITCH_LED_9_Pin|PITCH_LED_10_Pin|PITCH_LED_11_Pin 
+                          |LD4_Pin|LD3_Pin|LD5_Pin|LD6_Pin 
                           |Audio_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
