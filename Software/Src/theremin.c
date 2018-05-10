@@ -78,7 +78,8 @@ int32_t test;
 uint32_t ulWaveTableIndex = 0;
 uint32_t ulLFOTableIndex = 0;
 
-
+float fAudioFrequency = 0.0f;
+float fWavStepFilt = 0.0f;
 
 // Auto-tune
 int siAutotune = 0;			// Auto-tune down counter
@@ -478,7 +479,6 @@ inline void THEREMIN_96kHzDACTask(void)
 	int32_t p1, p2, tabix, tabsub;
 	float p1f, p2f;
 	floatint_ut u;
-	static volatile float fWavStepFilt = 0.0f;
 	int task48 = 0;
 	float result = 0.0f;
 	int iWavOut;
@@ -744,6 +744,9 @@ void THEREMIN_1msTask(void)
 		eWaveform = POTS_GetScaledValue(POT_WAVEFORM);
 		THEREMIN_Calc_WavTable();
 	}
+
+	// fWavStepFilt * 96kHz * (1 >> 20 / 1024(WaveTable length))
+	fAudioFrequency = fWavStepFilt * 0.0000894069671631;
 
 }
 

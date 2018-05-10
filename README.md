@@ -62,7 +62,7 @@ So no extra PCB is necessary:
 
 
 ## Auto-tune
-The blue button on the STM32 discovery board starts the auto-tune procedure.
+The blue button on the STM32 discovery board starts the Auto-Tune procedure.
 
 ![auto tune button](pics/auto_tune.png "auto tune")
 You can also use an additional button and connect it to:
