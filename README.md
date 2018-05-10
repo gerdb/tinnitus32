@@ -73,6 +73,14 @@ You can also use an additional button and connect it to:
 | Auto-tune  | PA0      | P1        | Signal from auto-tune button  |
 
 
+## USB-stick with sound file
+It's possible to store a \*.WAV or a \*.C file on an USB-stick and use it as sound source for the theremin.
+#### WAV file
+The file name must be **WAV1.WAV** and it must contain 1 periode of a sound sample. File format must be WAV (Microsoft) and the data format signed 16 bit PCM with only one mono track. Use Audacity to export it. https://www.audacityteam.org/ 
+#### C file
+The file name must be **WAV1.C** and it must contain 1 periode of a sound sample. File format must be the same as the Audio Wavetables from the Open.Theremin V3 project. http://www.gaudi.ch/OpenTheremin/index.php/download/audio-wavetables 
+
+
 ## Programming software for STM32
 Program the STM32 board with the [STM32CUBEPROG](http://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/stm32cubeprog.html) tool.
 
