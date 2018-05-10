@@ -745,10 +745,7 @@ void THEREMIN_1msTask(void)
 		THEREMIN_Calc_WavTable();
 	}
 
-	// fWavStepFilt * 96kHz * (1 >> 20 / 1024(WaveTable length))
-	fAudioFrequency = fWavStepFilt * 0.0000894069671631;
-
-	HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_RESET);
+	THEREMIN_PitchDisplay();
 }
 
 /**
@@ -764,4 +761,18 @@ void THEREMIN_1sTask(void)
 		//printf("Stopwatch %d\n", ulStopwatch);
 	}
 #endif
+}
+
+
+/**
+ * @brief Displays the pitch with 12 LEDs
+ *
+ */
+void THEREMIN_PitchDisplay(void)
+{
+	// fWavStepFilt * 96kHz * (1 >> 20 / 1024(WaveTable length))
+	fAudioFrequency = fWavStepFilt * 0.0000894069671631;
+
+	HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_RESET);
+
 }
