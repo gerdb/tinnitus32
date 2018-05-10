@@ -748,6 +748,7 @@ void THEREMIN_1msTask(void)
 	// fWavStepFilt * 96kHz * (1 >> 20 / 1024(WaveTable length))
 	fAudioFrequency = fWavStepFilt * 0.0000894069671631;
 
+	HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_RESET);
 }
 
 /**
