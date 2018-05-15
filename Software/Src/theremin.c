@@ -482,7 +482,7 @@ inline void THEREMIN_96kHzDACTask(void)
 	int task48 = 0;
 	float result = 0.0f;
 	int iWavOut;
-	float fLFO;
+	//float fLFO;
 
 
 	task48 = 1-task48;
@@ -491,7 +491,7 @@ inline void THEREMIN_96kHzDACTask(void)
 	{
 		ulLFOTableIndex +=1;
 
-		fLFO = fLFOTable[ulLFOTableIndex & 0x03FF];
+		//fLFO = fLFOTable[ulLFOTableIndex & 0x03FF];
 
 		if (fPitch >= 1.0f)
 		{
