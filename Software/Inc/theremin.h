@@ -65,6 +65,6 @@ void THEREMIN_Calc_PitchTable(void);
 void THEREMIN_Calc_WavTable(void);
 void THEREMIN_Calc_LFOTable(void);
 void THEREMIN_PitchDisplay(void);
-
+void THEREMIN_AutotuneDisplay(void);
 
 #endif /* THEREMIN_H_ */
