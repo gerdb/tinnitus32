@@ -482,7 +482,7 @@ inline void THEREMIN_96kHzDACTask(void)
 	int task48 = 0;
 	float result = 0.0f;
 	int iWavOut;
-	float fLFO;
+	//float fLFO;
 
 
 	task48 = 1-task48;
@@ -491,7 +491,7 @@ inline void THEREMIN_96kHzDACTask(void)
 	{
 		ulLFOTableIndex +=1;
 
-		fLFO = fLFOTable[ulLFOTableIndex & 0x03FF];
+		//fLFO = fLFOTable[ulLFOTableIndex & 0x03FF];
 
 		if (fPitch >= 1.0f)
 		{
@@ -641,6 +641,20 @@ void THEREMIN_1msTask(void)
 		// Start autotune by pressing BUTTON_KEY
 		if (BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_SET)
 		{
+
+			HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_1_GPIO_Port, PITCH_LED_1_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_5_GPIO_Port, PITCH_LED_5_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_6_GPIO_Port, PITCH_LED_6_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_11_GPIO_Port, PITCH_LED_11_Pin, GPIO_PIN_RESET);
+
 			// 1.0sec auto-tune
 			siAutotune = 1000;
 
@@ -684,6 +698,18 @@ void THEREMIN_1msTask(void)
 			// activate output
 			bMute = 0;
 
+			HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_1_GPIO_Port, PITCH_LED_1_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_5_GPIO_Port, PITCH_LED_5_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_6_GPIO_Port, PITCH_LED_6_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(PITCH_LED_11_GPIO_Port, PITCH_LED_11_Pin, GPIO_PIN_RESET);
 			// Use minimum values for offset of pitch and volume
 			slPitchOffset = slMinPitchPeriode;
 			slVolOffset = slMinVolPeriode;	// + 16384 * 128;
@@ -745,7 +771,18 @@ void THEREMIN_1msTask(void)
 		THEREMIN_Calc_WavTable();
 	}
 
-	THEREMIN_PitchDisplay();
+	if (siAutotune == 0)
+	{
+		THEREMIN_PitchDisplay();
+	}
+	else
+	{
+		THEREMIN_AutotuneDisplay();
+	}
+
+
+
+
 }
 
 /**
@@ -763,6 +800,105 @@ void THEREMIN_1sTask(void)
 #endif
 }
 
+void THEREMIN_AutotuneDisplay(void)
+{
+	static int timer1 =0;
+	static int zaehler = 0;
+	timer1 = timer1 + 1;
+	if (timer1 == 40)
+	{
+		timer1 = 0;
+		// alle 20ms
+
+		zaehler = zaehler+1;
+		if (zaehler == 10)
+		{
+			zaehler = 0;
+		}
+	}
+
+
+	if (zaehler == 0)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_11_GPIO_Port, PITCH_LED_11_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_1_GPIO_Port, PITCH_LED_1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_RESET);
+	}
+
+	if (zaehler == 1)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_1_GPIO_Port, PITCH_LED_1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_11_GPIO_Port, PITCH_LED_11_Pin, GPIO_PIN_RESET);
+	}
+
+	if (zaehler == 2)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_1_GPIO_Port, PITCH_LED_1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_RESET);
+	}
+
+	if (zaehler == 3)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_RESET);
+	}
+
+	if (zaehler == 4)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_RESET);
+	}
+
+	if (zaehler == 5)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_5_GPIO_Port, PITCH_LED_5_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_6_GPIO_Port, PITCH_LED_6_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_RESET);
+	}
+
+	if (zaehler == 6)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_5_GPIO_Port, PITCH_LED_5_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_6_GPIO_Port, PITCH_LED_6_Pin, GPIO_PIN_RESET);
+	}
+
+	if (zaehler == 7)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_RESET);
+	}
+
+	if (zaehler == 8)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_RESET);
+	}
+
+	if (zaehler == 9)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_1_GPIO_Port, PITCH_LED_1_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_RESET);
+	}
+
+}
 
 /**
  * @brief Displays the pitch with 12 LEDs
@@ -773,6 +909,182 @@ void THEREMIN_PitchDisplay(void)
 	// fWavStepFilt * 96kHz * (1 >> 20 / 1024(WaveTable length))
 	fAudioFrequency = fWavStepFilt * 0.0000894069671631;
 
-	HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_RESET);
 
+	// Eine Oktave anheben bei Frequenzen kleiner als c1
+	// Damit gehen Töne bis c oder 130Hz
+	if (fAudioFrequency <= 254.284f)
+	{
+		// Frequenz verdoppeln
+		fAudioFrequency = fAudioFrequency *2.0f;
+	}
+
+	// Eine Oktave anheben bei Frequenzen kleiner als c1
+	// Damit gehen Töne bis C oder 65Hz
+	if (fAudioFrequency <= 254.284f)
+	{
+		// Frequenz verdoppeln
+		fAudioFrequency = fAudioFrequency *2.0f;
+	}
+
+	// Eine Oktave anheben bei Frequenzen kleiner als c1
+	// Damit gehen Töne bis C1 oder 32Hz
+	if (fAudioFrequency <= 254.284f)
+	{
+		// Frequenz verdoppeln
+		fAudioFrequency = fAudioFrequency *2.0f;
+	}
+
+	// Eine Oktave anheben bei Frequenzen kleiner als c1
+	// Damit gehen Töne bis C2 oder 16Hz
+	if (fAudioFrequency <= 254.284f)
+	{
+		// Frequenz verdoppeln
+		fAudioFrequency = fAudioFrequency *2.0f;
+	}
+
+	// Eine Oktave absenken bei Frequenzen größer als h1
+	// Damit gehen Töne bis h2 oder 987Hz
+	if (fAudioFrequency > 508.567f)
+	{
+		// Frequenz halbieren
+		fAudioFrequency = fAudioFrequency *0.5f;
+	}
+
+	// Eine Oktave absenken bei Frequenzen größer als h1
+	// Damit gehen Töne bis h3 oder 1975Hz
+	if (fAudioFrequency > 508.567f)
+	{
+		// Frequenz halbieren
+		fAudioFrequency = fAudioFrequency *0.5f;
+	}
+
+	// Eine Oktave absenken bei Frequenzen größer als h1
+	// Damit gehen Töne bis h4 oder 3951Hz
+	if (fAudioFrequency > 508.567f)
+	{
+		// Frequenz halbieren
+		fAudioFrequency = fAudioFrequency *0.5f;
+	}
+
+
+	// Ton: c
+	if ( fAudioFrequency > 254.284f && fAudioFrequency <= 269.4045f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: cis
+	if ( fAudioFrequency > 269.4045f && fAudioFrequency <= 285.424f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_1_GPIO_Port, PITCH_LED_1_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_1_GPIO_Port, PITCH_LED_1_Pin, GPIO_PIN_RESET);
+	}
+
+
+	// Ton: d
+	if ( fAudioFrequency > 285.424f && fAudioFrequency <= 302.396f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: dis
+	if ( fAudioFrequency > 302.396f && fAudioFrequency <= 320.3775f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: e
+	if ( fAudioFrequency > 320.3775f && fAudioFrequency <= 339.428f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: f
+	if ( fAudioFrequency > 339.428f && fAudioFrequency <= 359.611f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_5_GPIO_Port, PITCH_LED_5_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_5_GPIO_Port, PITCH_LED_5_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: fis
+	if ( fAudioFrequency > 359.611f && fAudioFrequency <= 380.9945f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_6_GPIO_Port, PITCH_LED_6_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_6_GPIO_Port, PITCH_LED_6_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: g
+	if ( fAudioFrequency > 380.9945f && fAudioFrequency <= 403.65f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: gis
+	if ( fAudioFrequency > 403.65f && fAudioFrequency <= 427.6525f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: a
+	if ( fAudioFrequency > 427.6525f && fAudioFrequency <= 453.082f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: ais
+	if ( fAudioFrequency > 453.082f && fAudioFrequency <= 480.0235f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_RESET);
+	}
+
+	// Ton: h
+	if ( fAudioFrequency > 480.0235f && fAudioFrequency <= 508.567f)
+	{
+		HAL_GPIO_WritePin(PITCH_LED_11_GPIO_Port, PITCH_LED_11_Pin, GPIO_PIN_SET);
+	}
+	else
+	{
+		HAL_GPIO_WritePin(PITCH_LED_11_GPIO_Port, PITCH_LED_11_Pin, GPIO_PIN_RESET);
+	}
 }
