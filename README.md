@@ -108,3 +108,17 @@ The file name must be **WAV1.C** and it must contain 1 periode of a sound sample
 ## Programming software for STM32
 Program the STM32 board with the [STM32CUBEPROG](http://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/stm32cubeprog.html) tool.
 
+## Case and front panel
+As case a wooden wine box could be used.
+
+![Wooden wine box](pics/wine_box.jpg "Wooden wine box")
+
+The cheapest way for a professional looking front panel would be to use the service of a sign manufacturer. For example:
+https://www.digitaldruck-fabrik.de/werbeschilder/hart-pvc-polystyrolplatte.aspx
+
+Price of a 380x110mm front panel is about 4€ or 5$
+
+You can use the template under hardware/Frontpanel, but you have to adapt the size of the front panel file to your wine box. Use eg. https://inkscape.org
+
+![Front panel](pics/frontpanel.png "Front panel")
+
