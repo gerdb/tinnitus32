@@ -65,6 +65,7 @@ So no extra PCB is necessary:
 The blue button on the STM32 discovery board starts the Auto-Tune procedure.
 
 ![auto tune button](pics/auto_tune.png "auto tune")
+
 You can also use an additional button and connect it to:
 
 | Name       | PIN Name | Connector | Description                   |
@@ -74,7 +75,9 @@ You can also use an additional button and connect it to:
 
 ## Pitch LED display
 Optional display to show the current played note one a piano like display.
+
 ![LED display](pics/led_display.png "LED display")
+
 Connect 3mm LEDs with a series resistor of 100R to these PINs and connect all
 cathodes of to GND:
 
