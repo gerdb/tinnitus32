@@ -72,6 +72,27 @@ You can also use an additional button and connect it to:
 | VDD        | VDD      | P1        | 3V supply auto-tune button    |
 | Auto-tune  | PA0      | P1        | Signal from auto-tune button  |
 
+## Pitch LED display
+Optional display to show the current played note one a piano like display.
+![LED display](pics/led_display.png "LED display")
+Connect 3mm LEDs with a series resistor of 100R to these PINs and connect all
+cathodes of to GND:
+
+| Name         | PIN Name | Connector | Description                                    |
+| ------------ | -------- | --------- | ------------------------ |
+| PITCH LED 0  | PE12     | P1        | Note c                   |
+| PITCH LED 1  | PE14     | P1        | Note cis                 |
+| PITCH LED 2  | PE15     | P1        | Note d                   |
+| PITCH LED 3  | PB11     | P1        | Note dis                 |
+| PITCH LED 4  | PB12     | P1        | Note e                   |
+| PITCH LED 5  | PB13     | P1        | Note f                   |
+| PITCH LED 6  | PB14     | P1        | Note fis                 |
+| PITCH LED 7  | PB15     | P1        | Note g                   |
+| PITCH LED 8  | PD8      | P1        | Note gis                 |
+| PITCH LED 9  | PD9      | P1        | Note a                   |
+| PITCH LED 10 | PD10     | P1        | Note b                   |
+| PITCH LED 11 | PD11     | P1        | Note h                   |
+
 
 ## USB-stick with sound file
 It's possible to store a \*.WAV or a \*.C file on an USB-stick and use it as sound source for the theremin.
