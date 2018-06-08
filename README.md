@@ -30,13 +30,15 @@ So you need only 2 additional oscillators and some pots.
 | R2            | 1k           | 1k           | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 | IC            | SN74LVC1GX04 | SN74LVC1GX04 | 0.40$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 
-
-L1 should be an air-coil with 1mH. Eg. 200 windings of 0.25mm wire on a core with 50mm diameter.
-
 **Suppliers:**
 m: www.mouser.com
 f: www.farnell.com / www.newark.com
 d: www.digikey.com
+
+L1 should be an air-coil with 1mH. Eg. 180 windings of 0.25mm wire on a core with 50mm diameter.
+![tinnitus](pics/aircoil.png "tinnitus air coild")
+
+
 
 
 
