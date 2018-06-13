@@ -1,6 +1,6 @@
 ![tinnitus](pics/tinnitus_logo.png "logo")
 
-###A very cheap and easy to build Theremin for only 30..50$
+### A very cheap and easy to build Theremin for only 30..50$
 
 * Only an STM32 evaluation board, 2 oscillators and some knobs and switches needed.
 * Excellent audio quality: 16/24bit audio DAC with headphone amplifier
