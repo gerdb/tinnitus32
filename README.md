@@ -1,12 +1,12 @@
 ![tinnitus](pics/tinnitus_logo.png "logo")
 
-A digital Theremin based on the STM32 microcontroller.
+###A very cheap and easy to build Theremin for only 30..50$
 
-* Easy to build: Only an STM32 evaluation board and 2 oscillators for a Theremin
+* Only an STM32 evaluation board, 2 oscillators and some knobs and switches needed.
 * Excellent audio quality: 16/24bit audio DAC with headphone amplifier
-* Loads waveforms with Theremin sound directly from an USB stick
+* Can load waveforms with Theremin sound directly from an USB stick
 * Very fast autotune: 1sec
-* Powerful ARM Cortex-M4 microcontroller with DSP, FPU and 168MHz clock
+
 
 ![tinnitus basic](pics/tinnitus_basic.png "tinnitus basic")
 
@@ -35,9 +35,9 @@ m: www.mouser.com
 f: www.farnell.com / www.newark.com
 d: www.digikey.com
 
-L1 should be an air-coil with 1mH. Eg. 180 windings of 0.25mm wire on a core with 50mm diameter.
+L1 should be an air-coil with 1mH. Eg. 200 windings of 0.15mm wire on a core with 40mm diameter.
 ![tinnitus](pics/aircoil.png "tinnitus air coild")
-
+Use http://hamwaves.com/antennas/inductance.html for other diameters.
 
 
 
