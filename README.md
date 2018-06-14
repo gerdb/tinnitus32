@@ -12,24 +12,45 @@
 
 # Hardware
 The STM32F407G-DISC1 evaluation board can be used.
-So you need only 2 additional oscillators and some pots.
-![tinnitus](pics/stm32F407_disco.png "STM32F407G-DISC1")
+So you need only 2 additional oscillators and some potentiometers and switches.
+![tinnitus](pics/system.png "System tinnitus theremin")
 
-# Example of an LC colpitts oscillator
-### Schematic
+# The LC colpitts oscillator
+
+The oscillators could be built up with SMD or THD components.
+
+### Schematic for THD & SMD version
+(Values of SMD version, pitch oscillator)
 ![tinnitus](pics/tinnitus_osc_sch.png "tinnitus oscillator schematic")
 
-### Bill of material
+## Layout THD version
+The oscillators with THD components on a breadboard:
+![tinnitus](pics/tinnitus_osc_pcb_thd.png "tinnitus oscillator build on a breadboard")
+
+### Bill of material THD version
 | Component     | Pitch        | Volume       | Price | Supplier   |
 | ------------- | ------------ | ------------ | ----- | ---------- |
-| C1            | 82pF         | 100pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| C2            | 330pF        | 390pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| C1            | 150pF         | 180pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| C2            | 150pF        | 180pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 | C3            | 330pF        | 390pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 | C4            | 100nF        | 100nF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 | R1            | 2M2          | 2M2          | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 | R2            | 1k           | 1k           | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| IC            | SN74LVC1GX04 | SN74LVC1GX04 | 0.40$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| IC            | CD4069UBE | CD4069UBE | 0.48$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 
+
+## Layout SMD version
+The oscillators with THD components on a breadboard:
+![tinnitus](pics/tinnitus_osc_pcb.png "tinnitus oscillator build on a breadboard")
+
+### Bill of material SMD version
+Same as the THD version except:
+
+| Component     | Pitch        | Volume       | Price | Supplier   |
+| ------------- | ------------ | ------------ | ----- | ---------- |
+| C1            | 82pF         | 100pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| C2            | 330pF        | 390pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| IC            | SN74LVC1GX04 | SN74LVC1GX04 | 0.40$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 **Suppliers:**
 m: www.mouser.com
 f: www.farnell.com / www.newark.com
@@ -42,10 +63,7 @@ Use http://hamwaves.com/antennas/inductance.html for other diameters.
 
 
 
-## Breadboard
-The oscillators can be build up with SMD components on a breadboard.
-So no extra PCB is necessary:
-![tinnitus](pics/tinnitus_osc_pcb.png "tinnitus oscillator build on a breadboard")
+
 
 
 ## Pin maps
