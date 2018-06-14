@@ -21,10 +21,12 @@ The oscillators could be built up with SMD or THD components.
 
 ### Schematic for THD & SMD version
 (Values of SMD version, pitch oscillator)
+
 ![tinnitus](pics/tinnitus_osc_sch.png "tinnitus oscillator schematic")
 
 ## Layout THD version
 The oscillators with THD components on a breadboard:
+
 ![tinnitus](pics/tinnitus_osc_pcb_thd.png "tinnitus oscillator build on a breadboard")
 
 ### Bill of material THD version
@@ -40,7 +42,7 @@ The oscillators with THD components on a breadboard:
 
 
 ## Layout SMD version
-The oscillators with THD components on a breadboard:
+The oscillators with SMD components on a breadboard:
 ![tinnitus](pics/tinnitus_osc_pcb.png "tinnitus oscillator build on a breadboard")
 
 ### Bill of material SMD version
@@ -51,6 +53,7 @@ Same as the THD version except:
 | C1            | 82pF         | 100pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 | C2            | 330pF        | 390pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 | IC            | SN74LVC1GX04 | SN74LVC1GX04 | 0.40$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+
 **Suppliers:**
 m: www.mouser.com
 f: www.farnell.com / www.newark.com
