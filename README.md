@@ -17,19 +17,17 @@ So you need only 2 additional oscillators and some potentiometers and switches.
 
 # The LC colpitts oscillator
 
-The oscillators could be built up with SMD or THD components.
-
-### Schematic for THD & SMD version
-(Values of SMD version, pitch oscillator)
+### Schematic
+(Values of pitch oscillator)
 
 ![tinnitus](pics/tinnitus_osc_sch.png "tinnitus oscillator schematic")
 
-## Layout THD version
-The oscillators with THD components on a breadboard:
+## Layout
+The oscillators can be built up on a breadboard:
 
-![tinnitus](pics/tinnitus_osc_pcb_thd.png "tinnitus oscillator build on a breadboard")
+![tinnitus](pics/tinnitus_osc_pcb_thd.png "tinnitus oscillator built on a breadboard")
 
-### Bill of material THD version
+### Bill of material
 | Component     | Pitch        | Volume       | Price | Supplier   |
 | ------------- | ------------ | ------------ | ----- | ---------- |
 | C1            | 150pF         | 180pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
@@ -40,20 +38,6 @@ The oscillators with THD components on a breadboard:
 | R2            | 1k           | 1k           | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 | IC            | CD4069UBE | CD4069UBE | 0.48$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
 
-
-## Layout SMD version
-The oscillators with SMD components on a breadboard:
-![tinnitus](pics/tinnitus_osc_pcb.png "tinnitus oscillator build on a breadboard")
-
-### Bill of material SMD version
-Same as the THD version except:
-
-| Component     | Pitch        | Volume       | Price | Supplier   |
-| ------------- | ------------ | ------------ | ----- | ---------- |
-| C1            | 82pF         | 100pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| C2            | 330pF        | 390pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| IC            | SN74LVC1GX04 | SN74LVC1GX04 | 0.40$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-
 **Suppliers:**
 m: www.mouser.com
 f: www.farnell.com / www.newark.com
@@ -61,10 +45,8 @@ d: www.digikey.com
 
 L1 should be an air-coil with 1mH. Eg. 200 windings of 0.15mm wire on a core with 40mm diameter.
 ![tinnitus](pics/aircoil.png "tinnitus air coild")
+
 Use http://hamwaves.com/antennas/inductance.html for other diameters.
-
-
-
 
 
 
@@ -104,6 +86,8 @@ Optional display to show the current played note one a piano like display.
 
 Connect 3mm LEDs with a series resistor of 100R to these PINs and connect all
 cathodes of to GND:
+
+![LED display](pics/leds.png "LED display")
 
 | Name         | PIN Name | Connector | Description                                    |
 | ------------ | -------- | --------- | ------------------------ |
