@@ -105,6 +105,15 @@ cathodes of to GND:
 | PITCH LED 11 | PD11     | P1        | Note h                   |
 
 
+## Power supply
+The STM32 discovery board must be supplied by 5V (100mA). It is importand that the GND is connected to earth (PE). If a normal wall adapter is used, there must be an extra connection to earth (PE).
+
+The best power supply would be a linear one with 9V transformer (1VA - 2VA), rectifier , 1000µF capacitor and an LM7805 with two 100nF ceramic capacitors at the input and output. The PE could be directly connected to GND. Or a module like this one: https://www.elv.de/h-tronic-netzteilmodul-5v-300ma.html
+
+![Power supply](pics/power_supply.png "power supply")
+
+
+
 ## USB-stick with sound file
 It's possible to store a \*.WAV or a \*.C file on an USB-stick and use it as sound source for the theremin.
 #### WAV file
