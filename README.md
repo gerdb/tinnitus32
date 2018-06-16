@@ -1,6 +1,6 @@
 ![tinnitus](pics/tinnitus_logo.png "logo")
 
-### A very cheap and easy to build Theremin for only 30..50$
+### A very cheap and easy to build Theremin for only 50$
 
 * Only an STM32 evaluation board, 2 oscillators and some knobs and switches needed.
 * Excellent audio quality: 16/24bit audio DAC with headphone amplifier
@@ -110,8 +110,9 @@ The STM32 discovery board must be supplied by 5V (100mA). It is importand that t
 
 The best power supply would be a linear one with 9V transformer (1VA - 2VA), rectifier , 1000µF capacitor and an LM7805 with two 100nF ceramic capacitors at the input and output. The PE could be directly connected to GND. Or a module like this one: https://www.elv.de/h-tronic-netzteilmodul-5v-300ma.html
 
-![Power supply](pics/power_supply.png "power supply")
+![Power supply](pics/power_supply_sch.png "power supply")
 
+![Power supply](pics/power_supply.png "power supply")
 
 
 ## USB-stick with sound file
