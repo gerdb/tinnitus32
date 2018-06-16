@@ -28,15 +28,16 @@ The oscillators can be built up on a breadboard:
 ![tinnitus](pics/tinnitus_osc_pcb_thd.png "tinnitus oscillator built on a breadboard")
 
 ### Bill of material
-| Component     | Pitch        | Volume       | Price | Supplier   |
-| ------------- | ------------ | ------------ | ----- | ---------- |
-| C1            | 150pF         | 180pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| C2            | 150pF        | 180pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| C3            | 330pF        | 390pF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| C4            | 100nF        | 100nF        | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| R1            | 2M2          | 2M2          | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| R2            | 1k           | 1k           | 0.05$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
-| IC            | CD4069UBE | CD4069UBE | 0.48$ | [m](http://www.mouser.com), [f](http://www.farnell.com), [d](http://www.digikey.com) |
+| Component     | Pitch        | Volume       | Price |
+| ------------- | ------------ | ------------ | ----- |
+| C1            | 150pF        | 180pF        | 0.05$ |
+| C2            | 150pF        | 180pF        | 0.05$ |
+| C3            | 330pF        | 390pF        | 0.05$ |
+| C4            | 1µF          | 1µF          | 0.05$ |
+| R1            | 2M2          | 2M2          | 0.05$ |
+| R2            | 1k           | 1k           | 0.05$ |
+| R3            | 10R          | 10R          | 0.05$ |
+| IC1           | CD4069UBE    | CD4069UBE    | 0.48$ |
 
 **Suppliers:**
 m: www.mouser.com
