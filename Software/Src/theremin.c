@@ -910,64 +910,64 @@ void THEREMIN_PitchDisplay(void)
 	fAudioFrequency = fWavStepFilt * 0.0000894069671631;
 
 
-	// Eine Oktave anheben bei Frequenzen kleiner als c1
-	// Damit gehen Töne bis c oder 130Hz
+	// Shift it one octave if frequency is lower than c1
+	// So we can display notes down to c or 130Hz
 	if (fAudioFrequency <= 254.284f)
 	{
-		// Frequenz verdoppeln
+		// double the frequency
 		fAudioFrequency = fAudioFrequency *2.0f;
 	}
 
-	// Eine Oktave anheben bei Frequenzen kleiner als c1
-	// Damit gehen Töne bis C oder 65Hz
+	// Shift it one octave up, if frequency is lower than c1
+	// So we can display notes down to C or 65Hz
 	if (fAudioFrequency <= 254.284f)
 	{
-		// Frequenz verdoppeln
+		// double the frequency
 		fAudioFrequency = fAudioFrequency *2.0f;
 	}
 
-	// Eine Oktave anheben bei Frequenzen kleiner als c1
-	// Damit gehen Töne bis C1 oder 32Hz
+	// Shift it one octave up, if frequency is lower than c1
+	// So we can display notes down to C1 or 32Hz
 	if (fAudioFrequency <= 254.284f)
 	{
-		// Frequenz verdoppeln
+		// double the frequency
 		fAudioFrequency = fAudioFrequency *2.0f;
 	}
 
-	// Eine Oktave anheben bei Frequenzen kleiner als c1
-	// Damit gehen Töne bis C2 oder 16Hz
+	// Shift it one octave up, if frequency is lower than c1
+	// So we can display notes down to C2 or 16Hz
 	if (fAudioFrequency <= 254.284f)
 	{
-		// Frequenz verdoppeln
+		// double the frequency
 		fAudioFrequency = fAudioFrequency *2.0f;
 	}
 
-	// Eine Oktave absenken bei Frequenzen größer als h1
-	// Damit gehen Töne bis h2 oder 987Hz
+	// Shift it one octave down, if frequency is higher than h1
+	// So we can display notes up to h2 or 987Hz
 	if (fAudioFrequency > 508.567f)
 	{
-		// Frequenz halbieren
+		// halve the frequency
 		fAudioFrequency = fAudioFrequency *0.5f;
 	}
 
-	// Eine Oktave absenken bei Frequenzen größer als h1
-	// Damit gehen Töne bis h3 oder 1975Hz
+	// Shift it one octave down, if frequency is higher than h1
+	// So we can display notes up to h3 or 1975Hz
 	if (fAudioFrequency > 508.567f)
 	{
-		// Frequenz halbieren
+		// halve the frequency
 		fAudioFrequency = fAudioFrequency *0.5f;
 	}
 
-	// Eine Oktave absenken bei Frequenzen größer als h1
-	// Damit gehen Töne bis h4 oder 3951Hz
+	// Shift it one octave down, if frequency is higher than h1
+	// So we can display notes up to h4 or 3951Hz
 	if (fAudioFrequency > 508.567f)
 	{
-		// Frequenz halbieren
+		// halve the frequency
 		fAudioFrequency = fAudioFrequency *0.5f;
 	}
 
 
-	// Ton: c
+	// Note: c
 	if ( fAudioFrequency > 254.284f && fAudioFrequency <= 269.4045f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_SET);
@@ -977,7 +977,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_0_GPIO_Port, PITCH_LED_0_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: cis
+	// Note: cis
 	if ( fAudioFrequency > 269.4045f && fAudioFrequency <= 285.424f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_1_GPIO_Port, PITCH_LED_1_Pin, GPIO_PIN_SET);
@@ -988,7 +988,7 @@ void THEREMIN_PitchDisplay(void)
 	}
 
 
-	// Ton: d
+	// Note: d
 	if ( fAudioFrequency > 285.424f && fAudioFrequency <= 302.396f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_SET);
@@ -998,7 +998,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_2_GPIO_Port, PITCH_LED_2_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: dis
+	// Note: dis
 	if ( fAudioFrequency > 302.396f && fAudioFrequency <= 320.3775f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_SET);
@@ -1008,7 +1008,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_3_GPIO_Port, PITCH_LED_3_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: e
+	// Note: e
 	if ( fAudioFrequency > 320.3775f && fAudioFrequency <= 339.428f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_SET);
@@ -1018,7 +1018,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_4_GPIO_Port, PITCH_LED_4_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: f
+	// Note: f
 	if ( fAudioFrequency > 339.428f && fAudioFrequency <= 359.611f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_5_GPIO_Port, PITCH_LED_5_Pin, GPIO_PIN_SET);
@@ -1028,7 +1028,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_5_GPIO_Port, PITCH_LED_5_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: fis
+	// Note: fis
 	if ( fAudioFrequency > 359.611f && fAudioFrequency <= 380.9945f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_6_GPIO_Port, PITCH_LED_6_Pin, GPIO_PIN_SET);
@@ -1038,7 +1038,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_6_GPIO_Port, PITCH_LED_6_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: g
+	// Note: g
 	if ( fAudioFrequency > 380.9945f && fAudioFrequency <= 403.65f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_SET);
@@ -1048,7 +1048,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_7_GPIO_Port, PITCH_LED_7_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: gis
+	// Note: gis
 	if ( fAudioFrequency > 403.65f && fAudioFrequency <= 427.6525f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_SET);
@@ -1058,7 +1058,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_8_GPIO_Port, PITCH_LED_8_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: a
+	// Note: a
 	if ( fAudioFrequency > 427.6525f && fAudioFrequency <= 453.082f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_SET);
@@ -1068,7 +1068,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_9_GPIO_Port, PITCH_LED_9_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: ais
+	// Note: ais
 	if ( fAudioFrequency > 453.082f && fAudioFrequency <= 480.0235f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_SET);
@@ -1078,7 +1078,7 @@ void THEREMIN_PitchDisplay(void)
 		HAL_GPIO_WritePin(PITCH_LED_10_GPIO_Port, PITCH_LED_10_Pin, GPIO_PIN_RESET);
 	}
 
-	// Ton: h
+	// Note: h
 	if ( fAudioFrequency > 480.0235f && fAudioFrequency <= 508.567f)
 	{
 		HAL_GPIO_WritePin(PITCH_LED_11_GPIO_Port, PITCH_LED_11_Pin, GPIO_PIN_SET);

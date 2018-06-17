@@ -66,7 +66,7 @@ Use http://hamwaves.com/antennas/inductance.html for other diameters.
 | ANALOG_4   | PC4      | P1        | Analog input from zoom pitch potentiometer     |
 | ANALOG_5   | PC5      | P1        | Analog input from waveform potentiometer       |
 
-
+Connect an extra 100nF capacitor under each potentiometer from the potentiometer output to GND.
 
 ## Auto-tune
 The blue button on the STM32 discovery board starts the Auto-Tune procedure.
@@ -125,6 +125,8 @@ The file name must be **WAV1.C** and it must contain 1 periode of a sound sample
 
 
 ## Programming software for STM32
+You find the binary file in the "Binary" folder. Download the [tinnitus project as ZIP](https://github.com/gerdb/tinnitus32/archive/master.zip)
+
 Program the STM32 board with the [STM32CUBEPROG](http://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/stm32cubeprog.html) tool.
 
 ## Case and front panel
